@@ -24,7 +24,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 2, compatible = 1)
+@Version(major = 1, minor = 1, revision = 3, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -90,7 +90,7 @@ public class Chatgroups implements Module, Listener
 				"	}\n" +
 				"}\n" +
 				"command cg {\n" +
-				"	join [String:group] {\n" +
+				"	join [string:group] {\n" +
 				"		help Joins a chatgroup.;\n" +
 				"		run cgjoin group;\n" +
 				"	}\n" +
@@ -117,7 +117,7 @@ public class Chatgroups implements Module, Listener
 	 * 
 	 * @param sender the issuer of the command.
 	 * @param key the key to be set. Set to NULL or "" to go back to the default.
-	 * @return true if the key could be set. */
+	 * @return true. */
 	@SuppressWarnings("unchecked")
 	@Command(hook = "setcgkey")
 	public boolean setCgKey(CommandSender sender, String key)
@@ -126,7 +126,7 @@ public class Chatgroups implements Module, Listener
 		{
 			Utils.sendErrorMessage(sender, null,
 					"Could not set your key to §6" + key + " §7, it can be at most one char.");
-			return false;
+			return true;
 		}
 		if (key == null || key.length() == 0)
 		{
