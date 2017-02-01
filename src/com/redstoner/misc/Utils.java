@@ -110,7 +110,7 @@ public final class Utils
 		if (filter == null)
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
-				p.sendMessage(message);
+				p.sendMessage(prefix + message);
 			return Bukkit.getOnlinePlayers().size();
 		}
 		else
@@ -119,7 +119,7 @@ public final class Utils
 			for (Player p : Bukkit.getOnlinePlayers())
 				if (filter.sendTo(p))
 				{
-					p.sendMessage(message);
+					p.sendMessage(prefix + message);
 					count++;
 				}
 			return count;
