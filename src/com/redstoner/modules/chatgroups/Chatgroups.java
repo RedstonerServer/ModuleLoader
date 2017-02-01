@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 9, compatible = 1)
+@Version(major = 1, minor = 1, revision = 10, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -171,7 +171,7 @@ public class Chatgroups implements Module, Listener
 	/** Sets the cgkey of a Player.
 	 * 
 	 * @param sender the issuer of the command.
-	 * @param key the key to be set. Set to NULL or "" to go back to the default.
+	 * @param key the key to be set. Set to NULL or "" to get your current key.
 	 * @return true. */
 	@SuppressWarnings("unchecked")
 	@Command(hook = "setcgkey")
