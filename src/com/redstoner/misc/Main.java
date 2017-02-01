@@ -11,7 +11,7 @@ import com.redstoner.modules.chatgroups.Chatgroups;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 0, compatible = -1)
+@Version(major = 1, minor = 1, revision = 0, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -23,8 +23,8 @@ public class Main extends JavaPlugin
 		Debugger.init();
 		ModuleLoader.init();
 		// TODO: Add modules (this also loads them if necessary)
-		ModuleLoader.addModule(Adminchat.class, "Adminchat");
-		ModuleLoader.addModule(Chatgroups.class, "Chatrgoups");
+		ModuleLoader.addModule(Adminchat.class);
+		ModuleLoader.addModule(Chatgroups.class);
 		// And enable them
 		ModuleLoader.enableModules();
 	}
