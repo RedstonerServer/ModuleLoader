@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 1, compatible = 1)
+@Version(major = 1, minor = 1, revision = 2, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -111,6 +111,8 @@ public final class Utils
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 				p.sendMessage(prefix + message);
+			if (logmessage != null)
+				Bukkit.getConsoleSender().sendMessage(prefix + message);
 			return Bukkit.getOnlinePlayers().size();
 		}
 		else
@@ -120,6 +122,12 @@ public final class Utils
 				if (filter.sendTo(p))
 				{
 					p.sendMessage(prefix + message);
+					count++;
+				}
+			if (logmessage != null)
+				if (filter.sendTo(Bukkit.getConsoleSender()))
+				{
+					Bukkit.getConsoleSender().sendMessage(prefix + message);
 					count++;
 				}
 			return count;
