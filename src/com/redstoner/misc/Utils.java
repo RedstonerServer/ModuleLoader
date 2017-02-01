@@ -155,4 +155,13 @@ public final class Utils
 		}
 		return classname;
 	}
+	
+	/** Displays the module header to the recipient.</br>
+	 * Format: &2--=[ %MODULE% ]=--
+	 * 
+	 * @param recipient Whom to display the header to. */
+	public static void sendModuleHeader(CommandSender recipient)
+	{
+		recipient.sendMessage("§2--=[ " + getCaller() + " ]=--");
+	}
 }
