@@ -15,7 +15,7 @@ import com.redstoner.modules.warn.Warn;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 3, compatible = -1)
+@Version(major = 1, minor = 1, revision = 4, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
