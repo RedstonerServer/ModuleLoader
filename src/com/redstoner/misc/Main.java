@@ -8,6 +8,7 @@ import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.check.Check;
+import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.skullclick.SkullClick;
@@ -16,7 +17,7 @@ import com.redstoner.modules.warn.Warn;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 4, compatible = -1)
+@Version(major = 1, minor = 1, revision = 5, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -31,6 +32,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
+		ModuleLoader.addModule(DamnSpam.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
 		ModuleLoader.addModule(SkullClick.class);
