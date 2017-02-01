@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 10, compatible = 1)
+@Version(major = 1, minor = 1, revision = 11, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -160,12 +160,10 @@ public class Chatgroups implements Module, Listener
 	
 	/** Prints a Players cgkey to their chat.
 	 * 
-	 * @param sender the issuer of the command.
-	 * @return true. */
-	public boolean getCgKey(CommandSender sender)
+	 * @param sender the issuer of the command. */
+	public void getCgKey(CommandSender sender)
 	{
 		Utils.sendMessage(sender, null, "Your current cgkey is §6" + getKey((Player) sender));
-		return true;
 	}
 	
 	/** Sets the cgkey of a Player.
