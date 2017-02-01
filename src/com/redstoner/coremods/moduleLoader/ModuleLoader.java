@@ -21,24 +21,21 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 1, compatible = -1)
+@Version(major = 1, minor = 1, revision = 2, compatible = -1)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
 	private static final ArrayList<Module> modules = new ArrayList<Module>();
 	
-	static
-	{
-		instance = new ModuleLoader();
-	}
-	
 	private ModuleLoader()
-	{
-		CommandManager.registerCommand(getCommandString(), instance, Main.plugin);
-	}
+	{}
 	
 	public static void init()
-	{}
+	{
+		if (instance == null)
+			instance = new ModuleLoader();
+		CommandManager.registerCommand(instance.getCommandString(), instance, Main.plugin);
+	}
 	
 	/** This method will add a module to the module list, without enabling it
 	 * 

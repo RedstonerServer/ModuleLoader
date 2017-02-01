@@ -20,21 +20,22 @@ import com.redstoner.modules.CoreModule;
 /** The Debugger class, first Module to be loaded, responsible for debug interactions such as subscribing to method calls and getting field values on runtime.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 2, compatible = -1)
+@Version(major = 1, minor = 0, revision = 3, compatible = -1)
 public final class Debugger implements CoreModule, Listener
 {
 	private static Debugger instance;
 	private static HashMap<CommandSender, ArrayList<String>> subs;
 	
-	static
-	{
-		instance = new Debugger();
-	}
-	
 	private Debugger()
 	{
 		subs = new HashMap<>();
-		CommandManager.registerCommand(getCommandString(), instance, Main.plugin);
+	}
+	
+	public static void init()
+	{
+		if (instance == null)
+			instance = new Debugger();
+		CommandManager.registerCommand(instance.getCommandString(), instance, Main.plugin);
 	}
 	
 	public static void notifyMethod(Object... params)
@@ -173,7 +174,4 @@ public final class Debugger implements CoreModule, Listener
 	{
 		notifyMethod(recipient, message);
 	}
-	
-	public static void init()
-	{}
 }
