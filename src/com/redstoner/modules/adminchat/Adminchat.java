@@ -1,14 +1,14 @@
 package com.redstoner.modules.adminchat;
 
-import com.redstoner.annotations.AutoRegisterEvents;
+import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Version;
 import com.redstoner.modules.Module;
 
 /** AdminChat module. Allows staff to chat to other staff using /ac \<message\> as well as a one char prefix or a toggle.
  * 
  * @author Pepich */
-@AutoRegisterEvents
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@AutoRegisterListener
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Adminchat implements Module
 {
 	private boolean enabled = false;

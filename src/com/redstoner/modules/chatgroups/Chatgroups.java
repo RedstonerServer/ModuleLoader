@@ -7,15 +7,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.nemez.cmdmgr.Command;
-import com.redstoner.annotations.AutoRegisterEvents;
+import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Version;
 import com.redstoner.modules.Module;
 
 /** The ChatGroups module. Allows people to have private sub-chats that can be accessed via a single char prefix or a toggle.
  * 
  * @author Pepich */
-@AutoRegisterEvents
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@AutoRegisterListener
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private boolean enabled = false;
