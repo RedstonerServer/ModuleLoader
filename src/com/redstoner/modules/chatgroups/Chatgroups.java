@@ -2,6 +2,7 @@ package com.redstoner.modules.chatgroups;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -71,13 +72,13 @@ public class Chatgroups implements Module, Listener
 	@Override
 	public String getCommandString()
 	{
-		return  "command cgtoggle {\n" +
-				"	help Toggles your cgtoggle status.;\n"+
-				"	run cgtoggle;\n" +
+		return  "command cgt {\n" +
+				"	[string:void...] {\n" +
+				"		help Toggles your cgtoggle status.;\n"+
+				"		run cgtoggle;\n" +
+				"	}\n" +
 				"}\n" +
 				"command cgkey {\n" +
-				"	help Tells you your current chatgroup key.;\n"+
-				"	run getcgkey;\n" +
 				"	[string:key] {\n" +
 				"		help Sets your chatgroup key.;\n" +
 				"		run setcgkey key;\n" +
@@ -95,18 +96,67 @@ public class Chatgroups implements Module, Listener
 				"		run cgjoin group;\n" +
 				"	}\n" +
 				"	leave {\n" +
-				"		help leaves your chatgroup.;\n" +
+				"		help Leaves your chatgroup.;\n" +
 				"		run cgleave;\n" +
 				"	}\n" +
+				"	info {\n" +
+				"		help Displays info about your chatgroup.;\n" +
+				"		run cginfo;\n" +
+				"	}\n" +
+				
 				"}";
 	}
 	// @format
+	
+	/** Prints chatgroup info (like players in the group, groupname) to the sender.
+	 * 
+	 * @param sender the issuer of the command.
+	 * @return true. */
+	@SuppressWarnings("unchecked")
+	@Command(hook = "cginfo")
+	public boolean cgInfo(CommandSender sender)
+	{
+		String group = getGroup(sender);
+		if (group == null)
+			Utils.sendErrorMessage(sender, null, "You are not in a chatgroup!");
+		else
+		{
+			Utils.sendModuleHeader(sender);
+			Utils.sendMessage(sender, "", "Your current chatgroup is: §6" + group);
+			ArrayList<String> players = new ArrayList<String>();
+			for (int i = 0; i < groups.entrySet().size(); i++)
+			{
+				String t_group = (String) groups.entrySet().toArray(new String[] {})[i];
+				if (t_group.equals(group))
+				{
+					String name = (String) groups.values().toArray(new String[] {})[i];
+					if (!name.equals("CONSOLE"))
+					{
+						UUID uuid = UUID.fromString(name);
+						Player p = Bukkit.getPlayer(uuid);
+						if (p != null)
+							players.add(p.getDisplayName());
+						else
+							players.add(Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
+					}
+					players.add(name);
+				}
+				StringBuilder sb = new StringBuilder("&6");
+				for (String player : players)
+				{
+					sb.append(player);
+					sb.append(", ");
+				}
+				sb.delete(sb.length() - 2, sb.length());
+			}
+		}
+		return true;
+	}
 	
 	/** Prints a Players cgkey to their chat.
 	 * 
 	 * @param sender the issuer of the command.
 	 * @return true. */
-	@Command(hook = "getcgkey")
 	public boolean getCgKey(CommandSender sender)
 	{
 		Utils.sendMessage(sender, null, "Your current cgkey is §6" + getKey((Player) sender));
@@ -130,8 +180,7 @@ public class Chatgroups implements Module, Listener
 		}
 		if (key == null || key.length() == 0)
 		{
-			Utils.sendMessage(sender, null, "Set your key to §6" + defaultKey + " §7(default)");
-			keys.put(((Player) sender).getUniqueId().toString(), defaultKey + "");
+			getCgKey(sender);
 			return true;
 		}
 		Utils.sendMessage(sender, null, "Set your key to §6" + key + " §7(default)");
