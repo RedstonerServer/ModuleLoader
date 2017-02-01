@@ -11,6 +11,8 @@ import com.redstoner.modules.Module;
 @Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Warn implements Module
 {
+	private boolean enabled = false;
+	
 	@Command(hook = "warn")
 	public void warn_normal(CommandSender sender)
 	{
@@ -26,9 +28,21 @@ public class Warn implements Module
 	}
 	
 	@Override
+	public void onEnable()
+	{
+		enabled = true;
+	}
+	
+	@Override
+	public void onDisable()
+	{
+		enabled = false;
+	}
+	
+	@Override
 	public boolean enabled()
 	{
-		return true;
+		return enabled;
 	}
 	
 	// @noformat
