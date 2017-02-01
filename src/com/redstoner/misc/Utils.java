@@ -111,7 +111,7 @@ public final class Utils
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 				p.sendMessage(prefix + message);
-			if (logmessage != null)
+			if (logmessage == null)
 				Bukkit.getConsoleSender().sendMessage(prefix + message);
 			return Bukkit.getOnlinePlayers().size();
 		}
@@ -124,7 +124,7 @@ public final class Utils
 					p.sendMessage(prefix + message);
 					count++;
 				}
-			if (logmessage != null)
+			if (logmessage == null)
 				if (filter.sendTo(Bukkit.getConsoleSender()))
 				{
 					Bukkit.getConsoleSender().sendMessage(prefix + message);
