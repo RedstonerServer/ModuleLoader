@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.json.simple.JSONObject;
 
@@ -23,8 +24,8 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
-public class Adminchat implements Module
+@Version(major = 1, minor = 0, revision = 4, compatible = 1)
+public class Adminchat implements Module, Listener
 {
 	private static final char defaultKey = ',';
 	private boolean enabled = false;
@@ -125,7 +126,7 @@ public class Adminchat implements Module
 	@Command(hook = "act")
 	public boolean acToggleCommand(CommandSender sender)
 	{
-		if (actoggled.contains(sender))
+		if (actoggled.contains(((Player) sender).getUniqueId()))
 		{
 			actoggled.remove(((Player) sender).getUniqueId());
 			Utils.sendMessage(sender, null, "ACT now §cdisabled");
@@ -145,7 +146,7 @@ public class Adminchat implements Module
 	@Command(hook = "act_on")
 	public boolean acToggleOnCommand(CommandSender sender)
 	{
-		if (!actoggled.contains(sender))
+		if (!actoggled.contains(((Player) sender).getUniqueId()))
 		{
 			actoggled.add(((Player) sender).getUniqueId());
 			Utils.sendMessage(sender, null, "ACT now §aenabled");
@@ -162,7 +163,7 @@ public class Adminchat implements Module
 	@Command(hook = "act_off")
 	public boolean acToggleOffCommand(CommandSender sender)
 	{
-		if (actoggled.contains(sender))
+		if (actoggled.contains(((Player) sender).getUniqueId()))
 		{
 			actoggled.remove(((Player) sender).getUniqueId());
 			Utils.sendMessage(sender, null, "ACT now §cdisabled");

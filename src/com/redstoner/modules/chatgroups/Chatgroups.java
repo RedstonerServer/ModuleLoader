@@ -200,7 +200,7 @@ public class Chatgroups implements Module, Listener
 	public boolean cgToggleCommand(CommandSender sender)
 	{
 		if (getGroup(sender) != null)
-			if (cgtoggled.contains(sender))
+			if (cgtoggled.contains(((Player) sender).getUniqueId()))
 			{
 				cgtoggled.remove(((Player) sender).getUniqueId());
 				Utils.sendMessage(sender, null, "CGT now §cdisabled");
