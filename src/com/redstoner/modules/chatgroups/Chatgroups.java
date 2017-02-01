@@ -88,7 +88,7 @@ public class Chatgroups implements Module, Listener
 				"		help Chats in your chatgroup.\n"+
 				"		run cgsay message\n" +
 				"	}\n" +
-				"\n}" +
+				"}\n" +
 				"command cg {\n" +
 				"	join [String:group] {\n" +
 				"		help Joins a chatgroup.;\n" +
