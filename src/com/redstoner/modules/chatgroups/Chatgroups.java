@@ -26,13 +26,13 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 6, compatible = 1)
+@Version(major = 1, minor = 1, revision = 7, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
 	private static final File groupsLocation = new File(Main.plugin.getDataFolder(), "chatgroups.json");
 	private static final File keysLocation = new File(Main.plugin.getDataFolder(), "chatgroup_keys.json");
-	private ArrayList<CommandSender> cgtoggled;
+	private ArrayList<UUID> cgtoggled;
 	private static JSONObject groups, keys;
 	private boolean enabled = false;
 	
@@ -51,7 +51,7 @@ public class Chatgroups implements Module, Listener
 			keys = new JSONObject();
 			saveKeys();
 		}
-		cgtoggled = new ArrayList<CommandSender>();
+		cgtoggled = new ArrayList<UUID>();
 		enabled = true;
 	}
 	
@@ -204,13 +204,13 @@ public class Chatgroups implements Module, Listener
 		if (getGroup(sender) != null)
 			if (cgtoggled.contains(sender))
 			{
-				cgtoggled.remove(sender);
-				Utils.sendMessage(sender, null, "Cgt now §cdisbled");
+				cgtoggled.remove(((Player) sender).getUniqueId());
+				Utils.sendMessage(sender, null, "CGT now §cdisbled");
 			}
 			else
 			{
-				cgtoggled.add(sender);
-				Utils.sendMessage(sender, null, "Cgt now §aenabled");
+				cgtoggled.add(((Player) sender).getUniqueId());
+				Utils.sendMessage(sender, null, "CGT now §aenabled");
 			}
 		else
 			Utils.sendErrorMessage(sender, null, "You are not in a chatgroup!");
@@ -226,7 +226,7 @@ public class Chatgroups implements Module, Listener
 	{
 		removeGroup(sender);
 		Utils.sendMessage(sender, null, "Successfully removed you from your group!");
-		cgtoggled.remove(sender);
+		cgtoggled.remove(((Player) sender).getUniqueId());
 		return true;
 	}
 	
@@ -274,7 +274,7 @@ public class Chatgroups implements Module, Listener
 				event.setCancelled(true);
 				sendToGroup(event.getPlayer(), event.getMessage().replaceFirst(getKey(player), ""));
 			}
-			else if (cgtoggled.contains(event.getPlayer()))
+			else if (cgtoggled.contains(event.getPlayer().getUniqueId()))
 			{
 				event.setCancelled(true);
 				sendToGroup(event.getPlayer(), event.getMessage());
