@@ -2,6 +2,7 @@ package com.redstoner.modules.chatgroups;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -25,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 5, compatible = 1)
+@Version(major = 1, minor = 1, revision = 6, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -126,31 +127,33 @@ public class Chatgroups implements Module, Listener
 			Utils.sendModuleHeader(sender);
 			Utils.sendMessage(sender, "", "Your current chatgroup is: §6" + group);
 			ArrayList<String> players = new ArrayList<String>();
-			for (int i = 0; i < groups.entrySet().size(); i++)
+			Iterator<String> iter = groups.keySet().iterator();
+			while (iter.hasNext())
 			{
-				String t_group = (String) groups.entrySet().toArray(new Object[] {})[i];
-				if (t_group.equals(group))
+				String id = iter.next();
+				if (((String) groups.get(id)).equals(group))
 				{
-					String name = (String) groups.values().toArray(new Object[] {})[i];
-					if (!name.equals("CONSOLE"))
+					if (!id.equals("CONSOLE"))
 					{
-						UUID uuid = UUID.fromString(name);
+						UUID uuid = UUID.fromString(id);
 						Player p = Bukkit.getPlayer(uuid);
 						if (p != null)
 							players.add(p.getDisplayName());
 						else
-							players.add(Bukkit.getOfflinePlayer(UUID.fromString(name)).getName());
+							players.add(Bukkit.getOfflinePlayer(UUID.fromString(id)).getName());
 					}
-					players.add(name);
+					else
+						players.add(id);
 				}
-				StringBuilder sb = new StringBuilder("&6");
-				for (String player : players)
-				{
-					sb.append(player);
-					sb.append(", ");
-				}
-				sb.delete(sb.length() - 2, sb.length());
 			}
+			StringBuilder sb = new StringBuilder("&6Other players in this group: &9");
+			for (String player : players)
+			{
+				sb.append(player);
+				sb.append("&7, &9");
+			}
+			sb.delete(sb.length() - 2, sb.length());
+			Utils.sendMessage(sender, "", sb.toString(), '&');
 		}
 		return true;
 	}
