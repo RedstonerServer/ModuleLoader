@@ -112,10 +112,6 @@ public final class Debugger implements CoreModule, Listener
 				p.sendMessage(sb.toString());
 			}
 		}
-		else
-		{
-			System.err.println("EHH WAT");
-		}
 	}
 	
 	// @noformat
