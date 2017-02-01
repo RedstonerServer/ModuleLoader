@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 2, compatible = 1)
+@Version(major = 1, minor = 1, revision = 3, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -96,6 +96,7 @@ public final class Utils
 	 * If you want to, you can set a message that will be logged to console. Set to null to not log anything.</br>
 	 * You can still allow console in the filter to log the original message.
 	 * 
+	 * @param prefix The prefix for the message. Set to NULL to let it auto generate.
 	 * @param message the message to be sent around
 	 * @param filter the BroadcastFilter to be applied.</br>
 	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
@@ -104,6 +105,8 @@ public final class Utils
 	@Debugable
 	public static int broadcast(String prefix, String message, BroadcastFilter filter, String logmessage)
 	{
+		if (prefix == null)
+			prefix = "§8[§2" + getCaller() + "§8]: ";
 		Debugger.notifyMethod(message, filter, logmessage);
 		if (logmessage != null)
 			sendMessage(Bukkit.getConsoleSender(), prefix, logmessage);
