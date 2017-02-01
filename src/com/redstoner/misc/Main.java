@@ -3,8 +3,8 @@ package com.redstoner.misc;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.redstoner.annotations.Version;
-import com.redstoner.coremods.ModuleLoader.ModuleLoader;
 import com.redstoner.coremods.debugger.Debugger;
+import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.chatgroups.Chatgroups;
 
