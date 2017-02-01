@@ -185,7 +185,7 @@ public class Chatgroups implements Module, Listener
 			getCgKey(sender);
 			return true;
 		}
-		Utils.sendMessage(sender, null, "Set your key to §6" + key + " §7(default)");
+		Utils.sendMessage(sender, null, "Set your key to §6" + key);
 		keys.put(((Player) sender).getUniqueId().toString(), key + "");
 		return true;
 	}
