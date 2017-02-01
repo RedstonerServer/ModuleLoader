@@ -24,7 +24,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 3, compatible = 1)
+@Version(major = 1, minor = 1, revision = 4, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -183,7 +183,7 @@ public class Chatgroups implements Module, Listener
 	@Command(hook = "cgjoin")
 	public boolean cgJoin(CommandSender sender, String name)
 	{
-		groups.put(sender, name);
+		setGroup(sender, name);
 		saveGroups();
 		return true;
 	}
@@ -237,6 +237,19 @@ public class Chatgroups implements Module, Listener
 			return (String) groups.get(((Player) target).getUniqueId().toString());
 		else
 			return (String) groups.get("CONSOLE");
+	}
+	
+	/** Sets the group of the CommandSender.
+	 * 
+	 * @param target the CommandSender to set the group of.
+	 * @param group the name of the group to join. */
+	private void setGroup(CommandSender target, String group)
+	{
+		if (target instanceof Player)
+			groups.put(((Player) target).getUniqueId().toString(), group);
+		else
+			groups.put("CONSOLE", group);
+		saveGroups();
 	}
 	
 	/** Removes a CommandSender from their chatgroup. Will also save the groups after finishing
