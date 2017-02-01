@@ -71,11 +71,11 @@ public class Chatgroups implements Module, Listener
 	@Override
 	public String getCommandString()
 	{
-		return  "command cgtoggle{\n" +
+		return  "command cgtoggle {\n" +
 				"	help Toggles your cgtoggle status.;\n"+
 				"	run cgtoggle;\n" +
 				"}\n" +
-				"command cgkey{\n" +
+				"command cgkey {\n" +
 				"	help Tells you your current chatgroup key.;\n"+
 				"	run getcgkey;\n" +
 				"	[string:key] {\n" +
@@ -83,18 +83,16 @@ public class Chatgroups implements Module, Listener
 				"		run setcgkey key;\n" +
 				"	}\n" +
 				"}\n" +
-				"command cgsay{\n" +
+				"command cgsay {\n" +
 				"	[string:message...] {\n" +
 				"		help Chats in your chatgroup.\n"+
 				"		run cgsay message\n" +
 				"	}\n" +
 				"\n}" +
-				"command cg{\n" +
-				"	join {\n"+
-				"		[String:group]{\n" +
-				"			help Joins a chatgroup.;\n" +
-				"			run cgjoin group;\n" +
-				"		}\n" +
+				"command cg {\n" +
+				"	join [String:group] {\n" +
+				"		help Joins a chatgroup.;\n" +
+				"		run cgjoin group;\n" +
 				"	}\n" +
 				"	leave {\n" +
 				"		help leaves your chatgroup.;\n" +
