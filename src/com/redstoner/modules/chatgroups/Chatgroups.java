@@ -24,7 +24,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 1, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -39,12 +39,15 @@ public class Chatgroups implements Module, Listener
 	{
 		groups = JsonManager.getObject(groupsLocation);
 		if (groups == null)
-			return;
+		{
+			groups = new JSONObject();
+			saveGroups();
+		}
 		keys = JsonManager.getObject(keysLocation);
 		if (keys == null)
 		{
-			groups = null;
-			return;
+			keys = new JSONObject();
+			saveKeys();
 		}
 		cgtoggled = new ArrayList<CommandSender>();
 		enabled = true;
