@@ -286,7 +286,7 @@ public class Chatgroups implements Module, Listener
 		else
 			name = sender.getName();
 		String group = getGroup(sender);
-		Utils.broadcast("§8[§bCG§8] ", name + "§8: §6" + message, new BroadcastFilter()
+		Utils.broadcast("§8[§bCG§8] §9", name + "§8: §6" + message, new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
