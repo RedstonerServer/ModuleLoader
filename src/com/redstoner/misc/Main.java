@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
+import com.redstoner.modules.Imout.Imout;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.lagchunks.LagChunks;
@@ -28,6 +29,7 @@ public class Main extends JavaPlugin
 		// TODO: Add modules (this also loads them if necessary)
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(Chatgroups.class);
+		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
 		ModuleLoader.addModule(SkullClick.class);
 		ModuleLoader.addModule(Warn.class);
