@@ -24,7 +24,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 1, compatible = 1)
+@Version(major = 1, minor = 1, revision = 2, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -81,8 +81,8 @@ public class Chatgroups implements Module, Listener
 				"	[string:key] {\n" +
 				"		help Sets your chatgroup key.;\n" +
 				"		run setcgkey key;\n" +
-				"	}" +
-				"}" +
+				"	}\n" +
+				"}\n" +
 				"command cgsay{\n" +
 				"	[string:message...] {\n" +
 				"		help Chats in your chatgroup.\n"+
@@ -99,7 +99,7 @@ public class Chatgroups implements Module, Listener
 				"	leave {\n" +
 				"		help leaves your chatgroup.;\n" +
 				"		run cgleave;\n" +
-				"	}" +
+				"	}\n" +
 				"}";
 	}
 	// @format
