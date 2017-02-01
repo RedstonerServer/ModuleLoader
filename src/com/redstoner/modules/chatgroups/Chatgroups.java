@@ -170,6 +170,7 @@ public class Chatgroups implements Module, Listener
 	public boolean cgLeave(CommandSender sender)
 	{
 		removeGroup(sender);
+		Utils.sendMessage(sender, null, "Successfully removed you from your group!");
 		cgtoggled.remove(sender);
 		return true;
 	}
@@ -179,12 +180,11 @@ public class Chatgroups implements Module, Listener
 	 * @param sender the command issuer.
 	 * @param name the name of the group.
 	 * @return true. */
-	@SuppressWarnings("unchecked")
 	@Command(hook = "cgjoin")
 	public boolean cgJoin(CommandSender sender, String name)
 	{
 		setGroup(sender, name);
-		saveGroups();
+		Utils.sendMessage(sender, null, "Successfully joined group §6" + name);
 		return true;
 	}
 	
@@ -243,6 +243,7 @@ public class Chatgroups implements Module, Listener
 	 * 
 	 * @param target the CommandSender to set the group of.
 	 * @param group the name of the group to join. */
+	@SuppressWarnings("unchecked")
 	private void setGroup(CommandSender target, String group)
 	{
 		if (target instanceof Player)
