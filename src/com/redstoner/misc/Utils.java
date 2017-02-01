@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 1, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -80,25 +80,33 @@ public final class Utils
 				ChatColor.translateAlternateColorCodes(alternateColorCode, message));
 	}
 	
-	/** @param message
-	 * @param filter
-	 * @return */
+	/** This method broadcasts a message to all players (and console) that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
+	 * This will not be logged to console except when you return true in the filter.
+	 * 
+	 * @param message the message to be sent around
+	 * @param filter the BroadcastFilter to be applied.</br>
+	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
+	 * @return the amount of people that received the message. */
 	public static int broadcast(String prefix, String message, BroadcastFilter filter)
 	{
 		return broadcast(prefix, message, filter, null);
 	}
 	
-	/** @param message
-	 * @param filter
-	 * @param log
-	 * @return */
+	/** This method broadcasts a message to all players and console that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
+	 * If you want to, you can set a message that will be logged to console. Set to null to not log anything.</br>
+	 * You can still allow console in the filter to log the original message.
+	 * 
+	 * @param message the message to be sent around
+	 * @param filter the BroadcastFilter to be applied.</br>
+	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
+	 * @param logmessage the log message to appear in console. Set to null to not log this (you can still log the original message by returning true in the filter).
+	 * @return the amount of people that received the message. */
 	@Debugable
 	public static int broadcast(String prefix, String message, BroadcastFilter filter, String logmessage)
 	{
 		Debugger.notifyMethod(message, filter, logmessage);
 		if (logmessage != null)
-			sendMessage(Bukkit.getConsoleSender(), prefix,
-					logmessage + (filter == null ? " §7(global)" : " §7(filtered)"));
+			sendMessage(Bukkit.getConsoleSender(), prefix, logmessage);
 		if (filter == null)
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
