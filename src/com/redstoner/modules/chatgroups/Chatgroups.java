@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 7, compatible = 1)
+@Version(major = 1, minor = 1, revision = 8, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -196,7 +196,6 @@ public class Chatgroups implements Module, Listener
 	/** Let's a Player toggle their auto-cg status to allow for automatically sending chat messages to their chatgroup.
 	 * 
 	 * @param sender the issuer of the command.
-	 * @param _void ignored.
 	 * @return true. */
 	@Command(hook = "cgtoggle")
 	public boolean cgToggleCommand(CommandSender sender)
