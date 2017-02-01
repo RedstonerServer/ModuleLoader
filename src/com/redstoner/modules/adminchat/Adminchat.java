@@ -23,7 +23,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Adminchat implements Module
 {
 	private static final char defaultKey = ',';
@@ -106,7 +106,7 @@ public class Adminchat implements Module
 			name = ((Player) sender).getDisplayName();
 		else
 			name = sender.getName();
-		Utils.broadcast("§8[§cAC§8] §9" + name + "§8: ", message, new BroadcastFilter()
+		Utils.broadcast("§8[§cAC§8] §9" + name + "§8: §b", message, new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
