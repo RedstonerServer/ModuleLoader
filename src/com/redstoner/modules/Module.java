@@ -5,7 +5,7 @@ import com.redstoner.annotations.Version;
 /** Interface for the Module class. Modules must always have an empty constructor to be invoked by the ModuleLoader.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 0, compatible = 1)
 public interface Module
 {
 	/** Will be called when the module gets enabled. */
@@ -20,6 +20,15 @@ public interface Module
 	 * 
 	 * @return The status of the module, true when enabled, false when not. */
 	public boolean enabled();
+	
+	/** Default implementation for the enable() method, returning weather the module was enabled or not.
+	 * 
+	 * @return */
+	public default boolean enable()
+	{
+		onEnable();
+		return enabled();
+	}
 	
 	/** Gets called on registration of the module.
 	 * 
