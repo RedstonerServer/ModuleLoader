@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 3, compatible = 1)
+@Version(major = 1, minor = 1, revision = 4, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -30,10 +30,7 @@ public final class Utils
 	{
 		Debugger.notifyMethod(recipient, message, prefix);
 		if (prefix == null)
-		{
-			String classname = getCaller();
-			prefix = "§8[§2" + classname + "§8]: ";
-		}
+			prefix = "§8[§2" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
 	}
 	
@@ -47,10 +44,7 @@ public final class Utils
 	{
 		Debugger.notifyMethod(recipient, prefix, message);
 		if (prefix == null)
-		{
-			String classname = getCaller();
-			prefix = "§8[§c" + classname + "§8]: ";
-		}
+			prefix = "§8[§c" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
 		if (!recipient.equals(Bukkit.getConsoleSender()))
 			Bukkit.getConsoleSender().sendMessage("§c[WARN]: " + prefix + "§7" + message);
