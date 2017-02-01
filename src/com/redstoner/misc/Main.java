@@ -7,6 +7,7 @@ import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.chatgroups.Chatgroups;
+import com.redstoner.modules.check.Check;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.skullclick.SkullClick;
@@ -29,6 +30,7 @@ public class Main extends JavaPlugin
 		// TODO: Add modules (this also loads them if necessary)
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(Chatgroups.class);
+		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
 		ModuleLoader.addModule(SkullClick.class);
