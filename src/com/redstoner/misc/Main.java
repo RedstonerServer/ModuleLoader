@@ -7,12 +7,13 @@ import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.chatgroups.Chatgroups;
+import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.warn.Warn;
 
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 1, compatible = -1)
+@Version(major = 1, minor = 1, revision = 2, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -26,6 +27,7 @@ public class Main extends JavaPlugin
 		// TODO: Add modules (this also loads them if necessary)
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(Chatgroups.class);
+		ModuleLoader.addModule(SkullClick.class);
 		ModuleLoader.addModule(Warn.class);
 		// And enable them
 		ModuleLoader.enableModules();
