@@ -85,8 +85,8 @@ public class Chatgroups implements Module, Listener
 				"}\n" +
 				"command cgsay {\n" +
 				"	[string:message...] {\n" +
-				"		help Chats in your chatgroup.\n"+
-				"		run cgsay message\n" +
+				"		help Chats in your chatgroup.;\n"+
+				"		run cgsay message;\n" +
 				"	}\n" +
 				"}\n" +
 				"command cg {\n" +
