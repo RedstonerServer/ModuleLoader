@@ -73,10 +73,10 @@ public class Chatgroups implements Module, Listener
 	public String getCommandString()
 	{
 		return  "command cgt {\n" +
-				"	[string:void...] {\n" +
+				"	[empty] {\n" +
 				"		help Toggles your cgtoggle status.;\n"+
 				"		type player;\n" +
-				"		run cgtoggle void;\n" +
+				"		run cgtoggle;\n" +
 				"	}\n" +
 				"}\n" +
 				"command cgkey {\n" +
@@ -196,7 +196,7 @@ public class Chatgroups implements Module, Listener
 	 * @param _void ignored.
 	 * @return true. */
 	@Command(hook = "cgtoggle")
-	public boolean cgToggleCommand(CommandSender sender, String _void)
+	public boolean cgToggleCommand(CommandSender sender)
 	{
 		if (getGroup(sender) != null)
 			if (cgtoggled.contains(sender))
