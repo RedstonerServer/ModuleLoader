@@ -49,7 +49,9 @@ public final class ModuleLoader implements CoreModule
 		Debugger.notifyMethod(clazz);
 		try
 		{
-			modules.add(clazz.newInstance());
+			Module module = clazz.newInstance();
+			modules.add(module);
+			CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
