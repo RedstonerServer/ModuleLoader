@@ -76,12 +76,14 @@ public class Chatgroups implements Module, Listener
 				"	[string:void...] {\n" +
 				"		help Toggles your cgtoggle status.;\n"+
 				"		run cgtoggle;\n" +
+				"		type player;\n" +
 				"	}\n" +
 				"}\n" +
 				"command cgkey {\n" +
 				"	[string:key] {\n" +
 				"		help Sets your chatgroup key.;\n" +
 				"		run setcgkey key;\n" +
+				"		type player;\n" +
 				"	}\n" +
 				"}\n" +
 				"command cgsay {\n" +
