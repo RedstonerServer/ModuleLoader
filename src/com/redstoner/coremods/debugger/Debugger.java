@@ -20,7 +20,7 @@ import com.redstoner.modules.CoreModule;
 /** The Debugger class, first Module to be loaded, responsible for debug interactions such as subscribing to method calls and getting field values on runtime.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 0, compatible = -1)
+@Version(major = 1, minor = 0, revision = 1, compatible = -1)
 public final class Debugger implements CoreModule, Listener
 {
 	private static Debugger instance;
@@ -124,7 +124,7 @@ public final class Debugger implements CoreModule, Listener
 	{
 		return "command debugger {\n" + 
 				"	subscribe [string:classname] [string:methodname] {\n" + 
-				"		help Subscribes to all calls of the corresponding debugger method.;\n" + 
+				"		help Subscribes to all calls of the corresponding debugable method.;\n" + 
 				"		perm jutils.debugger.subscribe;\n" + 
 				"		run subscribe classname methodname;\n" + 
 				"	}\n" + 
