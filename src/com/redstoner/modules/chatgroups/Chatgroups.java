@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 11, compatible = 1)
+@Version(major = 1, minor = 2, revision = 0, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -188,6 +188,7 @@ public class Chatgroups implements Module, Listener
 		}
 		Utils.sendMessage(sender, null, "Set your key to §6" + key);
 		keys.put(((Player) sender).getUniqueId().toString(), key + "");
+		saveKeys();
 		return true;
 	}
 	
