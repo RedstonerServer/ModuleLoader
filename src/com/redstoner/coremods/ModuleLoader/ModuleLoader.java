@@ -2,11 +2,14 @@ package com.redstoner.coremods.ModuleLoader;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.Listener;
 
 import com.nemez.cmdmgr.Command;
 import com.nemez.cmdmgr.Command.AsyncType;
 import com.nemez.cmdmgr.CommandManager;
+import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
@@ -18,7 +21,7 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 0, compatible = -1)
+@Version(major = 1, minor = 1, revision = 1, compatible = -1)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -63,9 +66,14 @@ public final class ModuleLoader implements CoreModule
 		{
 			if (m.enabled())
 				continue;
-			m.onEnable();
-			if (m.enabled())
+			if (m.enable())
+			{
+				if (m.getClass().isAnnotationPresent(AutoRegisterListener.class) && (m instanceof Listener))
+				{
+					Bukkit.getPluginManager().registerEvents((Listener) m, Main.plugin);
+				}
 				Utils.log("Loaded module " + m.getClass().getName());
+			}
 			else
 				Utils.error("Failed to load module " + m.getClass().getName());
 		}
@@ -83,7 +91,20 @@ public final class ModuleLoader implements CoreModule
 		{
 			if (m.getClass().equals(clazz))
 			{
-				return m.enable();
+				if (m.enable())
+				{
+					if (m.getClass().isAnnotationPresent(AutoRegisterListener.class) && (m instanceof Listener))
+					{
+						Bukkit.getPluginManager().registerEvents((Listener) m, Main.plugin);
+					}
+					Utils.log("Loaded module " + m.getClass().getName());
+					return true;
+				}
+				else
+				{
+					Utils.error("Failed to load module " + m.getClass().getName());
+					return false;
+				}
 			}
 		}
 		try
@@ -92,8 +113,19 @@ public final class ModuleLoader implements CoreModule
 			modules.add(m);
 			m.onEnable();
 			if (m.enabled())
+			{
+				if (m.getClass().isAnnotationPresent(AutoRegisterListener.class) && (m instanceof Listener))
+				{
+					Bukkit.getPluginManager().registerEvents((Listener) m, Main.plugin);
+				}
 				Utils.log("Loaded module " + m.getClass().getName());
-			return m.enabled();
+				return true;
+			}
+			else
+			{
+				Utils.error("Failed to load module " + m.getClass().getName());
+				return false;
+			}
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
