@@ -3,6 +3,7 @@ package com.redstoner.modules;
 import com.redstoner.annotations.Version;
 
 /** This class shall be used for "CoreModules", which are acting on a lower level than modules and are also exempted from being disabled or reloaded on the go.</br>
+ * Please note that CoreModules will not be known to the ModuleLoader itself!</br>
  * Examples are the ModuleLoader and the Debugger.
  * 
  * @author Pepich */
