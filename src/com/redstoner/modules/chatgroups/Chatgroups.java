@@ -75,8 +75,8 @@ public class Chatgroups implements Module, Listener
 		return  "command cgt {\n" +
 				"	[string:void...] {\n" +
 				"		help Toggles your cgtoggle status.;\n"+
-				"		run cgtoggle;\n" +
 				"		type player;\n" +
+				"		run cgtoggle void;\n" +
 				"	}\n" +
 				"}\n" +
 				"command cgkey {\n" +
@@ -128,10 +128,10 @@ public class Chatgroups implements Module, Listener
 			ArrayList<String> players = new ArrayList<String>();
 			for (int i = 0; i < groups.entrySet().size(); i++)
 			{
-				String t_group = (String) groups.entrySet().toArray(new String[] {})[i];
+				String t_group = (String) groups.entrySet().toArray(new Object[] {})[i];
 				if (t_group.equals(group))
 				{
-					String name = (String) groups.values().toArray(new String[] {})[i];
+					String name = (String) groups.values().toArray(new Object[] {})[i];
 					if (!name.equals("CONSOLE"))
 					{
 						UUID uuid = UUID.fromString(name);
@@ -192,21 +192,22 @@ public class Chatgroups implements Module, Listener
 	
 	/** Let's a Player toggle their auto-cg status to allow for automatically sending chat messages to their chatgroup.
 	 * 
-	 * @param sender
-	 * @return */
+	 * @param sender the issuer of the command.
+	 * @param _void ignored.
+	 * @return true. */
 	@Command(hook = "cgtoggle")
-	public boolean cgToggleCommand(CommandSender sender)
+	public boolean cgToggleCommand(CommandSender sender, String _void)
 	{
 		if (getGroup(sender) != null)
 			if (cgtoggled.contains(sender))
 			{
 				cgtoggled.remove(sender);
-				Utils.sendMessage(sender, null, "cgt now §aenabled");
+				Utils.sendMessage(sender, null, "Cgt now §cdisbled");
 			}
 			else
 			{
 				cgtoggled.add(sender);
-				Utils.sendMessage(sender, null, "cgt now §cdisabled");
+				Utils.sendMessage(sender, null, "Cgt now §aenabled");
 			}
 		else
 			Utils.sendErrorMessage(sender, null, "You are not in a chatgroup!");
