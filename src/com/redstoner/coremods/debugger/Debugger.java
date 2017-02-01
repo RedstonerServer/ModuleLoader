@@ -20,7 +20,7 @@ import com.redstoner.modules.CoreModule;
 /** The Debugger class, first Module to be loaded, responsible for debug interactions such as subscribing to method calls and getting field values on runtime.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 1, compatible = -1)
+@Version(major = 1, minor = 0, revision = 2, compatible = -1)
 public final class Debugger implements CoreModule, Listener
 {
 	private static Debugger instance;
