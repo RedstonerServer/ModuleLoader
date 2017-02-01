@@ -1,4 +1,4 @@
-package com.redstoner.coremods.ModuleLoader;
+package com.redstoner.coremods.moduleLoader;
 
 import java.util.ArrayList;
 
