@@ -20,7 +20,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Vanish implements Module, Listener
 {
 	private boolean enabled = false;
@@ -240,7 +240,7 @@ public class Vanish implements Module, Listener
 				"    [string:name] {\n" + 
 				"        help Toggles someone elses vanish;\n" + 
 				"        run vanish_other name;\n" + 
-				"        perm utils.vanish;\n" + 
+				"        perm utils.vanishother;\n" + 
 				"    }\n" + 
 				"}";
 	}
