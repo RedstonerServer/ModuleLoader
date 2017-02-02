@@ -6,6 +6,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.modules.adminchat.Adminchat;
+import com.redstoner.modules.adminnotes.AdminNotes;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.check.Check;
 import com.redstoner.modules.damnspam.DamnSpam;
@@ -17,7 +18,7 @@ import com.redstoner.modules.warn.Warn;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 5, compatible = -1)
+@Version(major = 1, minor = 1, revision = 6, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -30,6 +31,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.init();
 		// TODO: Add modules (this also loads them if necessary)
 		ModuleLoader.addModule(Adminchat.class);
+		ModuleLoader.addModule(AdminNotes.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(DamnSpam.class);
@@ -40,8 +42,4 @@ public class Main extends JavaPlugin
 		// And enable them
 		ModuleLoader.enableModules();
 	}
-	
-	@Override
-	public void onDisable()
-	{}
 }
