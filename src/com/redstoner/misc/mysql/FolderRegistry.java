@@ -11,10 +11,10 @@ public class FolderRegistry
 	public static void init()
 	{
 		File dataFolder = Main.plugin.getDataFolder();
-		moduleFolder = new File(dataFolder + "/modules");
-		configFolder = new File(dataFolder + "/config");
-		commandFolder = new File(dataFolder + "/commands");
-		tempFolder = new File(dataFolder + "/temp");
+		moduleFolder = new File(dataFolder, "modules/");
+		configFolder = new File(dataFolder, "config/");
+		commandFolder = new File(dataFolder, "commands/");
+		tempFolder = new File(dataFolder, "temp/");
 		if (!moduleFolder.exists())
 		{
 			moduleFolder.mkdirs();
