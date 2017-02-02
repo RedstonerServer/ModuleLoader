@@ -21,7 +21,7 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 2, compatible = -1)
+@Version(major = 1, minor = 1, revision = 3, compatible = -1)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -158,8 +158,10 @@ public final class ModuleLoader implements CoreModule
 		StringBuilder sb = new StringBuilder("Modules:\n");
 		for (Module m : modules)
 		{
+			String[] classPath = m.getClass().getName().split("\\.");
+			String classname = classPath[classPath.length - 1];
 			sb.append(m.enabled() ? "&a" : "&c");
-			sb.append(m.getClass().getName());
+			sb.append(classname);
 			sb.append(", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
