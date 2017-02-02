@@ -12,13 +12,14 @@ import com.redstoner.modules.check.Check;
 import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
+import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.warn.Warn;
 
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 0, compatible = -1)
+@Version(major = 1, minor = 2, revision = 1, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -37,6 +38,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(DamnSpam.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
+		ModuleLoader.addModule(Scriptutils.class);
 		ModuleLoader.addModule(SkullClick.class);
 		ModuleLoader.addModule(Warn.class);
 		// And enable them
