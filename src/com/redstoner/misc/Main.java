@@ -12,6 +12,7 @@ import com.redstoner.modules.check.Check;
 import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
+import com.redstoner.modules.loginsecurity.LoginSecurity;
 import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.warn.Warn;
@@ -47,7 +48,7 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(Imbusy.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
-		// TODO: ModuleLoader.addModule(Loginsecurity.class);
+		ModuleLoader.addModule(LoginSecurity.class);
 		// TODO: ModuleLoader.addModule(Mentio.class);
 		// TODO: ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
