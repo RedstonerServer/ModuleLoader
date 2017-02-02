@@ -298,7 +298,27 @@ public class Mentio implements Module, Listener {
     public String getCommandString() {
         StringBuilder sb = new StringBuilder();
         
-        sb.append("");
+        sb.append("command mentio {");
+        sb.append(" perm utils.mentio;");
+        sb.append(" ");
+        sb.append(" add [string:word] {");
+        sb.append("     run addWord word;");
+        sb.append("     help Adds a word to your mentions.;");
+        sb.append("     type player;");
+        sb.append(" }");
+        sb.append(" ");
+        sb.append(" del [string:word] {");
+        sb.append("     run delWord word;");
+        sb.append("     help Removes a word from your mentions.;");
+        sb.append("     type player;");
+        sb.append(" }");
+        sb.append(" ");
+        sb.append(" list {");
+        sb.append("     run listWords;");
+        sb.append("     help Lists words that mention you.;");
+        sb.append("     type player;");
+        sb.append(" }");
+        sb.append("}");
         
         return sb.toString();
     }
