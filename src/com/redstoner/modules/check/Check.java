@@ -31,7 +31,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 1, minor = 0, revision = 4, compatible = 1)
 public class Check implements Module, Listener
 {
 	private boolean enabled = false;
@@ -43,7 +43,7 @@ public class Check implements Module, Listener
 		Map<Serializable, Serializable> config = JSONManager.getConfiguration("check.json");
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
-			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null, "Could not load the Check config file, disabling!");
+			Utils.error("Could not load the Check config file, disabling!");
 			enabled = false;
 			return;
 		}
@@ -54,7 +54,7 @@ public class Check implements Module, Listener
 		}
 		catch (NullPointerException e)
 		{
-			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null, "Could not use the Check config, disabling!");
+			Utils.error("Could not use the Check config, disabling!");
 			enabled = false;
 			return;
 		}
