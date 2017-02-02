@@ -48,6 +48,7 @@ public class LoginSecurity implements Module, Listener
 			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
 					"Could not load the LoginSecurity config file, disabling!");
 			enabled = false;
+			return;
 		}
 		try
 		{
@@ -62,6 +63,7 @@ public class LoginSecurity implements Module, Listener
 			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
 					"Could not use the LoginSecurity config, disabling!");
 			enabled = false;
+			return;
 		}
 		loggingIn = new HashMap<>();
 		Bukkit.getServer().getPluginManager().registerEvents(new CancelledEventsHandler(this), Main.plugin);
