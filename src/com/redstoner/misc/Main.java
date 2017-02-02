@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
+import com.redstoner.misc.mysql.FolderRegistry;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.adminnotes.AdminNotes;
 import com.redstoner.modules.chatgroups.Chatgroups;
@@ -32,6 +33,7 @@ public class Main extends JavaPlugin
 		plugin = this;
 		Debugger.init();
 		ModuleLoader.init();
+		FolderRegistry.init();
 		// TODO: ModuleLoader.addModule(Answerbot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
