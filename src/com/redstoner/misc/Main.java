@@ -16,10 +16,12 @@ import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.warn.Warn;
 
+import motd.Motd;
+
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 2, compatible = -1)
+@Version(major = 1, minor = 2, revision = 3, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -47,7 +49,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(LagChunks.class);
 		// TODO: ModuleLoader.addModule(Mentio.class);
 		// TODO: ModuleLoader.addModule(Misc.class);
-		// TODO: ModuleLoader.addModule(Motd.class);
+		ModuleLoader.addModule(Motd.class);
 		// TODO: ModuleLoader.addModule(Nametags.class);
 		// TODO: ModuleLoader.addModule(Pmtoggle.class);
 		// TODO: ModuleLoader.addModule(Punishments.class); // Remove?
