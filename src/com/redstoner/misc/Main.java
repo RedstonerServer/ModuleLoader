@@ -19,7 +19,7 @@ import com.redstoner.modules.warn.Warn;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 1, compatible = -1)
+@Version(major = 1, minor = 2, revision = 2, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -30,17 +30,38 @@ public class Main extends JavaPlugin
 		plugin = this;
 		Debugger.init();
 		ModuleLoader.init();
-		// TODO: Add modules (this also loads them if necessary)
+		// TODO: ModuleLoader.addModule(Answerbot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
+		// TODO: ModuleLoader.addModule(Badges.class);
+		// TODO: ModuleLoader.addModule(Calc.class);
+		// TODO: ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
+		// TODO: ModuleLoader.addModule(Cycle.class); // Remove?
 		ModuleLoader.addModule(DamnSpam.class);
+		// TODO: ModuleLoader.addModule(Forcefield.class); // Remove?
+		// TODO: ModuleLoader.addModule(Friends.class);
+		// TODO: ModuleLoader.addModule(Imbusy.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
+		// TODO: ModuleLoader.addModule(Mentio.class);
+		// TODO: ModuleLoader.addModule(Misc.class);
+		// TODO: ModuleLoader.addModule(Motd.class);
+		// TODO: ModuleLoader.addModule(Nametags.class);
+		// TODO: ModuleLoader.addModule(Pmtoggle.class);
+		// TODO: ModuleLoader.addModule(Punishments.class); // Remove?
+		// TODO: ModuleLoader.addModule(Reports.class);
+		// TODO: ModuleLoader.addModule(Saylol.class);
 		ModuleLoader.addModule(Scriptutils.class);
+		// TODO: ModuleLoader.addModule(Serversigns.class);
+		// TODO: ModuleLoader.addModule(Signalstrength.class);
 		ModuleLoader.addModule(SkullClick.class);
+		// TODO: ModuleLoader.addModule(Snowbrawl.class); // Remove?
+		// TODO: ModuleLoader.addModule(Tag.class);
+		// TODO: ModuleLoader.addModule(Vanish.class);
 		ModuleLoader.addModule(Warn.class);
+		// TODO: ModuleLoader.addModule(Webtoken.class);
 		// And enable them
 		ModuleLoader.enableModules();
 	}
