@@ -23,7 +23,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 0, compatible = -1)
+@Version(major = 1, minor = 3, revision = 1, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -38,14 +38,10 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(Answerbot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
-		// TODO: ModuleLoader.addModule(Badges.class); // Remove?
-		// TODO: ModuleLoader.addModule(Calc.class); // Remove?
 		// TODO: ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
-		// TODO: ModuleLoader.addModule(Cycle.class); // Remove?
 		ModuleLoader.addModule(DamnSpam.class);
-		// TODO: ModuleLoader.addModule(Forcefield.class); // Remove?
 		// TODO: ModuleLoader.addModule(Friends.class);
 		// TODO: ModuleLoader.addModule(Imbusy.class);
 		ModuleLoader.addModule(Imout.class);
@@ -56,14 +52,12 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Motd.class);
 		// TODO: ModuleLoader.addModule(Nametags.class);
 		// TODO: ModuleLoader.addModule(Pmtoggle.class);
-		// TODO: ModuleLoader.addModule(Punishments.class); // Remove?
 		// TODO: ModuleLoader.addModule(Reports.class);
 		// TODO: ModuleLoader.addModule(Saylol.class);
 		ModuleLoader.addModule(Scriptutils.class);
 		// TODO: ModuleLoader.addModule(Serversigns.class);
 		// TODO: ModuleLoader.addModule(Signalstrength.class);
 		ModuleLoader.addModule(SkullClick.class);
-		// TODO: ModuleLoader.addModule(Snowbrawl.class); // Remove?
 		// TODO: ModuleLoader.addModule(Tag.class);
 		// TODO: ModuleLoader.addModule(Vanish.class);
 		ModuleLoader.addModule(Warn.class);
