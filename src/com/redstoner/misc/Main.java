@@ -18,7 +18,7 @@ import com.redstoner.modules.warn.Warn;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 6, compatible = -1)
+@Version(major = 1, minor = 2, revision = 0, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -41,5 +41,11 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Warn.class);
 		// And enable them
 		ModuleLoader.enableModules();
+	}
+	
+	@Override
+	public void onDisable()
+	{
+		ModuleLoader.disableModules();
 	}
 }

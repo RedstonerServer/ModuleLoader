@@ -21,7 +21,7 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 3, compatible = -1)
+@Version(major = 1, minor = 2, revision = 0, compatible = -1)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -168,5 +168,14 @@ public final class ModuleLoader implements CoreModule
 		Utils.sendMessage(sender, " §e", sb.toString(), '&');
 		Utils.sendMessage(sender, " §7", "For more detailed information, consult the debugger.");
 		return true;
+	}
+	
+	public static void disableModules()
+	{
+		for (Module m : modules)
+		{
+			if (m.enabled())
+				m.onDisable();
+		}
 	}
 }
