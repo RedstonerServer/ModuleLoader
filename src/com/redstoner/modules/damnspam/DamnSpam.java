@@ -33,15 +33,15 @@ import org.json.simple.parser.ParseException;
 import com.nemez.cmdmgr.Command;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Version;
-import com.redstoner.misc.mysql.FolderRegistry;
+import com.redstoner.misc.Main;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 0, compatible = 1)
 public class DamnSpam implements Module, Listener
 {
 	private boolean enabled = false;
-	File configFile;
+	File configFile = new File(Main.plugin.getDataFolder(), "DamnSpam.json");
 	Map<String, SpamInput> inputs;
 	boolean changingInput = false;
 	List<Material> acceptedInputs;
@@ -53,7 +53,6 @@ public class DamnSpam implements Module, Listener
 	@Override
 	public void onEnable()
 	{
-		configFile = new File(FolderRegistry.configFolder, "DamnSpam.json");
 		loadInputs();
 		acceptedInputs = new ArrayList<Material>();
 		Collections.addAll(acceptedInputs, Material.WOOD_BUTTON, Material.STONE_BUTTON, Material.LEVER);

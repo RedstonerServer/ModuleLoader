@@ -18,11 +18,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.redstoner.misc.Main;
+
 public class JSONManager
 {
 	public static Map<Serializable, Serializable> getConfiguration(String fileName)
 	{
-		File file = new File(FolderRegistry.configFolder, fileName);
+		File file = new File(Main.plugin.getDataFolder(), fileName);
 		if (!file.exists())
 		{
 			try
@@ -51,7 +53,7 @@ public class JSONManager
 	{
 		try
 		{
-			saveMap(new File(FolderRegistry.configFolder, fileName), config);
+			saveMap(new File(Main.plugin.getDataFolder(), fileName), config);
 		}
 		catch (IOException e)
 		{

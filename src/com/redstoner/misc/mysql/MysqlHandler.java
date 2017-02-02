@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.json.simple.parser.ParseException;
 
+import com.redstoner.misc.Main;
 import com.redstoner.misc.mysql.elements.MysqlDatabase;
 
 public class MysqlHandler
@@ -34,7 +35,7 @@ public class MysqlHandler
 	public static void init()
 	{
 		Map<Serializable, Serializable> mysqlCredentials = new HashMap<>();
-		File mysqlCredentialsFile = new File(FolderRegistry.configFolder, "mysqlCredentials.json");
+		File mysqlCredentialsFile = new File(Main.plugin.getDataFolder(), "mysqlCredentials.json");
 		if (mysqlCredentialsFile.exists())
 		{
 			try
