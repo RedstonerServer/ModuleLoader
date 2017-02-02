@@ -6,6 +6,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.misc.mysql.MysqlHandler;
+import com.redstoner.modules.abot.Abot;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.adminnotes.AdminNotes;
 import com.redstoner.modules.chatgroups.Chatgroups;
@@ -23,7 +24,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 1, compatible = -1)
+@Version(major = 1, minor = 3, revision = 3, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -35,7 +36,7 @@ public class Main extends JavaPlugin
 		Debugger.init();
 		ModuleLoader.init();
 		MysqlHandler.init();
-		// TODO: ModuleLoader.addModule(Answerbot.class);
+		ModuleLoader.addModule(Abot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
 		// TODO: ModuleLoader.addModule(Chatalias.class);
