@@ -1,4 +1,4 @@
-package motd;
+package com.redstoner.modules.motd;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

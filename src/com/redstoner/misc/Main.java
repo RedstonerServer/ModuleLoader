@@ -13,11 +13,10 @@ import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.loginsecurity.LoginSecurity;
+import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.warn.Warn;
-
-import motd.Motd;
 
 /** Main class. Duh.
  * 
