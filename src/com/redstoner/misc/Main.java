@@ -27,7 +27,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 4, compatible = -1)
+@Version(major = 1, minor = 3, revision = 5, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -42,7 +42,9 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Abot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
+		// TODO: ModuleLoader.addModule(Calc.class);
 		// TODO: ModuleLoader.addModule(Chatalias.class);
+		// TODO: ModuleLoader.addModule(Cycle.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(DamnSpam.class);
