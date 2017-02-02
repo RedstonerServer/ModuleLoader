@@ -32,7 +32,7 @@ import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.misc.mysql.types.text.VarChar;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class LoginSecurity implements Module, Listener
 {
 	private boolean enabled = false;
@@ -42,7 +42,7 @@ public class LoginSecurity implements Module, Listener
 	@Override
 	public void onEnable()
 	{
-		Map<Serializable, Serializable> config = JSONManager.getConfiguration("LoginSecurity.json");
+		Map<Serializable, Serializable> config = JSONManager.getConfiguration("loginsecurity.json");
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
 			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
