@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class AdminNotes implements Module, Listener
 {
 	private boolean enabled = false;
@@ -117,16 +117,19 @@ public class AdminNotes implements Module, Listener
 				"		type player;\n" + 
 				"		help Creates a new admin note;\n" + 
 				"		run an_create note;\n" + 
+				"		perm utils.an" +
 				"	}\n" + 
 				"	\n" + 
 				"	del [int:id] {\n" + 
 				"		help Deletes an admin note;\n" + 
 				"		run an_del id;\n" + 
+				"		perm utils.an" +
 				"	}\n" + 
 				"	\n" + 
 				"	list {\n" + 
 				"		help Lists all notes;\n" + 
 				"		run an_list;\n" + 
+				"		perm utils.an" +
 				"	}\n" + 
 				"}";
 	}

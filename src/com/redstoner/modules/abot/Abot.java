@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Abot implements Module, Listener
 {
 	private boolean enabled = false;
@@ -85,6 +85,7 @@ public class Abot implements Module, Listener
 				"	reload {" +
 				"		help Reloads answes from the .json file.;\n" +
 				"		run abot_reload;\n" +
+				"		perm utils.abot.reload;" +
 				"	}\n" +
 				"}";
 	}

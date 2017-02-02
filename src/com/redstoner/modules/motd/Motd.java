@@ -12,7 +12,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Motd implements Module
 {
 	private boolean enabled = false;
@@ -69,12 +69,14 @@ public class Motd implements Module
 				"    [string:motd...] {\n" + 
 				"        help Sets the motd. Use --reset to reset to default;\n" + 
 				"        run setmotd motd;\n" + 
+				"    	perm utils.setmotd;" +
 				"    }\n" + 
 				"}\n" + 
 				"command getmotd {\n" + 
 				"    [empty] {\n" + 
 				"        help Returns the motd;\n" + 
 				"        run getmotd;\n" + 
+				"    	perm utils.getmotd;" +
 				"    }\n" + 
 				"}";
 	}
