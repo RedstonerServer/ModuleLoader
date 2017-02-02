@@ -21,7 +21,7 @@ import motd.Motd;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 3, compatible = -1)
+@Version(major = 1, minor = 2, revision = 4, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -35,8 +35,8 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(Answerbot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
-		// TODO: ModuleLoader.addModule(Badges.class);
-		// TODO: ModuleLoader.addModule(Calc.class);
+		// TODO: ModuleLoader.addModule(Badges.class); // Remove?
+		// TODO: ModuleLoader.addModule(Calc.class); // Remove?
 		// TODO: ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
@@ -47,6 +47,7 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(Imbusy.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
+		// TODO: ModuleLoader.addModule(Loginsecurity.class);
 		// TODO: ModuleLoader.addModule(Mentio.class);
 		// TODO: ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
