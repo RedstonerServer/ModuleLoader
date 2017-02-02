@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -34,10 +33,11 @@ import com.nemez.cmdmgr.Command;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Version;
 import com.redstoner.misc.Main;
+import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 1, compatible = 1)
 public class DamnSpam implements Module, Listener
 {
 	private boolean enabled = false;
@@ -142,12 +142,10 @@ public class DamnSpam implements Module, Listener
 			destroyingInput = true;
 		else if (!isAcceptableTimeout(seconds))
 		{
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-					"&cThe timeout must be -1 or within 0 and " + maxTimeout));
+			Utils.sendMessage(sender, null, "&cThe timeout must be -1 or within 0 and " + maxTimeout, '&');
 			return;
 		}
-		sender.sendMessage(
-				ChatColor.translateAlternateColorCodes('&', "&aPlease click the input you would like to set."));
+		Utils.sendMessage(sender, null, "&aPlease click the input you would like to set.", '&');
 		setPlayer((Player) sender, destroyingInput, seconds, seconds);
 	}
 	
@@ -163,12 +161,10 @@ public class DamnSpam implements Module, Listener
 		}
 		else if (!(isAcceptableTimeout(secondsOn) && isAcceptableTimeout(secondsOff)))
 		{
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-					"&cThe timeout must be -1 or within 0 and " + maxTimeout));
+			Utils.sendMessage(sender, null, "&cThe timeout must be -1 or within 0 and " + maxTimeout, '&');
 			return;
 		}
-		sender.sendMessage(
-				ChatColor.translateAlternateColorCodes('&', "&aPlease click the input you would like to set."));
+		Utils.sendMessage(sender, null, "&aPlease click the input you would like to set.", '&');
 		setPlayer((Player) sender, destroyingInput, secondsOff, secondsOn);
 	}
 	
@@ -188,8 +184,7 @@ public class DamnSpam implements Module, Listener
 		{
 			if (!acceptedInputs.contains(block.getType()))
 			{
-				player.sendMessage(
-						ChatColor.translateAlternateColorCodes('&', "&cThat block is not an acceptable input!"));
+				Utils.sendMessage(player, null, "&cThat block is not an acceptable input!", '&');
 				return true;
 			}
 			String typeStr = block.getType().toString().toLowerCase().replace("_", " ");
@@ -199,8 +194,8 @@ public class DamnSpam implements Module, Listener
 			changingInput = false;
 			if (!buildCheck)
 			{
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-						"&cThere is no timeout to remove on this " + typeStr + "(by setting the timeout to 0)"));
+				Utils.sendMessage(player, null,
+						"&cThere is no timeout to remove on this " + typeStr + "(by setting the timeout to 0)", '&');
 				return true;
 			}
 			SpamInput input = players.get(player);
@@ -208,20 +203,20 @@ public class DamnSpam implements Module, Listener
 			{
 				if (!inputs.containsKey(locationStr))
 				{
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							"&cThere is no timeout to remove on this " + typeStr + "(by setting the timeout to 0)"));
+					Utils.sendMessage(player, null,
+							"&cThere is no timeout to remove on this " + typeStr + "(by setting the timeout to 0)",
+							'&');
 					return true;
 				}
 				inputs.remove(locationStr);
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-						"&aSuccessfully removed the timeout for this " + typeStr));
+				Utils.sendMessage(player, null, "&aSuccessfully removed the timeout for this " + typeStr, '&');
 			}
 			else
 			{
 				inputs.put(locationStr, players.get(player));
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-						"&aSuccessfully set a timeout for this " + typeStr));
+				Utils.sendMessage(player, null, "&aSuccessfully set a timeout for this " + typeStr, '&');
 			}
+			event.setCancelled(true);
 			players.remove(player);
 			saveInputs();
 			return true;
@@ -243,9 +238,9 @@ public class DamnSpam implements Module, Listener
 				: "the " + typeStr + " attached to that block");
 		if (!sender.isSneaking())
 		{
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot destroy " + inputStr));
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-					"&c&nSneak&c and break or set the timeout to 0 if you want to remove it."));
+			Utils.sendMessage(sender, null, "&cYou cannot destroy " + inputStr, '&');
+			Utils.sendMessage(sender, "", "&c&nSneak&c and break or set the timeout to 0 if you want to remove it.",
+					'&');
 			event.setCancelled(true);
 			return;
 		}
@@ -253,12 +248,11 @@ public class DamnSpam implements Module, Listener
 		{
 			inputs.remove(posStr);
 			saveInputs();
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccesfully removed " + inputStr));
+			Utils.sendMessage(sender, null, "&aSuccesfully removed " + inputStr, '&');
 		}
 		else
 		{
-			sender.sendMessage(
-					ChatColor.translateAlternateColorCodes('&', "&cYou are not allowed to remove " + inputStr));
+			Utils.sendMessage(sender, null, "&cYou are not allowed to remove " + inputStr, '&');
 			event.setCancelled(true);
 		}
 	}
@@ -333,14 +327,13 @@ public class DamnSpam implements Module, Listener
 				if (checktime == -1)
 				{
 					event.setCancelled(true);
-					sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							"&cThis " + btype + " is locked permanently by /damnspam."));
+					Utils.sendMessage(sender, null, "&cThis " + btype + " is locked permanently by /damnspam.", '&');
 				}
 				else if (timeLeft > 0)
 				{
 					event.setCancelled(true);
-					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThis " + btype
-							+ " has a damnspam timeout of " + checktime + ", with " + timeLeft + " left."));
+					Utils.sendMessage(sender, null, "&cThis " + btype + " has a damnspam timeout of " + checktime
+							+ ", with " + timeLeft + " left.", '&');
 				}
 				else
 				{
