@@ -11,6 +11,7 @@ import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.adminnotes.AdminNotes;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.check.Check;
+import com.redstoner.modules.cycle.Cycle;
 import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
@@ -27,7 +28,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 5, compatible = -1)
+@Version(major = 1, minor = 3, revision = 6, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -44,7 +45,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(AdminNotes.class);
 		// TODO: ModuleLoader.addModule(Calc.class);
 		// TODO: ModuleLoader.addModule(Chatalias.class);
-		// TODO: ModuleLoader.addModule(Cycle.class);
+		ModuleLoader.addModule(Cycle.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(DamnSpam.class);
