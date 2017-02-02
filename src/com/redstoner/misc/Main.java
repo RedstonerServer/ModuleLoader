@@ -18,6 +18,7 @@ import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.warn.Warn;
+import com.redstoner.modules.webtoken.WebToken;
 
 /** Main class. Duh.
  * 
@@ -66,7 +67,7 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(Tag.class);
 		// TODO: ModuleLoader.addModule(Vanish.class);
 		ModuleLoader.addModule(Warn.class);
-		// TODO: ModuleLoader.addModule(Webtoken.class);
+		ModuleLoader.addModule(WebToken.class);
 		// And enable them
 		ModuleLoader.enableModules();
 	}
