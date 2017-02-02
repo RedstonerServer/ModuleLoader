@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -32,7 +31,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Check implements Module, Listener
 {
 	private boolean enabled = false;
@@ -44,7 +43,7 @@ public class Check implements Module, Listener
 		Map<Serializable, Serializable> config = JSONManager.getConfiguration("Check.json");
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not load the Check config file, disabling!");
+			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null, "Could not load the Check config file, disabling!");
 			enabled = false;
 			return;
 		}
@@ -55,7 +54,7 @@ public class Check implements Module, Listener
 		}
 		catch (NullPointerException e)
 		{
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not use the Check config, disabling!");
+			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null, "Could not use the Check config, disabling!");
 			enabled = false;
 			return;
 		}

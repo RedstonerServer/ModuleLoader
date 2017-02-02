@@ -19,7 +19,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.nemez.cmdmgr.Command;
+import com.redstoner.annotations.Version;
 import com.redstoner.misc.Main;
+import com.redstoner.misc.Utils;
 import com.redstoner.misc.mysql.JSONManager;
 import com.redstoner.misc.mysql.MysqlHandler;
 import com.redstoner.misc.mysql.elements.ConstraintOperator;
@@ -30,6 +32,7 @@ import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.misc.mysql.types.text.VarChar;
 import com.redstoner.modules.Module;
 
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class LoginSecurity implements Module, Listener
 {
 	private boolean enabled = false;
@@ -42,8 +45,8 @@ public class LoginSecurity implements Module, Listener
 		Map<Serializable, Serializable> config = JSONManager.getConfiguration("LoginSecurity.json");
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
-			Bukkit.getConsoleSender()
-					.sendMessage(ChatColor.RED + "Could not load the LoginSecurity config file, disabling!");
+			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
+					"Could not load the LoginSecurity config file, disabling!");
 			enabled = false;
 		}
 		try
@@ -56,7 +59,8 @@ public class LoginSecurity implements Module, Listener
 		}
 		catch (NullPointerException e)
 		{
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not use the LoginSecurity config, disabling!");
+			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
+					"Could not use the LoginSecurity config, disabling!");
 			enabled = false;
 		}
 		loggingIn = new HashMap<>();
