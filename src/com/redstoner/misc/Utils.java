@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 4, compatible = 1)
+@Version(major = 1, minor = 1, revision = 5, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -58,6 +58,8 @@ public final class Utils
 	 * @param alternateColorCode The alternate color code indicator to use. If set to '&' then "&7" would be translated to "§7". Works with any char. */
 	public static void sendMessage(CommandSender recipient, String prefix, String message, char alternateColorCode)
 	{
+		if (prefix == null)
+			prefix = "§8[§c" + getCaller() + "§8]: ";
 		sendMessage(recipient, ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
 				ChatColor.translateAlternateColorCodes(alternateColorCode, message));
 	}
@@ -70,6 +72,8 @@ public final class Utils
 	 * @param alternateColorCode The alternate color code indicator to use. If set to '&' then "&7" would be translated to "§7". Works with any char. */
 	public static void sendErrorMessage(CommandSender recipient, String prefix, String message, char alternateColorCode)
 	{
+		if (prefix == null)
+			prefix = "§8[§c" + getCaller() + "§8]: ";
 		sendErrorMessage(recipient, ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
 				ChatColor.translateAlternateColorCodes(alternateColorCode, message));
 	}
