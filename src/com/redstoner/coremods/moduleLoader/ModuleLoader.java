@@ -21,7 +21,7 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 1, compatible = -1)
+@Version(major = 1, minor = 3, revision = 2, compatible = -1)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -64,17 +64,25 @@ public final class ModuleLoader implements CoreModule
 		{
 			if (module.enabled())
 				continue;
-			if (module.enable())
+			try
 			{
-				CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
-				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
+				if (module.enable())
 				{
-					Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
+					CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
+					if (module.getClass().isAnnotationPresent(AutoRegisterListener.class)
+							&& (module instanceof Listener))
+					{
+						Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
+					}
+					Utils.log("Loaded module " + module.getClass().getName());
 				}
-				Utils.log("Loaded module " + module.getClass().getName());
+				else
+					Utils.error("Failed to load module " + module.getClass().getName());
 			}
-			else
+			catch (Exception e)
+			{
 				Utils.error("Failed to load module " + module.getClass().getName());
+			}
 		}
 	}
 	
