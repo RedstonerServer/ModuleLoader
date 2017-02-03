@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Vanish implements Module, Listener
 {
 	private boolean enabled = false;
@@ -130,6 +130,11 @@ public class Vanish implements Module, Listener
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		Player player = event.getPlayer();
+		if (vanished.contains(player.getUniqueId()))
+		{
+			for (Player p : Bukkit.getOnlinePlayers())
+				p.hidePlayer(player);
+		}
 		if (player.hasPermission("utils.vanish"))
 			return;
 		for (UUID uid : vanished)
@@ -192,7 +197,7 @@ public class Vanish implements Module, Listener
 	private void unvanishPlayer(Player player)
 	{
 		for (Player p : Bukkit.getOnlinePlayers())
-			p.showPlayer(p);
+			p.showPlayer(player);
 	}
 	
 	@Override
