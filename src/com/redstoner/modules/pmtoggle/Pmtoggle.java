@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Pmtoggle implements Module, Listener
 {
 	private boolean enabled;
@@ -92,7 +92,7 @@ public class Pmtoggle implements Module, Listener
 				{
 					toggles.remove(player);
 					Utils.sendMessage(entry.getKey(), null,
-							"We removed your pmtoggle for &6" + player + "&7, as he left the game.", '&');
+							"We removed your pmtoggle for &6" + player + "&7, as they left the game.", '&');
 				}
 			}
 		}
