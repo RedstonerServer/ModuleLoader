@@ -19,6 +19,7 @@ import com.redstoner.modules.loginsecurity.LoginSecurity;
 import com.redstoner.modules.mentio.Mentio;
 import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.nametags.NameTags;
+import com.redstoner.modules.pmtoggle.Pmtoggle;
 import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.vanish.Vanish;
@@ -58,7 +59,7 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
 		ModuleLoader.addModule(NameTags.class);
-		// TODO: ModuleLoader.addModule(Pmtoggle.class);
+		ModuleLoader.addModule(Pmtoggle.class);
 		// TODO: ModuleLoader.addModule(Reports.class);
 		// TODO: ModuleLoader.addModule(Saylol.class);
 		ModuleLoader.addModule(Scriptutils.class);
