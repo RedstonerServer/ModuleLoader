@@ -13,21 +13,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.nemez.cmdmgr.Command;
-import com.nemez.cmdmgr.Command.AsyncType;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Vanish implements Module, Listener
 {
 	private boolean enabled = false;
 	private ArrayList<UUID> vanished = new ArrayList<UUID>();
 	private HashMap<UUID, ArrayList<UUID>> vanishOthers = new HashMap<UUID, ArrayList<UUID>>();
 	
-	@Command(hook = "vanish", async = AsyncType.ALWAYS)
+	@Command(hook = "vanish")
 	public boolean vanish(CommandSender sender)
 	{
 		UUID uid = ((Player) sender).getUniqueId();
@@ -46,7 +45,7 @@ public class Vanish implements Module, Listener
 		return true;
 	}
 	
-	@Command(hook = "vanish_on", async = AsyncType.ALWAYS)
+	@Command(hook = "vanish_on")
 	public boolean vanishOn(CommandSender sender)
 	{
 		UUID uid = ((Player) sender).getUniqueId();
@@ -62,7 +61,7 @@ public class Vanish implements Module, Listener
 		return true;
 	}
 	
-	@Command(hook = "vanish_off", async = AsyncType.ALWAYS)
+	@Command(hook = "vanish_off")
 	public boolean vanishOff(CommandSender sender)
 	{
 		UUID uid = ((Player) sender).getUniqueId();
@@ -78,7 +77,7 @@ public class Vanish implements Module, Listener
 		return true;
 	}
 	
-	@Command(hook = "vanish_other", async = AsyncType.ALWAYS)
+	@Command(hook = "vanish_other")
 	public boolean vanishOther(CommandSender sender, String name)
 	{
 		Player player = Bukkit.getPlayer(name);
