@@ -16,10 +16,8 @@ import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.loginsecurity.LoginSecurity;
-import com.redstoner.modules.mentio.Mentio;
 import com.redstoner.modules.misc.Misc;
 import com.redstoner.modules.motd.Motd;
-import com.redstoner.modules.nametags.NameTags;
 import com.redstoner.modules.pmtoggle.Pmtoggle;
 import com.redstoner.modules.saylol.Saylol;
 import com.redstoner.modules.scriptutils.Scriptutils;
@@ -32,7 +30,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 9, compatible = -1)
+@Version(major = 1, minor = 3, revision = 10, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -47,6 +45,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Abot.class);
 		ModuleLoader.addModule(Adminchat.class);
 		ModuleLoader.addModule(AdminNotes.class);
+		// TODO: ModuleLoader.addModule(BlockplaceMods.class);
 		// TODO: ModuleLoader.addModule(Calc.class);
 		// TODO: ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Cycle.class);
@@ -58,10 +57,10 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
 		ModuleLoader.addModule(LoginSecurity.class);
-		ModuleLoader.addModule(Mentio.class);
+		// TODO: ModuleLoader.addModule(Mentio.class);
 		ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
-		ModuleLoader.addModule(NameTags.class);
+		// TODO: ModuleLoader.addModule(NameTags.class);
 		ModuleLoader.addModule(Pmtoggle.class);
 		// TODO: ModuleLoader.addModule(Reports.class);
 		ModuleLoader.addModule(Saylol.class);
