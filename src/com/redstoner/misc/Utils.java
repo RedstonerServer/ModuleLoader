@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 7, compatible = 1)
+@Version(major = 1, minor = 1, revision = 8, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -46,8 +46,6 @@ public final class Utils
 		if (prefix == null)
 			prefix = "§8[§c" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
-		if (!recipient.equals(Bukkit.getConsoleSender()))
-			Bukkit.getConsoleSender().sendMessage("§c[WARN]: " + prefix + "§7" + message);
 	}
 	
 	/** Invokes sendMessage. This method will additionally translate alternate color codes for you.
