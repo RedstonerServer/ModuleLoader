@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 6, compatible = 1)
+@Version(major = 1, minor = 1, revision = 7, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -88,6 +88,22 @@ public final class Utils
 	public static int broadcast(String prefix, String message, BroadcastFilter filter)
 	{
 		return broadcast(prefix, message, filter, null);
+	}
+	
+	/** This method broadcasts a message to all players (and console) that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
+	 * This will not be logged to console except when you return true in the filter.
+	 * 
+	 * @param message the message to be sent around
+	 * @param filter the BroadcastFilter to be applied.</br>
+	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
+	 * @param alternateColorCode The alternate color code indicator to use. If set to '&' then "&7" would be translated to "§7". Works with any char.
+	 * @return the amount of people that received the message. */
+	public static int broadcast(String prefix, String message, BroadcastFilter filter, char alternateColorCode)
+	{
+		if (prefix == null)
+			prefix = "§8[§c" + getCaller() + "§8]: ";
+		return broadcast(ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
+				ChatColor.translateAlternateColorCodes(alternateColorCode, message), filter, null);
 	}
 	
 	/** This method broadcasts a message to all players and console that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
