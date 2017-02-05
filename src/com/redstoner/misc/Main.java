@@ -20,6 +20,7 @@ import com.redstoner.modules.mentio.Mentio;
 import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.nametags.NameTags;
 import com.redstoner.modules.pmtoggle.Pmtoggle;
+import com.redstoner.modules.saylol.Saylol;
 import com.redstoner.modules.scriptutils.Scriptutils;
 import com.redstoner.modules.skullclick.SkullClick;
 import com.redstoner.modules.vanish.Vanish;
@@ -29,7 +30,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 6, compatible = -1)
+@Version(major = 1, minor = 3, revision = 7, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -61,7 +62,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(NameTags.class);
 		ModuleLoader.addModule(Pmtoggle.class);
 		// TODO: ModuleLoader.addModule(Reports.class);
-		// TODO: ModuleLoader.addModule(Saylol.class);
+		ModuleLoader.addModule(Saylol.class);
 		ModuleLoader.addModule(Scriptutils.class);
 		// TODO: ModuleLoader.addModule(Serversigns.class);
 		// TODO: ModuleLoader.addModule(Signalstrength.class);
