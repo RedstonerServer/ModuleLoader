@@ -101,7 +101,7 @@ public final class Utils
 	public static int broadcast(String prefix, String message, BroadcastFilter filter, char alternateColorCode)
 	{
 		if (prefix == null)
-			prefix = "§8[§c" + getCaller() + "§8]: ";
+			prefix = "§8[§2" + getCaller() + "§8]: ";
 		return broadcast(ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
 				ChatColor.translateAlternateColorCodes(alternateColorCode, message), filter, null);
 	}
