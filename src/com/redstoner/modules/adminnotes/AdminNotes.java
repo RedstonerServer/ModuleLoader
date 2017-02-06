@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class AdminNotes implements Module, Listener
 {
 	private boolean enabled = false;
@@ -30,6 +30,8 @@ public class AdminNotes implements Module, Listener
 	public void onEnable()
 	{
 		notes = JsonManager.getArray(saveFile);
+		if (notes == null)
+			notes = new JSONArray();
 		enabled = true;
 	}
 	
