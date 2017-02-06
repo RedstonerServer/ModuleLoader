@@ -26,7 +26,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -180,6 +180,11 @@ public class Chatalias implements Module, Listener
 	@Command(hook = "addalias")
 	public boolean addAlias(CommandSender sender, boolean regex, String keyword, String replacement)
 	{
+		if (keyword.equals(".*"))
+		{
+			Utils.sendErrorMessage(sender, null, "You may not define the wildcard regex as an alias.");
+			return true;
+		}
 		Player player = (Player) sender;
 		UUID uuid = player.getUniqueId();
 		JSONObject data = (JSONObject) aliases.get(uuid.toString());
