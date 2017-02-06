@@ -17,6 +17,7 @@ import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.loginsecurity.LoginSecurity;
+import com.redstoner.modules.mentio.Mentio;
 import com.redstoner.modules.misc.Misc;
 import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.nametags.Nametags;
@@ -32,7 +33,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 11, compatible = -1)
+@Version(major = 1, minor = 3, revision = 13, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
 		ModuleLoader.addModule(LoginSecurity.class);
-		// TODO: ModuleLoader.addModule(Mentio.class);
+		ModuleLoader.addModule(Mentio.class);
 		ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
 		ModuleLoader.addModule(Nametags.class);
