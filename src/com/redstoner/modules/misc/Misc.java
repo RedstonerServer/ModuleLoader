@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Misc implements Module, Listener
 {
 	private boolean enabled = false;
@@ -83,8 +83,10 @@ public class Misc implements Module, Listener
 		Player player = event.getPlayer();
 		if (!event.isCancelled() && event.getCause() == TeleportCause.SPECTATE
 				&& !player.hasPermission("utils.tp.spectate"))
+		{
 			event.setCancelled(true);
-		Utils.sendErrorMessage(event.getPlayer(), null, "Spectator teleportation is disabled!");
+			Utils.sendErrorMessage(event.getPlayer(), null, "Spectator teleportation is disabled!");
+		}
 	}
 	
 	// Disables water and lava breaking stuff
