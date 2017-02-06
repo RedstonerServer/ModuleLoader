@@ -3,7 +3,6 @@ package com.redstoner.misc;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.redstoner.annotations.Version;
-import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.misc.mysql.MysqlHandler;
 import com.redstoner.modules.abot.Abot;
@@ -33,7 +32,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 13, compatible = -1)
+@Version(major = 1, minor = 3, revision = 14, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -42,7 +41,7 @@ public class Main extends JavaPlugin
 	public void onEnable()
 	{
 		plugin = this;
-		Debugger.init();
+		// Debugger.init();
 		ModuleLoader.init();
 		MysqlHandler.init();
 		ModuleLoader.addModule(Abot.class);
