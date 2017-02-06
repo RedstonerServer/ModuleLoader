@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Misc implements Module, Listener
 {
 	private boolean enabled = false;
@@ -106,6 +106,8 @@ public class Misc implements Module, Listener
 	@Command(hook = "tempadd")
 	public boolean tempAdd(CommandSender sender, String user, String group, String duration)
 	{
+		// Use it to make a proper duration output later. Too lazy rn.
+		@SuppressWarnings("unused")
 		int i = 0;
 		try
 		{
