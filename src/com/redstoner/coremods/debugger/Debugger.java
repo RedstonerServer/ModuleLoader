@@ -1,6 +1,5 @@
 package com.redstoner.coremods.debugger;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -133,39 +132,41 @@ public final class Debugger implements CoreModule, Listener
 	@Debugable
 	public boolean subscribeCommand(CommandSender sender, String classname, String methodname)
 	{
-		Class<?> clazz = null;
-		try
-		{
-			clazz = Class.forName(classname);
-		}
-		catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-			// TODO: Add error message
-			return true;
-		}
-		boolean found = false;
-		for (Method m : clazz.getMethods())
-		{
-			if (m.getName().matches(methodname))
-			{
-				if (m.isAnnotationPresent(Debugable.class))
-				{
-					found = true;
-					if (!subs.containsKey(sender))
-						subs.put(sender, new ArrayList<String>());
-					subs.get(sender).add(classname + "." + methodname);
-					break;
-				}
-			}
-		}
-		if (!found)
-		{
-			System.err.println("2");
-			// TODO: Add error message
-			return true;
-		}
-		Utils.sendMessage(sender, null, "YAY");
+		Utils.sendMessage(sender, null, "Debugger is currently disabled!");
 		return true;
+		// Class<?> clazz = null;
+		// try
+		// {
+		// clazz = Class.forName(classname);
+		// }
+		// catch (ClassNotFoundException e)
+		// {
+		// e.printStackTrace();
+		// // TODO: Add error message
+		// return true;
+		// }
+		// boolean found = false;
+		// for (Method m : clazz.getMethods())
+		// {
+		// if (m.getName().matches(methodname))
+		// {
+		// if (m.isAnnotationPresent(Debugable.class))
+		// {
+		// found = true;
+		// if (!subs.containsKey(sender))
+		// subs.put(sender, new ArrayList<String>());
+		// subs.get(sender).add(classname + "." + methodname);
+		// break;
+		// }
+		// }
+		// }
+		// if (!found)
+		// {
+		// System.err.println("2");
+		// // TODO: Add error message
+		// return true;
+		// }
+		// Utils.sendMessage(sender, null, "YAY");
+		// return true;
 	}
 }
