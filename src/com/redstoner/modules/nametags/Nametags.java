@@ -16,7 +16,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Nametags implements Module, Listener
 {
 	private boolean enabled = false;
@@ -64,7 +64,8 @@ public class Nametags implements Module, Listener
 	@EventHandler
 	public void consoleCommand(ServerCommandEvent event)
 	{
-		if (event.getCommand().matches("(pro|de)mote"))
+		if (event.getCommand().contains("promote") || event.getCommand().contains("demote")
+				|| event.getCommand().matches("pex user .* group (set|add|leave)"))
 		{
 			String[] args = event.getCommand().split(" ");
 			for (String s : args)
