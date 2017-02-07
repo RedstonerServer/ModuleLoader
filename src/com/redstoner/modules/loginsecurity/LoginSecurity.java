@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.nemez.cmdmgr.Command;
+import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Version;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
@@ -32,7 +33,8 @@ import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.misc.mysql.types.text.VarChar;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@AutoRegisterListener
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class LoginSecurity implements Module, Listener
 {
 	private boolean enabled = false;
@@ -213,6 +215,7 @@ public class LoginSecurity implements Module, Listener
 		{
 			return;
 		}
+		Utils.sendMessage(player, null, "You'll have to log in within 60s or you'll be kicked!");
 		loggingIn.put(player.getUniqueId(), player.getLocation());
 		BukkitScheduler scheduler = Bukkit.getScheduler();
 		RepeatingLoginRunnable repeatingRunnable = new RepeatingLoginRunnable(this, player);
