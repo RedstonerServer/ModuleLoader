@@ -25,7 +25,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 1, minor = 0, revision = 5, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -81,12 +81,14 @@ public class Chatalias implements Module, Listener
 		aliases.remove(event.getPlayer().getUniqueId().toString());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event)
 	{
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
 		JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
+		boolean changed = false;
 		for (Object key : playerAliases.keySet())
 		{
 			String keyword = (String) key;
@@ -100,6 +102,11 @@ public class Chatalias implements Module, Listener
 			{
 				if (keyword.startsWith("N: "))
 					keyword = keyword.replace("N: ", "");
+				else
+				{
+					changed = true;
+					playerAliases.put(key, "N: " + keyword);
+				}
 				event.setMessage(event.getMessage().replace(keyword, replacement));
 			}
 			int maxLength;
@@ -118,6 +125,8 @@ public class Chatalias implements Module, Listener
 				return;
 			}
 		}
+		if (changed)
+			saveAliases(uuid);
 	}
 	
 	// @EventHandler
@@ -276,7 +285,14 @@ public class Chatalias implements Module, Listener
 		{
 			JSONObject temp = new JSONObject();
 			temp.put("dataFormat", "v1");
-			temp.put("data", playerAliases);
+			JSONObject tempAliases = new JSONObject();
+			{
+				for (Object key : playerAliases.keySet())
+				{
+					tempAliases.put(key, "N: " + playerAliases.get(key));
+				}
+			}
+			temp.put("data", tempAliases);
 			aliases.put(uuid.toString(), temp.get("data"));
 		}
 		else if (dataFormat.equals("v1"))
