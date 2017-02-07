@@ -24,7 +24,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 5, compatible = 1)
+@Version(major = 1, minor = 0, revision = 6, compatible = 1)
 public class Adminchat implements Module, Listener
 {
 	private static final char defaultKey = ',';
@@ -182,6 +182,8 @@ public class Adminchat implements Module, Listener
 	public void onPlayerChat(AsyncPlayerChatEvent event)
 	{
 		Player player = event.getPlayer();
+		if (!player.hasPermission("utils.ac"))
+			return;
 		if (event.getMessage().startsWith(getKey(player)))
 		{
 			event.setCancelled(true);
