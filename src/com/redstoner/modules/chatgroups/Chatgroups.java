@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 2, revision = 0, compatible = 1)
+@Version(major = 1, minor = 2, revision = 1, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -345,7 +345,11 @@ public class Chatgroups implements Module, Listener
 			@Override
 			public boolean sendTo(CommandSender recipient)
 			{
-				return getGroup(recipient).equals(group);
+				String rgroup = getGroup(recipient);
+				if (rgroup != null)
+					return rgroup.equals(group);
+				else
+					return false;
 			}
 		});
 		if (!getGroup(Bukkit.getConsoleSender()).equals(group))
