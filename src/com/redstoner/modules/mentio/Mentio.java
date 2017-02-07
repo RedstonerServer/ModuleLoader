@@ -22,7 +22,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Mentio implements Module, Listener
 {
 	private boolean enabled = false;
@@ -137,7 +137,7 @@ public class Mentio implements Module, Listener
 			for (Object raw : playerMentios)
 			{
 				String mentio = (String) raw;
-				if (event.getMessage().contains(mentio))
+				if (event.getMessage().toLowerCase().contains(mentio.toLowerCase()))
 				{
 					event.getRecipients().remove(player);
 					String temp = event.getMessage().replace(mentio, "§§");
@@ -158,6 +158,7 @@ public class Mentio implements Module, Listener
 					Utils.log(event.getMessage());
 					Utils.log(event.getFormat());
 					player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
+					return;
 				}
 			}
 		}
