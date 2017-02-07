@@ -172,7 +172,7 @@ public class Misc implements Module, Listener
 				}
 			}
 			Bukkit.dispatchCommand(target, command.replaceFirst("^/", ""));
-			Utils.sendMessage(sender, null, "Sudoed " + target + " into running " + command);
+			Utils.sendMessage(sender, null, "Sudoed " + name + " into running " + command);
 		}
 		else
 			((Player) target).chat(command);
