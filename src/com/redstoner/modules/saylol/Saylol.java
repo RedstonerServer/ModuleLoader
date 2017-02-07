@@ -15,7 +15,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Saylol implements Module
 {
 	private long lastLol = 0;
@@ -95,7 +95,7 @@ public class Saylol implements Module
 		if (time - lastLol < 15000)
 		{
 			Utils.sendErrorMessage(sender, null,
-					"You can't use saylol for another " + Math.floor(time - lastLol) + "s.");
+					"You can't use saylol for another " + (14 - (int) Math.ceil((time - lastLol) / 1000)) + "s.");
 			return true;
 		}
 		if (id < 0 || id >= lols.size())
@@ -108,12 +108,12 @@ public class Saylol implements Module
 			name = ((Player) sender).getDisplayName();
 		else
 			name = "&9" + sender.getName();
-		Utils.broadcast(null, name + "&8: &e" + lols.get(id), new BroadcastFilter()
+		Utils.broadcast("&8[&blol&8]", name + "&8: &e" + lols.get(id), new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
 			{
-				return sender.hasPermission("utils.lol.see");
+				return recipient.hasPermission("utils.lol.see");
 			}
 		}, '&');
 		lastLol = time;
@@ -137,12 +137,12 @@ public class Saylol implements Module
 			name = "&9" + sender.getName();
 		Random random = new Random();
 		int id = random.nextInt(lols.size());
-		Utils.broadcast(null, name + "&8: &e" + lols.get(id), new BroadcastFilter()
+		Utils.broadcast("&8[&blol&8]", name + "&8: &e" + lols.get(id), new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
 			{
-				return sender.hasPermission("utils.lol.see");
+				return recipient.hasPermission("utils.lol.see");
 			}
 		}, '&');
 		lastLol = time;
