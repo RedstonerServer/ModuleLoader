@@ -8,9 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -26,7 +24,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -82,45 +80,44 @@ public class Chatalias implements Module, Listener
 		aliases.remove(event.getPlayer().getUniqueId().toString());
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChat(AsyncPlayerChatEvent event)
-	{
-		Player player = event.getPlayer();
-		UUID uuid = player.getUniqueId();
-		JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
-		for (Object key : playerAliases.keySet())
-		{
-			String keyword = (String) key;
-			String replacement = (String) playerAliases.get(key);
-			if (keyword.startsWith("R: "))
-			{
-				keyword = keyword.replace("R: ", "");
-				event.setMessage(event.getMessage().replaceAll(keyword, replacement));
-			}
-			else
-			{
-				if (keyword.startsWith("N: "))
-					keyword = keyword.replace("N: ", "");
-				event.setMessage(event.getMessage().replace(keyword, replacement));
-			}
-			int maxLength;
-			try
-			{
-				maxLength = Integer.valueOf(getPermissionContent(player, "utils.alias.length."));
-			}
-			catch (NumberFormatException e)
-			{
-				maxLength = 255;
-			}
-			if (event.getMessage().length() > maxLength)
-			{
-				Utils.sendErrorMessage(player, null, "The generated message is too long!");
-				event.setCancelled(true);
-				return;
-			}
-		}
-	}
-	
+	// @EventHandler(priority = EventPriority.LOWEST)
+	// public void onPlayerChat(AsyncPlayerChatEvent event)
+	// {
+	// Player player = event.getPlayer();
+	// UUID uuid = player.getUniqueId();
+	// JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
+	// for (Object key : playerAliases.keySet())
+	// {
+	// String keyword = (String) key;
+	// String replacement = (String) playerAliases.get(key);
+	// if (keyword.startsWith("R: "))
+	// {
+	// keyword = keyword.replace("R: ", "");
+	// event.setMessage(event.getMessage().replaceAll(keyword, replacement));
+	// }
+	// else
+	// {
+	// if (keyword.startsWith("N: "))
+	// keyword = keyword.replace("N: ", "");
+	// event.setMessage(event.getMessage().replace(keyword, replacement));
+	// }
+	// int maxLength;
+	// try
+	// {
+	// maxLength = Integer.valueOf(getPermissionContent(player, "utils.alias.length."));
+	// }
+	// catch (NumberFormatException e)
+	// {
+	// maxLength = 255;
+	// }
+	// if (event.getMessage().length() > maxLength)
+	// {
+	// Utils.sendErrorMessage(player, null, "The generated message is too long!");
+	// event.setCancelled(true);
+	// return;
+	// }
+	// }
+	// }
 	@EventHandler
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event)
 	{
