@@ -8,8 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -24,7 +25,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -80,65 +81,12 @@ public class Chatalias implements Module, Listener
 		aliases.remove(event.getPlayer().getUniqueId().toString());
 	}
 	
-	// @EventHandler(priority = EventPriority.LOWEST)
-	// public void onPlayerChat(AsyncPlayerChatEvent event)
-	// {
-	// Player player = event.getPlayer();
-	// UUID uuid = player.getUniqueId();
-	// JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
-	// for (Object key : playerAliases.keySet())
-	// {
-	// String keyword = (String) key;
-	// String replacement = (String) playerAliases.get(key);
-	// if (keyword.startsWith("R: "))
-	// {
-	// keyword = keyword.replace("R: ", "");
-	// event.setMessage(event.getMessage().replaceAll(keyword, replacement));
-	// }
-	// else
-	// {
-	// if (keyword.startsWith("N: "))
-	// keyword = keyword.replace("N: ", "");
-	// event.setMessage(event.getMessage().replace(keyword, replacement));
-	// }
-	// int maxLength;
-	// try
-	// {
-	// maxLength = Integer.valueOf(getPermissionContent(player, "utils.alias.length."));
-	// }
-	// catch (NumberFormatException e)
-	// {
-	// maxLength = 255;
-	// }
-	// if (event.getMessage().length() > maxLength)
-	// {
-	// Utils.sendErrorMessage(player, null, "The generated message is too long!");
-	// event.setCancelled(true);
-	// return;
-	// }
-	// }
-	// }
-	@EventHandler
-	public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerChat(AsyncPlayerChatEvent event)
 	{
-		if (event.isCancelled())
-			return;
-		boolean listening = false;
-		for (String s : commands)
-		{
-			if (event.getMessage().matches("^/.*:" + s))
-			{
-				listening = true;
-				break;
-			}
-		}
-		if (!listening)
-			return;
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
 		JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
-		String command = event.getMessage().split(" ")[0];
-		event.setMessage(event.getMessage().replace(command, ""));
 		for (Object key : playerAliases.keySet())
 		{
 			String keyword = (String) key;
@@ -170,9 +118,62 @@ public class Chatalias implements Module, Listener
 				return;
 			}
 		}
-		event.setMessage(command + event.getMessage());
 	}
 	
+	// @EventHandler
+	// public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+	// {
+	// if (event.isCancelled())
+	// return;
+	// boolean listening = false;
+	// for (String s : commands)
+	// {
+	// if (event.getMessage().matches("^/.*:" + s))
+	// {
+	// listening = true;
+	// break;
+	// }
+	// }
+	// if (!listening)
+	// return;
+	// Player player = event.getPlayer();
+	// UUID uuid = player.getUniqueId();
+	// JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
+	// String command = event.getMessage().split(" ")[0];
+	// event.setMessage(event.getMessage().replace(command, ""));
+	// for (Object key : playerAliases.keySet())
+	// {
+	// String keyword = (String) key;
+	// String replacement = (String) playerAliases.get(key);
+	// if (keyword.startsWith("R: "))
+	// {
+	// keyword = keyword.replace("R: ", "");
+	// event.setMessage(event.getMessage().replaceAll(keyword, replacement));
+	// }
+	// else
+	// {
+	// if (keyword.startsWith("N: "))
+	// keyword = keyword.replace("N: ", "");
+	// event.setMessage(event.getMessage().replace(keyword, replacement));
+	// }
+	// int maxLength;
+	// try
+	// {
+	// maxLength = Integer.valueOf(getPermissionContent(player, "utils.alias.length."));
+	// }
+	// catch (NumberFormatException e)
+	// {
+	// maxLength = 255;
+	// }
+	// if (event.getMessage().length() > maxLength)
+	// {
+	// Utils.sendErrorMessage(player, null, "The generated message is too long!");
+	// event.setCancelled(true);
+	// return;
+	// }
+	// }
+	// event.setMessage(command + event.getMessage());
+	// }
 	@SuppressWarnings("unchecked")
 	@Command(hook = "addalias")
 	public boolean addAlias(CommandSender sender, boolean regex, String keyword, String replacement)
