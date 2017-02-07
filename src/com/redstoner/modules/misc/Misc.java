@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -19,7 +18,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 1, minor = 0, revision = 4, compatible = 1)
 public class Misc implements Module, Listener
 {
 	private boolean enabled = false;
@@ -66,15 +65,14 @@ public class Misc implements Module, Listener
 			player.teleport(player.getWorld().getSpawnLocation());
 		}
 	}
-	
 	// Fixes /up 0 grief
-	@EventHandler
-	public void onPlayerCommand(PlayerCommandPreprocessEvent event)
-	{
-		String args[] = event.getMessage().split(" ");
-		if (args[0].equals("/up") || args[0].equals("/worldedit:up"))
-			event.setMessage("/" + event.getMessage());
-	}
+	// @EventHandler
+	// public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+	// {
+	// String args[] = event.getMessage().split(" ");
+	// if (args[0].equals("/up") || args[0].equals("/worldedit:up"))
+	// event.setMessage("/" + event.getMessage());
+	// }
 	
 	// Disables spectator teleportation
 	@EventHandler
@@ -171,11 +169,14 @@ public class Misc implements Module, Listener
 					return true;
 				}
 			}
-			Bukkit.dispatchCommand(target, command.replaceFirst("^/", ""));
+			Bukkit.dispatchCommand(target, command.replaceFirst("/", ""));
 			Utils.sendMessage(sender, null, "Sudoed " + name + " into running " + command);
 		}
 		else
+		{
 			((Player) target).chat(command);
+			Utils.sendMessage(sender, null, "Sudoed " + name + " into saying " + command);
+		}
 		return true;
 	}
 	
