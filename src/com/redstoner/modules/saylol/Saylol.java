@@ -15,7 +15,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Saylol implements Module
 {
 	private long lastLol = 0;
@@ -108,7 +108,7 @@ public class Saylol implements Module
 			name = ((Player) sender).getDisplayName();
 		else
 			name = "&9" + sender.getName();
-		Utils.broadcast("&8[&blol&8]", name + "&8: &e" + lols.get(id), new BroadcastFilter()
+		Utils.broadcast("&8[&blol&8] ", name + "&8: &e" + lols.get(id), new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
@@ -137,7 +137,7 @@ public class Saylol implements Module
 			name = "&9" + sender.getName();
 		Random random = new Random();
 		int id = random.nextInt(lols.size());
-		Utils.broadcast("&8[&blol&8]", name + "&8: &e" + lols.get(id), new BroadcastFilter()
+		Utils.broadcast("&8[&blol&8] ", name + "&8: &e" + lols.get(id), new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
