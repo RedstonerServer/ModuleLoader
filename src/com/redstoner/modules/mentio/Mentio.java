@@ -2,6 +2,7 @@ package com.redstoner.modules.mentio;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Mentio implements Module, Listener
 {
 	private boolean enabled = false;
@@ -140,7 +141,7 @@ public class Mentio implements Module, Listener
 				if (event.getMessage().toLowerCase().contains(mentio.toLowerCase()))
 				{
 					event.getRecipients().remove(player);
-					String temp = event.getMessage().replace(mentio, "§§");
+					String temp = event.getMessage().replaceAll("(?i)" + Pattern.quote(mentio), "§§");
 					String lastColorCodes = "§r";
 					char lastChar = ' ';
 					for (char c : temp.toCharArray())
@@ -155,8 +156,6 @@ public class Mentio implements Module, Listener
 					Utils.sendMessage(player, "",
 							event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s",
 									temp.replaceFirst("§§", "§a§o" + mentio + lastColorCodes).replace("§§", mentio)));
-					Utils.log(event.getMessage());
-					Utils.log(event.getFormat());
 					player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
 					return;
 				}
