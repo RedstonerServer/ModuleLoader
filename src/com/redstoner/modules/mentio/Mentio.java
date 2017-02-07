@@ -23,7 +23,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 1, minor = 0, revision = 4, compatible = 1)
 public class Mentio implements Module, Listener
 {
 	private boolean enabled = false;
@@ -157,7 +157,8 @@ public class Mentio implements Module, Listener
 					// Using §§ as a placeholder as it can't occur in minecraft chat message naturally. If another plugin is stupid enough to leave that in, fuck that plugin.
 					Utils.sendMessage(player, "",
 							event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s",
-									temp.replaceFirst("§§", "§a§o" + mentio + lastColorCodes).replace("§§", mentio)));
+									temp.replaceFirst("§§([^ ]*) ", "§a§o" + mentio + "$1 " + lastColorCodes)
+											.replace("§§", mentio)));
 					player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
 					return;
 				}
