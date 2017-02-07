@@ -25,13 +25,14 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 5, compatible = 1)
+@Version(major = 1, minor = 0, revision = 6, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
 	// pyeval [save_json_file("aliases/" + uuid, shared['modules']['chatalias'].data[uuid]) for uuid in shared['modules']['chatalias'].data]
 	// HANDLE WITH CARE! This will create an array of null entries the size of len(data)!
 	private boolean enabled = false;
+	@SuppressWarnings("unused")
 	private final String[] commands = new String[] {"e?r", "e?m", "e?t", "e?w", "e?msg", "e?message", "e?whisper",
 			"e?me", "cg say", "ac"};
 	private JSONObject defaults = new JSONObject();
@@ -105,7 +106,7 @@ public class Chatalias implements Module, Listener
 				else
 				{
 					changed = true;
-					playerAliases.put(key, "N: " + keyword);
+					playerAliases.put("N: " + key, replacement);
 				}
 				event.setMessage(event.getMessage().replace(keyword, replacement));
 			}
