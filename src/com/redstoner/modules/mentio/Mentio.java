@@ -23,7 +23,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Mentio implements Module, Listener
 {
 	private boolean enabled = false;
@@ -125,6 +125,8 @@ public class Mentio implements Module, Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChat(AsyncPlayerChatEvent event)
 	{
+		if (event.isCancelled())
+			return;
 		for (Player player : event.getRecipients())
 		{
 			UUID uuid = player.getUniqueId();
