@@ -19,7 +19,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Misc implements Module, Listener
 {
 	private boolean enabled = false;
@@ -171,7 +171,8 @@ public class Misc implements Module, Listener
 					return true;
 				}
 			}
-			Bukkit.dispatchCommand(target, command);
+			Bukkit.dispatchCommand(target, command.replaceFirst("^/", ""));
+			Utils.sendMessage(sender, null, "Sudoed " + target + " into running " + command);
 		}
 		else
 			((Player) target).chat(command);
