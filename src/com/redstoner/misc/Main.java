@@ -35,7 +35,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 4, revision = 0, compatible = -1)
+@Version(major = 1, minor = 4, revision = 1, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
