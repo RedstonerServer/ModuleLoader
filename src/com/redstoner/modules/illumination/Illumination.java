@@ -6,8 +6,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.nemez.cmdmgr.Command;
+import com.redstoner.annotations.Version;
 import com.redstoner.modules.Module;
 
+@Version(major = 1, minor = 0, revision = 0, compatible = 1)
 public class Illumination implements Module{
 
 	boolean enabled = false;
