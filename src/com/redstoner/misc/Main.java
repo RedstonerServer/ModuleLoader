@@ -12,6 +12,7 @@ import com.redstoner.modules.adminnotes.AdminNotes;
 import com.redstoner.modules.chatalias.Chatalias;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.check.Check;
+import com.redstoner.modules.clearonjoin.ClearOnJoin;
 import com.redstoner.modules.cycle.Cycle;
 import com.redstoner.modules.damnspam.DamnSpam;
 import com.redstoner.modules.imout.Imout;
@@ -51,6 +52,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(AdminNotes.class);
 		// TODO: ModuleLoader.addModule(BlockplaceMods.class);
 		// TODO: ModuleLoader.addModule(Calc.class);
+		ModuleLoader.addModule(ClearOnJoin.class);
 		ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Cycle.class);
 		ModuleLoader.addModule(Chatgroups.class);
