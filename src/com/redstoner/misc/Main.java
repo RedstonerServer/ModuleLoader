@@ -16,6 +16,7 @@ import com.redstoner.modules.check.Check;
 import com.redstoner.modules.clearonjoin.ClearOnJoin;
 import com.redstoner.modules.cycle.Cycle;
 import com.redstoner.modules.damnspam.DamnSpam;
+import com.redstoner.modules.illumination.Illumination;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.loginsecurity.LoginSecurity;
@@ -61,6 +62,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(DamnSpam.class);
 		// TODO: ModuleLoader.addModule(Friends.class);
+		ModuleLoader.addModule(Illumination.class);
 		// TODO: ModuleLoader.addModule(Imbusy.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
