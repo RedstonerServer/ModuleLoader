@@ -24,6 +24,7 @@ import com.redstoner.modules.mentio.Mentio;
 import com.redstoner.modules.misc.Misc;
 import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.nametags.Nametags;
+import com.redstoner.modules.naming.Naming;
 import com.redstoner.modules.pmtoggle.Pmtoggle;
 import com.redstoner.modules.reports.Reports;
 import com.redstoner.modules.saylol.Saylol;
@@ -70,6 +71,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Mentio.class);
 		ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
+		ModuleLoader.addModule(Naming.class);
 		ModuleLoader.addModule(Nametags.class);
 		ModuleLoader.addModule(Pmtoggle.class);
 		ModuleLoader.addModule(Reports.class);
