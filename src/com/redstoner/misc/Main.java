@@ -9,6 +9,7 @@ import com.redstoner.misc.mysql.MysqlHandler;
 import com.redstoner.modules.abot.Abot;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.adminnotes.AdminNotes;
+import com.redstoner.modules.challenge.Challenge;
 import com.redstoner.modules.chatalias.Chatalias;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.check.Check;
@@ -52,6 +53,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(AdminNotes.class);
 		// TODO: ModuleLoader.addModule(BlockplaceMods.class);
 		// TODO: ModuleLoader.addModule(Calc.class);
+		ModuleLoader.addModule(Challenge.class);
 		ModuleLoader.addModule(ClearOnJoin.class);
 		ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Cycle.class);
