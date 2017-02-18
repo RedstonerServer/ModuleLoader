@@ -10,7 +10,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Illumination implements Module
 {
 	boolean enabled = false;
@@ -52,7 +52,8 @@ public class Illumination implements Module
 	
 	// @noformat
 	@Override
-	public String getCommandString() {
+	public String getCommandString()
+	{
 		return "command nightvision {\n" + 
 				"	[empty] {\n" + 
 				"		run illuminate;\n" + 
@@ -60,7 +61,6 @@ public class Illumination implements Module
 				"		help Gives the player infinte night vision;\n" + 
 				"		perm utils.illuminate;\n" + 
 				"	}\n" + 
-				"}\n" + 
 				"}";
 	}
 	// @format
