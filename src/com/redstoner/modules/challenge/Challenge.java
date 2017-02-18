@@ -13,7 +13,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Challenge implements Module
 {
 	private boolean enabled = false;
@@ -60,9 +60,14 @@ public class Challenge implements Module
 	@Command(hook = "delchallenge")
 	public boolean delChallenge(CommandSender sender, int id)
 	{
+		if (challenges.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no challenges yet!");
+			return true;
+		}
 		if (id < 0 || id >= challenges.size())
 		{
-			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + challenges.size());
+			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (challenges.size() - 1));
 			return true;
 		}
 		Utils.sendMessage(sender, null, "Successfully deleted the challenge: " + challenges.remove(id), '&');
@@ -74,9 +79,14 @@ public class Challenge implements Module
 	@Command(hook = "setchallenge")
 	public boolean setChallenge(CommandSender sender, int id, String text)
 	{
+		if (challenges.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no challenges yet!");
+			return true;
+		}
 		if (id < 0 || id >= challenges.size())
 		{
-			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + challenges.size());
+			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (challenges.size() - 1));
 			return true;
 		}
 		Utils.sendMessage(sender, null,
@@ -89,6 +99,11 @@ public class Challenge implements Module
 	@Command(hook = "challengeid")
 	public boolean challengeId(CommandSender sender, int id)
 	{
+		if (challenges.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no challenges yet!");
+			return true;
+		}
 		if (id < 0 || id >= challenges.size())
 		{
 			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (challenges.size() - 1));
@@ -114,6 +129,11 @@ public class Challenge implements Module
 	@Command(hook = "listchallenges")
 	public boolean listChallenges(CommandSender sender, int page)
 	{
+		if (challenges.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no challenges yet!");
+			return true;
+		}
 		page = page - 1;
 		int start = page * 10;
 		int end = start + 10;
