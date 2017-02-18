@@ -22,7 +22,7 @@ import net.minecraft.server.v1_11_R1.EntityHuman;
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.PacketPlayOutOpenWindow;
 
-@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+@Version(major = 1, minor = 0, revision = 2, compatible = 1)
 public class Naming implements Module
 {
 	boolean enabled = false;
@@ -99,7 +99,8 @@ public class Naming implements Module
 	
 	// @noformat
 	@Override
-	public String getCommandString() {
+	public String getCommandString()
+	{
 		return "command anvil {\n" + 
 		"	[empty] {\n" + 
 		"		run anvil;\n" + 
@@ -108,7 +109,6 @@ public class Naming implements Module
 		"		perm utils.anvil;\n" + 
 		"	}\n" + 
 		"}\n" +
-		"\n" +
 		"command name {\n" + 
 		"	[string:name...] {\n" + 
 		"		run name name;\n" + 
@@ -117,7 +117,6 @@ public class Naming implements Module
 		"		perm utils.name;\n" + 
 		"	}\n" + 
 		"}\n" +
-		"\n" +
 		"command lore {\n" + 
 		"	[string:name...] {\n" + 
 		"		run lore name;\n" + 
