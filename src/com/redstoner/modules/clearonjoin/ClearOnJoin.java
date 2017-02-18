@@ -11,30 +11,35 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.json.simple.JSONArray;
 
 import com.nemez.cmdmgr.Command;
+import com.redstoner.annotations.Version;
 import com.redstoner.misc.JsonManager;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-public class ClearOnJoin implements Module, Listener{
-
+@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+public class ClearOnJoin implements Module, Listener
+{
 	boolean enabled = false;
 	private File listLocation = new File(Main.plugin.getDataFolder(), "clearonjoins.json");
 	private JSONArray list;
 	
 	@SuppressWarnings("unchecked")
 	@Command(hook = "clearonjoin")
-	public void clearOnJoin(CommandSender sender, String player) {
+	public void clearOnJoin(CommandSender sender, String player)
+	{
 		list.add("!" + player.toLowerCase());
 		saveList();
-		Utils.sendMessage(sender, null, player +"'s inventory will be cleared next time he joins.");
+		Utils.sendMessage(sender, null, player + "'s inventory will be cleared next time he joins.");
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Command(hook = "clearonjoinself")
-	public void clearOnJoinSelf(CommandSender sender) {
+	public void clearOnJoinSelf(CommandSender sender)
+	{
 		String name = sender.getName().toLowerCase();
-		if(list.contains(name)) {
+		if (list.contains(name))
+		{
 			list.remove(name);
 			Utils.sendMessage(sender, null, "Your inventory will no longer be cleared apon joining");
 			saveList();
@@ -47,14 +52,16 @@ public class ClearOnJoin implements Module, Listener{
 	
 	@EventHandler
 	public void aponJoin(PlayerJoinEvent e)
-	{	
+	{
 		Player player = e.getPlayer();
 		String playerName = player.getName().toLowerCase();
-		if(list.contains(playerName)) {
+		if (list.contains(playerName))
+		{
 			e.getPlayer().getInventory().clear();
 			Utils.sendMessage(e.getPlayer(), null, "Inventory Cleared.");
 		}
-		else if(list.contains("!" + playerName)){
+		else if (list.contains("!" + playerName))
+		{
 			e.getPlayer().getInventory().clear();
 			list.remove("!" + playerName);
 			saveList();
@@ -68,27 +75,32 @@ public class ClearOnJoin implements Module, Listener{
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable()
+	{
 		enabled = true;
 		list = JsonManager.getArray(listLocation);
-		if (list == null) list = new JSONArray();
+		if (list == null)
+			list = new JSONArray();
 		Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
 	}
-
+	
 	@Override
-	public void onDisable() {
+	public void onDisable()
+	{
 		saveList();
 		enabled = false;
-		
 	}
-
+	
 	@Override
-	public boolean enabled() {
+	public boolean enabled()
+	{
 		return enabled;
 	}
-
+	
+	// @noformat
 	@Override
-	public String getCommandString() {
+	public String getCommandString()
+	{
 		return "command clearonjoin {\n" + 
 				"    [string:name] {\n" + 
 				"        help Clears that players inventory the nect time they join.;\n" + 
@@ -102,5 +114,5 @@ public class ClearOnJoin implements Module, Listener{
 				"    }\n" + 
 				"}";
 	}
-
+	// @format
 }
