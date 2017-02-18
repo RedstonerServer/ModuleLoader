@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -25,7 +26,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 6, compatible = 1)
+@Version(major = 1, minor = 0, revision = 7, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -33,8 +34,8 @@ public class Chatalias implements Module, Listener
 	// HANDLE WITH CARE! This will create an array of null entries the size of len(data)!
 	private boolean enabled = false;
 	@SuppressWarnings("unused")
-	private final String[] commands = new String[] {"e?r", "e?m", "e?t", "e?w", "e?msg", "e?message", "e?whisper",
-			"e?me", "cg say", "ac"};
+	private final String[] commands = new String[] {"e?r", "e?m .+? ", "e?t", "e?w", "e?msg .+? ", "e?message .+? ",
+			"e?whisper .+? ", "e?me", "cg say", "ac"};
 	private JSONObject defaults = new JSONObject();
 	private JSONObject aliases = new JSONObject();
 	
@@ -44,7 +45,7 @@ public class Chatalias implements Module, Listener
 	{
 		defaults.put("dataFormat", "v1");
 		JSONObject data = new JSONObject();
-		data.put("R: ^(([^\\w]|_)\\/|\\\\)", "\\/");
+		data.put("N: ./", "/");
 		defaults.put("data", data);
 		for (Player p : Bukkit.getOnlinePlayers())
 		{
@@ -130,65 +131,71 @@ public class Chatalias implements Module, Listener
 			saveAliases(uuid);
 	}
 	
-	// @EventHandler
-	// public void onPlayerCommand(PlayerCommandPreprocessEvent event)
-	// {
-	// if (event.isCancelled())
-	// return;
-	// boolean listening = false;
-	// for (String s : commands)
-	// {
-	// if (event.getMessage().matches("^/.*:" + s))
-	// {
-	// listening = true;
-	// break;
-	// }
-	// }
-	// if (!listening)
-	// return;
-	// Player player = event.getPlayer();
-	// UUID uuid = player.getUniqueId();
-	// JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
-	// String command = event.getMessage().split(" ")[0];
-	// event.setMessage(event.getMessage().replace(command, ""));
-	// for (Object key : playerAliases.keySet())
-	// {
-	// String keyword = (String) key;
-	// String replacement = (String) playerAliases.get(key);
-	// if (keyword.startsWith("R: "))
-	// {
-	// keyword = keyword.replace("R: ", "");
-	// event.setMessage(event.getMessage().replaceAll(keyword, replacement));
-	// }
-	// else
-	// {
-	// if (keyword.startsWith("N: "))
-	// keyword = keyword.replace("N: ", "");
-	// event.setMessage(event.getMessage().replace(keyword, replacement));
-	// }
-	// int maxLength;
-	// try
-	// {
-	// maxLength = Integer.valueOf(getPermissionContent(player, "utils.alias.length."));
-	// }
-	// catch (NumberFormatException e)
-	// {
-	// maxLength = 255;
-	// }
-	// if (event.getMessage().length() > maxLength)
-	// {
-	// Utils.sendErrorMessage(player, null, "The generated message is too long!");
-	// event.setCancelled(true);
-	// return;
-	// }
-	// }
-	// event.setMessage(command + event.getMessage());
-	// }
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerCommand(PlayerCommandPreprocessEvent event)
+	{
+		if (event.isCancelled())
+			return;
+		boolean listening = false;
+		String regex = "";
+		for (String s : commands)
+		{
+			regex = "^\\/(.*:)?" + s + ".*";
+			if (event.getMessage().matches(regex))
+			{
+				listening = true;
+				break;
+			}
+		}
+		if (!listening)
+			return;
+		Player player = event.getPlayer();
+		UUID uuid = player.getUniqueId();
+		JSONObject playerAliases = (JSONObject) aliases.get(uuid.toString());
+		String command = event.getMessage().replaceAll(regex.replaceAll("\\.\\*$", ""), "");
+		command = event.getMessage().replace(command, "");
+		event.setMessage(event.getMessage().replace(command, "§§"));
+		Utils.log(event.getMessage());
+		for (Object key : playerAliases.keySet())
+		{
+			String keyword = (String) key;
+			String replacement = (String) playerAliases.get(key);
+			if (keyword.startsWith("R: "))
+			{
+				keyword = keyword.replace("R: ", "");
+				event.setMessage(event.getMessage().replaceAll(keyword, replacement));
+			}
+			else
+			{
+				if (keyword.startsWith("N: "))
+					keyword = keyword.replace("N: ", "");
+				event.setMessage(event.getMessage().replace(keyword, replacement));
+			}
+			int maxLength;
+			try
+			{
+				maxLength = Integer.valueOf(getPermissionContent(player, "utils.alias.length."));
+			}
+			catch (NumberFormatException e)
+			{
+				maxLength = 255;
+			}
+			if (event.getMessage().length() > maxLength)
+			{
+				Utils.sendErrorMessage(player, null, "The generated message is too long!");
+				event.setCancelled(true);
+				return;
+			}
+		}
+		event.setMessage(command + event.getMessage().substring(2));
+		Utils.log(event.getMessage());
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Command(hook = "addalias")
 	public boolean addAlias(CommandSender sender, boolean regex, String keyword, String replacement)
 	{
-		if (keyword.equals(".*"))
+		if (regex && keyword.equals(".*"))
 		{
 			Utils.sendErrorMessage(sender, null, "You may not define the wildcard regex as an alias.");
 			return true;
@@ -290,7 +297,7 @@ public class Chatalias implements Module, Listener
 			{
 				for (Object key : playerAliases.keySet())
 				{
-					tempAliases.put(key, "N: " + playerAliases.get(key));
+					tempAliases.put("N: " + key, playerAliases.get(key));
 				}
 			}
 			temp.put("data", tempAliases);
