@@ -22,7 +22,7 @@ import net.minecraft.server.v1_11_R1.EntityHuman;
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.PacketPlayOutOpenWindow;
 
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 1, minor = 0, revision = 3, compatible = 1)
 public class Naming implements Module
 {
 	boolean enabled = false;
@@ -46,6 +46,11 @@ public class Naming implements Module
 		name = ChatColor.translateAlternateColorCodes('&', name);
 		ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
 		ItemMeta meta = item.getItemMeta();
+		if (meta == null)
+		{
+			Utils.sendErrorMessage(sender, null, "You can not rename that item!");
+			return;
+		}
 		meta.setDisplayName(name);
 		item.setItemMeta(meta);
 		Utils.sendMessage(sender, null, "Name set to " + name);
@@ -59,6 +64,11 @@ public class Naming implements Module
 		lore.add(name);
 		ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
 		ItemMeta meta = item.getItemMeta();
+		if (meta == null)
+		{
+			Utils.sendErrorMessage(sender, null, "You can not change the lore of that item!");
+			return;
+		}
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		item.getItemMeta().setLore(lore);
