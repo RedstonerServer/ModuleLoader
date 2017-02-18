@@ -15,7 +15,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 1, minor = 0, revision = 4, compatible = 1)
 public class Saylol implements Module
 {
 	private long lastLol = 0;
@@ -123,6 +123,11 @@ public class Saylol implements Module
 	@Command(hook = "saylol")
 	public boolean saylol(CommandSender sender)
 	{
+		if (lols.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no lols yet!");
+			return true;
+		}
 		long time = System.currentTimeMillis();
 		if (time - lastLol < 15000)
 		{
