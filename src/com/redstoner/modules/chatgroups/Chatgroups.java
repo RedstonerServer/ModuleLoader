@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 2, revision = 1, compatible = 1)
+@Version(major = 1, minor = 2, revision = 2, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -270,7 +270,7 @@ public class Chatgroups implements Module, Listener
 			if (event.getMessage().startsWith(getKey(player)))
 			{
 				event.setCancelled(true);
-				sendToGroup(event.getPlayer(), event.getMessage().replaceFirst(getKey(player), ""));
+				sendToGroup(event.getPlayer(), event.getMessage().substring(1));
 			}
 			else if (cgtoggled.contains(event.getPlayer().getUniqueId()))
 			{
