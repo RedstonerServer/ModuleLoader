@@ -26,7 +26,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 1, compatible = 1)
+@Version(major = 1, minor = 1, revision = 2, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -148,7 +148,6 @@ public class Chatalias implements Module, Listener
 		String command = event.getMessage().replaceAll(regex.replaceAll("\\.\\*$", ""), "");
 		command = event.getMessage().replace(command, "");
 		event.setMessage(event.getMessage().replace(command, "§§"));
-		Utils.log(event.getMessage());
 		for (Object key : playerAliases.keySet())
 		{
 			String keyword = (String) key;
@@ -181,7 +180,6 @@ public class Chatalias implements Module, Listener
 			}
 		}
 		event.setMessage(command + event.getMessage().substring(2));
-		Utils.log(event.getMessage());
 	}
 	
 	@SuppressWarnings("unchecked")
