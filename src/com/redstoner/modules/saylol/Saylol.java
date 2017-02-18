@@ -15,7 +15,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 4, compatible = 1)
+@Version(major = 1, minor = 0, revision = 5, compatible = 1)
 public class Saylol implements Module
 {
 	private long lastLol = 0;
@@ -63,9 +63,14 @@ public class Saylol implements Module
 	@Command(hook = "dellol")
 	public boolean delLol(CommandSender sender, int id)
 	{
+		if (lols.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no lols yet!");
+			return true;
+		}
 		if (id < 0 || id >= lols.size())
 		{
-			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + lols.size());
+			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (lols.size() - 1));
 			return true;
 		}
 		Utils.sendMessage(sender, null, "Successfully deleted the lol: " + lols.remove(id), '&');
@@ -77,9 +82,14 @@ public class Saylol implements Module
 	@Command(hook = "setlol")
 	public boolean setLol(CommandSender sender, int id, String text)
 	{
+		if (lols.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no lols yet!");
+			return true;
+		}
 		if (id < 0 || id >= lols.size())
 		{
-			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + lols.size());
+			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (lols.size() - 1));
 			return true;
 		}
 		Utils.sendMessage(sender, null, "Successfully changed the lol: &e" + lols.get(id) + " &7to: &e" + text, '&');
@@ -91,6 +101,11 @@ public class Saylol implements Module
 	@Command(hook = "lolid")
 	public boolean lolId(CommandSender sender, int id)
 	{
+		if (lols.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no lols yet!");
+			return true;
+		}
 		long time = System.currentTimeMillis();
 		if (time - lastLol < 15000)
 		{
@@ -100,7 +115,7 @@ public class Saylol implements Module
 		}
 		if (id < 0 || id >= lols.size())
 		{
-			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + lols.size());
+			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (lols.size() - 1));
 			return true;
 		}
 		String name;
