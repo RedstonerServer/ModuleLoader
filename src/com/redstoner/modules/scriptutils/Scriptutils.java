@@ -8,7 +8,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Scriptutils implements Module
 {
 	private boolean enabled = false;
@@ -25,7 +25,7 @@ public class Scriptutils implements Module
 		Utils.broadcast("", "§r", null);
 		Utils.broadcast("", "§9" + name + " is restarting the server.", null);
 		Utils.broadcast("", "§a§lServer is going to restart in " + timeout + " seconds.", null);
-		Utils.broadcast("", "§6§l%s" + reason, null);
+		Utils.broadcast("", "§6§l" + reason, null);
 		Utils.broadcast("", "§r", null);
 		Utils.broadcast("", "§r", null);
 		Utils.broadcast("", "§2§l=============================================", null);
