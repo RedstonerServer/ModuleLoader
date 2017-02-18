@@ -31,7 +31,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 5, compatible = 1)
+@Version(major = 1, minor = 0, revision = 6, compatible = 1)
 public class Check implements Module, Listener
 {
 	private boolean enabled = false;
@@ -66,7 +66,7 @@ public class Check implements Module, Listener
 	public void checkCommand(final CommandSender sender, final String player)
 	{
 		Utils.sendModuleHeader(sender);
-		Utils.sendMessage(sender, "", "&7Please notice that the data may not be fully accurate!");
+		Utils.sendMessage(sender, "", "&7Please note that the data may not be fully accurate!", '&');
 		OfflinePlayer oPlayer;
 		oPlayer = Bukkit.getPlayer(player);
 		if (oPlayer == null)
