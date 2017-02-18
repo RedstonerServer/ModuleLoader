@@ -31,7 +31,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 4, compatible = 1)
+@Version(major = 1, minor = 0, revision = 5, compatible = 1)
 public class Check implements Module, Listener
 {
 	private boolean enabled = false;
@@ -67,7 +67,10 @@ public class Check implements Module, Listener
 	{
 		Utils.sendModuleHeader(sender);
 		Utils.sendMessage(sender, "", "&7Please notice that the data may not be fully accurate!");
-		OfflinePlayer oPlayer = Bukkit.getServer().getOfflinePlayer(player);
+		OfflinePlayer oPlayer;
+		oPlayer = Bukkit.getPlayer(player);
+		if (oPlayer == null)
+			oPlayer = Bukkit.getServer().getOfflinePlayer(player);
 		sendData(sender, oPlayer);
 	}
 	
@@ -128,7 +131,7 @@ public class Check implements Module, Listener
 	{
 		Long firstJoin = player.getFirstPlayed();
 		Date date = new Date(firstJoin);
-		SimpleDateFormat format = new SimpleDateFormat("y-M-d H:m");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		return format.format(date);
 	}
 	
@@ -136,7 +139,7 @@ public class Check implements Module, Listener
 	{
 		Long lastSeen = player.getLastPlayed();
 		Date date = new Date(lastSeen);
-		SimpleDateFormat format = new SimpleDateFormat("y-M-d H:m");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		return format.format(date);
 	}
 	
@@ -192,9 +195,9 @@ public class Check implements Module, Listener
 		{
 			// data
 			String firstJoin = getFirstJoin(player);
-			String lastSeen = getFirstJoin(player);
-			firstJoin = (firstJoin.equals("1970-1-1 1:0")) ? "&eNever" : "&7(y-m-d h:m:s) &e" + firstJoin;
-			lastSeen = (lastSeen.equals("1970-1-1 1:0")) ? "&eNever" : "&7(y-m-d h:m:s) &e" + lastSeen;
+			String lastSeen = getLastSeen(player);
+			firstJoin = (firstJoin.equals("1970-01-01 01:00")) ? "&eNever" : "&7(yyyy-MM-dd hh:mm:ss) &e" + firstJoin;
+			lastSeen = (lastSeen.equals("1970-1-1 1:0")) ? "&eNever" : "&7(yyyy-MM-dd hh:mm:ss) &e" + lastSeen;
 			Object[] websiteData = getWebsiteData(player);
 			String websiteUrl = (websiteData[0] == null) ? "None" : (String) websiteData[0];
 			String email = (websiteData[0] == null) ? "Unknown" : (String) websiteData[1];
