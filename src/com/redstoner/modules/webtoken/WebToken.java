@@ -22,7 +22,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 0, compatible = 1)
 public class WebToken implements Module
 {
 	private boolean enabled = false;
@@ -65,6 +65,28 @@ public class WebToken implements Module
 			return;
 		}
 		enabled = true;
+	}
+	
+	private String getNextId() throws Exception
+	{
+		Object[] results = table.get("select id from register_tokens order by id desc limit 1;");
+		if (results instanceof String[])
+		{
+			String[] tokenResults = (String[]) results;
+			if (tokenResults.length == 1)
+			{
+				int id = Integer.valueOf(tokenResults[0]);
+				return "" + ++id;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new Exception("Token query returned invalid result!");
+		}
 	}
 	
 	private String query(String emailOrToken, UUID uuid) throws Exception
@@ -164,8 +186,9 @@ public class WebToken implements Module
 			String token = generateToken();
 			try
 			{
+				String id = getNextId();
 				table.delete(new MysqlConstraint("uuid", ConstraintOperator.EQUAL, uuid));
-				table.insert(uuid, token, email);
+				table.insert(id, uuid, token, email);
 				player.sendMessage(ChatColor.GREEN + "Token generated!");
 				printToken(player, email, token);
 			}
@@ -215,7 +238,7 @@ public class WebToken implements Module
 				"		help Generates a token used for website authentication;\n" + 
 				"		type player;\n" + 
 				"		perm utils.webtoken;\n" + 
-				"		run gettoken;\n" + 
+				"		run gettoken email;\n" + 
 				"	}\n" + 
 				"}";
 	}
