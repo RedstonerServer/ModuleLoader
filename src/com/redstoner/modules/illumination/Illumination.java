@@ -10,42 +10,47 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
-public class Illumination implements Module{
-
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+public class Illumination implements Module
+{
 	boolean enabled = false;
 	PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false);
 	
 	@Command(hook = "illuminate")
-	public void illuminate(CommandSender sender) {
+	public void illuminate(CommandSender sender)
+	{
 		Player player = (Player) sender;
-		if(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+		if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION))
+		{
 			player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 			Utils.sendMessage(sender, null, "Night Vision Disabled.");
 		}
-		else {
+		else
+		{
 			player.addPotionEffect(effect, true);
 			Utils.sendMessage(sender, null, "Night Vision Enabled.");
 		}
 	}
 	
 	@Override
-	public void onEnable() {
+	public void onEnable()
+	{
 		enabled = true;
-		
 	}
-
+	
 	@Override
-	public void onDisable() {
+	public void onDisable()
+	{
 		enabled = false;
-		
 	}
-
+	
 	@Override
-	public boolean enabled() {
+	public boolean enabled()
+	{
 		return enabled;
 	}
-
+	
+	// @noformat
 	@Override
 	public String getCommandString() {
 		return "command nightvision {\n" + 
@@ -56,7 +61,7 @@ public class Illumination implements Module{
 				"		perm utils.illuminate;\n" + 
 				"	}\n" + 
 				"}\n" + 
-				"\n" + 
 				"}";
 	}
+	// @format
 }
