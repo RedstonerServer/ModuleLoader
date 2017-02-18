@@ -26,27 +26,21 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 7, compatible = 1)
+@Version(major = 1, minor = 1, revision = 0, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
 	// pyeval [save_json_file("aliases/" + uuid, shared['modules']['chatalias'].data[uuid]) for uuid in shared['modules']['chatalias'].data]
 	// HANDLE WITH CARE! This will create an array of null entries the size of len(data)!
 	private boolean enabled = false;
-	@SuppressWarnings("unused")
 	private final String[] commands = new String[] {"e?r", "e?m .+? ", "e?t", "e?w", "e?msg .+? ", "e?message .+? ",
 			"e?whisper .+? ", "e?me", "cg say", "ac"};
-	private JSONObject defaults = new JSONObject();
 	private JSONObject aliases = new JSONObject();
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onEnable()
 	{
-		defaults.put("dataFormat", "v1");
-		JSONObject data = new JSONObject();
-		data.put("N: ./", "/");
-		defaults.put("data", data);
 		for (Player p : Bukkit.getOnlinePlayers())
 		{
 			loadAliases(p.getUniqueId());
@@ -282,11 +276,16 @@ public class Chatalias implements Module, Listener
 	@SuppressWarnings("unchecked")
 	private void loadAliases(UUID uuid)
 	{
+		JSONObject defaults = new JSONObject();
+		defaults.put("dataFormat", "v1");
+		JSONObject data = new JSONObject();
+		data.put("N: ./", "/");
+		defaults.put("data", data);
 		JSONObject playerAliases = JsonManager
 				.getObject(new File(Main.plugin.getDataFolder(), "aliases/" + uuid.toString() + ".json"));
 		if (playerAliases == null)
 		{
-			playerAliases = (JSONObject) defaults.clone();
+			playerAliases = defaults;
 		}
 		String dataFormat = (String) playerAliases.get("dataFormat");
 		if (dataFormat == null)
