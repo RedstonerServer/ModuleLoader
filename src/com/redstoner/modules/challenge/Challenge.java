@@ -13,7 +13,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 public class Challenge implements Module
 {
 	private boolean enabled = false;
@@ -79,7 +79,8 @@ public class Challenge implements Module
 			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + challenges.size());
 			return true;
 		}
-		Utils.sendMessage(sender, null, "Successfully changed the challenge: &a" + challenges.get(id) + " &7to: &e" + text, '&');
+		Utils.sendMessage(sender, null,
+				"Successfully changed the challenge: &a" + challenges.get(id) + " &7to: &e" + text, '&');
 		challenges.set(id, text);
 		saveChallenges();
 		return true;
@@ -100,6 +101,11 @@ public class Challenge implements Module
 	@Command(hook = "challenge")
 	public boolean challenge(CommandSender sender)
 	{
+		if (challenges.size() == 0)
+		{
+			Utils.sendErrorMessage(sender, null, "There are no challenges yet!");
+			return true;
+		}
 		int id = (new Random()).nextInt(challenges.size());
 		Utils.sendMessage(sender, null, challenges.get(id) + "", '&');
 		return true;
