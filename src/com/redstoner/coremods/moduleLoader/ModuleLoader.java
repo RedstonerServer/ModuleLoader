@@ -82,6 +82,7 @@ public final class ModuleLoader implements CoreModule
 			catch (Exception e)
 			{
 				Utils.error("Failed to load module " + module.getClass().getName());
+				e.printStackTrace();
 			}
 		}
 	}
