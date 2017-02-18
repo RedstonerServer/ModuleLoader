@@ -9,11 +9,14 @@ import com.redstoner.misc.mysql.MysqlHandler;
 import com.redstoner.modules.abot.Abot;
 import com.redstoner.modules.adminchat.Adminchat;
 import com.redstoner.modules.adminnotes.AdminNotes;
+import com.redstoner.modules.challenge.Challenge;
 import com.redstoner.modules.chatalias.Chatalias;
 import com.redstoner.modules.chatgroups.Chatgroups;
 import com.redstoner.modules.check.Check;
+import com.redstoner.modules.clearonjoin.ClearOnJoin;
 import com.redstoner.modules.cycle.Cycle;
 import com.redstoner.modules.damnspam.DamnSpam;
+import com.redstoner.modules.illumination.Illumination;
 import com.redstoner.modules.imout.Imout;
 import com.redstoner.modules.lagchunks.LagChunks;
 import com.redstoner.modules.loginsecurity.LoginSecurity;
@@ -21,6 +24,7 @@ import com.redstoner.modules.mentio.Mentio;
 import com.redstoner.modules.misc.Misc;
 import com.redstoner.modules.motd.Motd;
 import com.redstoner.modules.nametags.Nametags;
+import com.redstoner.modules.naming.Naming;
 import com.redstoner.modules.pmtoggle.Pmtoggle;
 import com.redstoner.modules.reports.Reports;
 import com.redstoner.modules.saylol.Saylol;
@@ -34,7 +38,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 4, revision = 0, compatible = -1)
+@Version(major = 1, minor = 4, revision = 1, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -51,12 +55,15 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(AdminNotes.class);
 		// TODO: ModuleLoader.addModule(BlockplaceMods.class);
 		// TODO: ModuleLoader.addModule(Calc.class);
+		ModuleLoader.addModule(Challenge.class);
+		ModuleLoader.addModule(ClearOnJoin.class);
 		ModuleLoader.addModule(Chatalias.class);
 		ModuleLoader.addModule(Cycle.class);
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(DamnSpam.class);
 		// TODO: ModuleLoader.addModule(Friends.class);
+		ModuleLoader.addModule(Illumination.class);
 		// TODO: ModuleLoader.addModule(Imbusy.class);
 		ModuleLoader.addModule(Imout.class);
 		ModuleLoader.addModule(LagChunks.class);
@@ -64,6 +71,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Mentio.class);
 		ModuleLoader.addModule(Misc.class);
 		ModuleLoader.addModule(Motd.class);
+		ModuleLoader.addModule(Naming.class);
 		ModuleLoader.addModule(Nametags.class);
 		ModuleLoader.addModule(Pmtoggle.class);
 		ModuleLoader.addModule(Reports.class);
