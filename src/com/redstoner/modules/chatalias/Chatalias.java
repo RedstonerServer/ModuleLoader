@@ -26,7 +26,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 1, compatible = 1)
 public class Chatalias implements Module, Listener
 {
 	// to export chatalias data to json:
@@ -37,7 +37,6 @@ public class Chatalias implements Module, Listener
 			"e?whisper .+? ", "e?me", "cg say", "ac"};
 	private JSONObject aliases = new JSONObject();
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onEnable()
 	{
