@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.nemez.cmdmgr.Command;
+import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
@@ -21,25 +22,29 @@ import net.minecraft.server.v1_11_R1.EntityHuman;
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.PacketPlayOutOpenWindow;
 
-public class Naming implements Module{
-
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
+public class Naming implements Module
+{
 	boolean enabled = false;
 	
 	@Command(hook = "anvil")
-	public void anvil(CommandSender sender) {
+	public void anvil(CommandSender sender)
+	{
 		EntityPlayer p = ((CraftPlayer) sender).getHandle();
-	    AnvilContainer container = new AnvilContainer(p);
-	    int c = p.nextContainerCounter();
-	    p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c,"minecraft:anvil",new ChatMessage("Repairing",new Object[]{}),0));
-	    p.activeContainer = container;
-	    p.activeContainer.windowId = c;
-	    p.activeContainer.addSlotListener(p);
+		AnvilContainer container = new AnvilContainer(p);
+		int c = p.nextContainerCounter();
+		p.playerConnection.sendPacket(
+				new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage("Repairing", new Object[] {}), 0));
+		p.activeContainer = container;
+		p.activeContainer.windowId = c;
+		p.activeContainer.addSlotListener(p);
 	}
 	
 	@Command(hook = "name")
-	public void name(CommandSender sender, String name){
+	public void name(CommandSender sender, String name)
+	{
 		name = ChatColor.translateAlternateColorCodes('&', name);
-		ItemStack item = ((Player)sender).getInventory().getItemInMainHand();
+		ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		item.setItemMeta(meta);
@@ -47,11 +52,12 @@ public class Naming implements Module{
 	}
 	
 	@Command(hook = "lore")
-	public void lore(CommandSender sender, String name){
+	public void lore(CommandSender sender, String name)
+	{
 		List<String> lore = new ArrayList<String>();
 		name = ChatColor.translateAlternateColorCodes('&', name);
 		lore.add(name);
-		ItemStack item = ((Player)sender).getInventory().getItemInMainHand();
+		ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
 		ItemMeta meta = item.getItemMeta();
 		meta.setLore(lore);
 		item.setItemMeta(meta);
@@ -59,31 +65,41 @@ public class Naming implements Module{
 		Utils.sendMessage(sender, null, "Lore set to " + name);
 	}
 	
-	public class AnvilContainer extends ContainerAnvil {
-	    public AnvilContainer(EntityHuman entity) {
-	    	super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
-	    }
-	    public boolean a(EntityHuman entityhuman) {
-	        return true;
-	    }
-	}
-	@Override
-	public void onEnable() {
-		enabled = true;
+	public class AnvilContainer extends ContainerAnvil
+	{
+		public AnvilContainer(EntityHuman entity)
+		{
+			super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
+		}
 		
+		@Override
+		public boolean a(EntityHuman entityhuman)
+		{
+			return true;
+		}
 	}
+	
 	@Override
-	public void onDisable() {
+	public void onEnable()
+	{
+		enabled = true;
+	}
+	
+	@Override
+	public void onDisable()
+	{
 		enabled = false;
 	}
+	
 	@Override
-	public boolean enabled() {
+	public boolean enabled()
+	{
 		return enabled;
 	}
-
+	
+	// @noformat
 	@Override
 	public String getCommandString() {
-		// TODO Auto-generated method stub
 		return "command anvil {\n" + 
 		"	[empty] {\n" + 
 		"		run anvil;\n" + 
@@ -111,5 +127,5 @@ public class Naming implements Module{
 		"	}\n" + 
 		"}";
 	}
-
+	// @format
 }
