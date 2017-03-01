@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 2, revision = 2, compatible = 1)
+@Version(major = 1, minor = 2, revision = 3, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -352,7 +352,7 @@ public class Chatgroups implements Module, Listener
 					return false;
 			}
 		});
-		if (!getGroup(Bukkit.getConsoleSender()).equals(group))
+		if (getGroup(Bukkit.getConsoleSender()) == null || !getGroup(Bukkit.getConsoleSender()).equals(group))
 		{
 			Utils.log(name + " in " + group + ": " + message + " §8(hidden)");
 		}
