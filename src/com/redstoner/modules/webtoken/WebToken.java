@@ -22,7 +22,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 2, compatible = 2)
 public class WebToken implements Module
 {
 	private static final int TOKEN_LENGTH = 6;
@@ -66,18 +66,14 @@ public class WebToken implements Module
 	private String getNextId() throws Exception
 	{
 		Object[] results = table.get("select id from register_tokens order by id desc limit 1;");
-		if (results instanceof String[])
+		if (results[0] instanceof Integer)
 		{
-			String[] tokenResults = (String[]) results;
-			if (tokenResults.length == 1)
-			{
-				int id = Integer.valueOf(tokenResults[0]);
-				return "" + ++id;
-			}
-			else
-			{
-				return null;
-			}
+			return ((int) results[0]) + 1 + "";
+		}
+		else if (results[0] instanceof String)
+		{
+			int id = Integer.valueOf((String) results[0]);
+			return id + 1 + "";
 		}
 		else
 		{
