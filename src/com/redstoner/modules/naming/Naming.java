@@ -22,11 +22,9 @@ import net.minecraft.server.v1_11_R1.EntityHuman;
 import net.minecraft.server.v1_11_R1.EntityPlayer;
 import net.minecraft.server.v1_11_R1.PacketPlayOutOpenWindow;
 
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Naming implements Module
 {
-	boolean enabled = false;
-	
 	@Command(hook = "anvil")
 	public void anvil(CommandSender sender)
 	{
@@ -90,22 +88,14 @@ public class Naming implements Module
 	}
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
+	{}
 	
 	// @noformat
 	@Override

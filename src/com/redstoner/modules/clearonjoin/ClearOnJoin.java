@@ -17,10 +17,9 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class ClearOnJoin implements Module, Listener
 {
-	boolean enabled = false;
 	private File listLocation = new File(Main.plugin.getDataFolder(), "clearonjoins.json");
 	private JSONArray list;
 	
@@ -75,26 +74,19 @@ public class ClearOnJoin implements Module, Listener
 	}
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
-		enabled = true;
 		list = JsonManager.getArray(listLocation);
 		if (list == null)
 			list = new JSONArray();
 		Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
 	{
 		saveList();
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
 	}
 	
 	// @noformat

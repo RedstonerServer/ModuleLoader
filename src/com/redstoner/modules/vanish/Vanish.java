@@ -19,10 +19,9 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Vanish implements Module, Listener
 {
-	private boolean enabled = false;
 	private ArrayList<UUID> vanished = new ArrayList<UUID>();
 	private HashMap<UUID, ArrayList<UUID>> vanishOthers = new HashMap<UUID, ArrayList<UUID>>();
 	
@@ -201,22 +200,14 @@ public class Vanish implements Module, Listener
 	}
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
+	{}
 	
 	// @noformat
 	@Override

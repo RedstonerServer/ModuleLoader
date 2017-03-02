@@ -31,21 +31,19 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 7, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Check implements Module, Listener
 {
-	private boolean enabled = false;
 	MysqlTable table;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		Map<Serializable, Serializable> config = JSONManager.getConfiguration("check.json");
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
 			Utils.error("Could not load the Check config file, disabling!");
-			enabled = false;
-			return;
+			return false;
 		}
 		try
 		{
@@ -56,10 +54,9 @@ public class Check implements Module, Listener
 		catch (NullPointerException e)
 		{
 			Utils.error("Could not use the Check config, disabling!");
-			enabled = false;
-			return;
+			return false;
 		}
-		enabled = true;
+		return true;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -228,12 +225,6 @@ public class Check implements Module, Listener
 		}
 	}
 	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
-	
 	// @noformat
 	@Override
 	public String getCommandString()
@@ -251,7 +242,5 @@ public class Check implements Module, Listener
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
+	{}
 }

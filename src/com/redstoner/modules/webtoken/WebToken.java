@@ -22,17 +22,16 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 1, revision = 1, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class WebToken implements Module
 {
-	private boolean enabled = false;
 	private static final int TOKEN_LENGTH = 6;
 	private static final String CONSONANTS = "bcdfghjklmnpqrstvwxyz";
 	private static final String VOWELS = "aeiou";
 	private MysqlTable table;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		Config config;
 		try
@@ -42,16 +41,14 @@ public class WebToken implements Module
 		catch (IOException | ParseException e1)
 		{
 			e1.printStackTrace();
-			enabled = false;
-			return;
+			return false;
 		}
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
 			Utils.error("Could not load the WebToken config file, disabling!");
 			config.put("database", "redstoner");
 			config.put("table", "webtoken");
-			enabled = false;
-			return;
+			return false;
 		}
 		try
 		{
@@ -61,10 +58,9 @@ public class WebToken implements Module
 		catch (NullPointerException e)
 		{
 			Utils.error("Could not use the WebToken config, disabling!");
-			enabled = false;
-			return;
+			return false;
 		}
-		enabled = true;
+		return true;
 	}
 	
 	private String getNextId() throws Exception
@@ -206,15 +202,7 @@ public class WebToken implements Module
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
+	{}
 	
 	// @noformat
 	@Override

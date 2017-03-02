@@ -34,23 +34,21 @@ import com.redstoner.misc.mysql.types.text.VarChar;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 3, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class LoginSecurity implements Module, Listener
 {
-	private boolean enabled = false;
 	protected static Map<UUID, Location> loggingIn;
 	private MysqlTable table;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		Map<Serializable, Serializable> config = JSONManager.getConfiguration("loginsecurity.json");
 		if (config == null || !config.containsKey("database") || !config.containsKey("table"))
 		{
 			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
 					"Could not load the LoginSecurity config file, disabling!");
-			enabled = false;
-			return;
+			return false;
 		}
 		try
 		{
@@ -64,12 +62,11 @@ public class LoginSecurity implements Module, Listener
 		{
 			Utils.sendErrorMessage(Bukkit.getConsoleSender(), null,
 					"Could not use the LoginSecurity config, disabling!");
-			enabled = false;
-			return;
+			return false;
 		}
 		loggingIn = new HashMap<>();
 		Bukkit.getServer().getPluginManager().registerEvents(new CancelledEventsHandler(this), Main.plugin);
-		enabled = true;
+		return true;
 	}
 	
 	public static Map<UUID, Location> getLoggingIn()
@@ -264,16 +261,8 @@ public class LoginSecurity implements Module, Listener
 	}
 	
 	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
-	
-	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
+	{}
 	
 	// @noformat
 	@Override

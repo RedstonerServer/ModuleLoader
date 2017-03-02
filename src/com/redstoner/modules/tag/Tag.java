@@ -17,33 +17,25 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Tag implements Module
 {
-	private boolean enabled;
 	private File tagLocation = new File(Main.plugin.getDataFolder(), "tag.json");
 	private JSONObject tags;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		tags = JsonManager.getObject(tagLocation);
 		if (tags == null)
 			tags = new JSONObject();
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
 	{
 		saveTags();
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
 	}
 	
 	@SuppressWarnings({"deprecation", "unchecked"})

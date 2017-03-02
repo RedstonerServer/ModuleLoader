@@ -9,28 +9,18 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Clear implements Module
 {
-	boolean enabled;
-	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
+	{}
 	
 	@Command(hook = "clear")
 	public boolean clearInventory(CommandSender sender)

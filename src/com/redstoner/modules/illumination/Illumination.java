@@ -10,10 +10,9 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Illumination implements Module
 {
-	boolean enabled = false;
 	PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false);
 	
 	@Command(hook = "illuminate")
@@ -33,22 +32,14 @@ public class Illumination implements Module
 	}
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
+	{}
 	
 	// @noformat
 	@Override

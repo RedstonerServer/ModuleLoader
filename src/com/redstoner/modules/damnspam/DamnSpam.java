@@ -37,10 +37,9 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 1, revision = 1, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class DamnSpam implements Module, Listener
 {
-	private boolean enabled = false;
 	File configFile = new File(Main.plugin.getDataFolder(), "DamnSpam.json");
 	Map<String, SpamInput> inputs;
 	boolean changingInput = false;
@@ -51,7 +50,7 @@ public class DamnSpam implements Module, Listener
 	String timeoutErrorString = "&cThe timeout must be -1 or within 0 and " + maxTimeout;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		loadInputs();
 		acceptedInputs = new ArrayList<Material>();
@@ -64,7 +63,7 @@ public class DamnSpam implements Module, Listener
 		attachedBlocks.put(Material.WOOD_BUTTON,
 				new int[][] {{0, 8}, {5, 6, 7, 13, 14, 15}, {4, 12}, {3, 11}, {2, 10}, {1, 9}});
 		players = new HashMap<Player, SpamInput>();
-		enabled = true;
+		return true;
 	}
 	
 	public void loadInputs()
@@ -345,16 +344,8 @@ public class DamnSpam implements Module, Listener
 	}
 	
 	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
-	
-	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
+	{}
 	
 	// @noformat
 	@Override

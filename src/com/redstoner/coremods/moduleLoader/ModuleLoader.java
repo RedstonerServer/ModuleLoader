@@ -1,6 +1,6 @@
 package com.redstoner.coremods.moduleLoader;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -21,11 +21,11 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 2, compatible = -1)
+@Version(major = 2, minor = 0, revision = 0, compatible = -1)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
-	private static final ArrayList<Module> modules = new ArrayList<Module>();
+	private static final HashMap<Module, Boolean> modules = new HashMap<Module, Boolean>();
 	
 	private ModuleLoader()
 	{}
@@ -47,7 +47,7 @@ public final class ModuleLoader implements CoreModule
 		try
 		{
 			Module module = clazz.newInstance();
-			modules.add(module);
+			modules.put(module, false);
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
@@ -60,13 +60,13 @@ public final class ModuleLoader implements CoreModule
 	public static final void enableModules()
 	{
 		Debugger.notifyMethod();
-		for (Module module : modules)
+		for (Module module : modules.keySet())
 		{
-			if (module.enabled())
+			if (modules.get(module))
 				continue;
 			try
 			{
-				if (module.enable())
+				if (module.onEnable())
 				{
 					CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
 					if (module.getClass().isAnnotationPresent(AutoRegisterListener.class)
@@ -74,6 +74,7 @@ public final class ModuleLoader implements CoreModule
 					{
 						Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
 					}
+					modules.put(module, true);
 					Utils.log("Loaded module " + module.getClass().getName());
 				}
 				else
@@ -95,22 +96,24 @@ public final class ModuleLoader implements CoreModule
 	public static final boolean enableModule(Class<? extends Module> clazz)
 	{
 		Debugger.notifyMethod(clazz);
-		for (Module m : modules)
+		for (Module module : modules.keySet())
 		{
-			if (m.getClass().equals(clazz))
+			if (module.getClass().equals(clazz))
 			{
-				if (m.enable())
+				if (module.onEnable())
 				{
-					if (m.getClass().isAnnotationPresent(AutoRegisterListener.class) && (m instanceof Listener))
+					if (module.getClass().isAnnotationPresent(AutoRegisterListener.class)
+							&& (module instanceof Listener))
 					{
-						Bukkit.getPluginManager().registerEvents((Listener) m, Main.plugin);
+						Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
 					}
-					Utils.log("Loaded module " + m.getClass().getName());
+					Utils.log("Loaded module " + module.getClass().getName());
+					modules.put(module, true);
 					return true;
 				}
 				else
 				{
-					Utils.error("Failed to load module " + m.getClass().getName());
+					Utils.error("Failed to load module " + module.getClass().getName());
 					return false;
 				}
 			}
@@ -118,9 +121,8 @@ public final class ModuleLoader implements CoreModule
 		try
 		{
 			Module m = clazz.newInstance();
-			modules.add(m);
-			m.onEnable();
-			if (m.enabled())
+			modules.put(m, false);
+			if (m.onEnable())
 			{
 				if (m.getClass().isAnnotationPresent(AutoRegisterListener.class) && (m instanceof Listener))
 				{
@@ -165,11 +167,11 @@ public final class ModuleLoader implements CoreModule
 	{
 		Utils.sendModuleHeader(sender);
 		StringBuilder sb = new StringBuilder("Modules:\n");
-		for (Module m : modules)
+		for (Module module : modules.keySet())
 		{
-			String[] classPath = m.getClass().getName().split("\\.");
+			String[] classPath = module.getClass().getName().split("\\.");
 			String classname = classPath[classPath.length - 1];
-			sb.append(m.enabled() ? "&a" : "&c");
+			sb.append(modules.get(module) ? "&a" : "&c");
 			sb.append(classname);
 			sb.append(", ");
 		}
@@ -181,9 +183,9 @@ public final class ModuleLoader implements CoreModule
 	
 	public static void disableModules()
 	{
-		for (Module module : modules)
+		for (Module module : modules.keySet())
 		{
-			if (module.enabled())
+			if (modules.get(module))
 			{
 				module.onDisable();
 			}

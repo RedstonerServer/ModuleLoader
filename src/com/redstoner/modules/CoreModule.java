@@ -7,20 +7,15 @@ import com.redstoner.annotations.Version;
  * Examples are the ModuleLoader and the Debugger.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 1, compatible = -1)
+@Version(major = 2, minor = 0, revision = 0, compatible = -1)
 public interface CoreModule extends Module
 {
-	/** Core modules should always be enabled. */
+	/** Core modules don't need to be enabled. */
 	@Override
-	public default boolean enabled()
+	public default boolean onEnable()
 	{
 		return true;
 	}
-	
-	/** Core modules don't need to be enabled. */
-	@Override
-	public default void onEnable()
-	{}
 	
 	/** Core modules don't need to be disabled. */
 	@Override

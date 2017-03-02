@@ -15,34 +15,26 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 6, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Saylol implements Module
 {
 	private long lastLol = 0;
-	private boolean enabled = false;
 	private File lolLocation = new File(Main.plugin.getDataFolder(), "lol.json");
 	private JSONArray lols;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		lols = JsonManager.getArray(lolLocation);
 		if (lols == null)
 			lols = new JSONArray();
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
 	{
 		saveLols();
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -24,17 +24,16 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 6, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Adminchat implements Module, Listener
 {
 	private static final char defaultKey = ',';
-	private boolean enabled = false;
 	private static final File keysLocation = new File(Main.plugin.getDataFolder(), "adminchat_keys.json");
 	private ArrayList<UUID> actoggled;
 	private static JSONObject keys;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		keys = JsonManager.getObject(keysLocation);
 		if (keys == null)
@@ -43,20 +42,12 @@ public class Adminchat implements Module, Listener
 			saveKeys();
 		}
 		actoggled = new ArrayList<UUID>();
-		this.enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		this.enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
-	}
+	{}
 	
 	// @noformat
 	@Override

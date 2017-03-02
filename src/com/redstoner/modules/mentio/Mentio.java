@@ -23,31 +23,23 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 1, minor = 0, revision = 4, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Mentio implements Module, Listener
 {
-	private boolean enabled = false;
 	private File mentioLocation = new File(Main.plugin.getDataFolder(), "mentio.json");
 	private JSONObject mentios;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		loadMentios();
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
 	{
 		saveMentios();
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
 	}
 	
 	@SuppressWarnings("unchecked")

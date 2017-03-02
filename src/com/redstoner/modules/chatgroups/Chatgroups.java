@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 3, revision = 2, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -34,10 +34,9 @@ public class Chatgroups implements Module, Listener
 	private static final File keysLocation = new File(Main.plugin.getDataFolder(), "chatgroup_keys.json");
 	private ArrayList<UUID> cgtoggled;
 	private static JSONObject groups, keys;
-	private boolean enabled = false;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		groups = JsonManager.getObject(groupsLocation);
 		if (groups == null)
@@ -52,7 +51,7 @@ public class Chatgroups implements Module, Listener
 			saveKeys();
 		}
 		cgtoggled = new ArrayList<UUID>();
-		enabled = true;
+		return true;
 	}
 	
 	@Override
@@ -60,13 +59,6 @@ public class Chatgroups implements Module, Listener
 	{
 		saveKeys();
 		saveGroups();
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
 	}
 	
 	// @noformat

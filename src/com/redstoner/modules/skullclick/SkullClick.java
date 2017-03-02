@@ -16,7 +16,6 @@ import com.redstoner.modules.Module;
 @AutoRegisterListener
 public class SkullClick implements Module, Listener
 {
-	private boolean enabled = false;
 	private boolean seen = false;
 	
 	@SuppressWarnings("deprecation")
@@ -54,22 +53,14 @@ public class SkullClick implements Module, Listener
 	}
 	
 	@Override
-	public boolean enabled()
+	public boolean onEnable()
 	{
-		return enabled;
-	}
-	
-	@Override
-	public void onEnable()
-	{
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
+	{}
 	
 	@Override
 	public String getCommandString()

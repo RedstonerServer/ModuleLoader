@@ -13,33 +13,25 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 2, compatible = 1)
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Challenge implements Module
 {
-	private boolean enabled = false;
 	private File challengeLocation = new File(Main.plugin.getDataFolder(), "challenges.json");
 	private JSONArray challenges;
 	
 	@Override
-	public void onEnable()
+	public boolean onEnable()
 	{
 		challenges = JsonManager.getArray(challengeLocation);
 		if (challenges == null)
 			challenges = new JSONArray();
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
 	{
 		saveChallenges();
-		enabled = false;
-	}
-	
-	@Override
-	public boolean enabled()
-	{
-		return enabled;
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -9,24 +9,10 @@ import com.redstoner.annotations.Version;
 public interface Module
 {
 	/** Will be called when the module gets enabled. */
-	public void onEnable();
+	public boolean onEnable();
 	
 	/** Will be called when the module gets disabled. */
 	public void onDisable();
-	
-	/** Will be called to check if a module is enabled or not.
-	 * 
-	 * @return The status of the module, true when enabled, false when not. */
-	public boolean enabled();
-	
-	/** Default implementation for the enable() method, returning weather the module was enabled or not.
-	 * 
-	 * @return */
-	public default boolean enable()
-	{
-		onEnable();
-		return enabled();
-	}
 	
 	/** Gets called on registration of the module.
 	 * 

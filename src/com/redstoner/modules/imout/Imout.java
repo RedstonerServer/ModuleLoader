@@ -7,12 +7,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.nemez.cmdmgr.Command;
+import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
+@Version(major = 2, minor = 0, revision = 0, compatible = 2)
 public class Imout implements Module
 {
-	private boolean enabled = false;
 	List<String> imout_toggle_list = new ArrayList<String>();
 	
 	@Command(hook = "imout")
@@ -42,22 +43,14 @@ public class Imout implements Module
 	}
 	
 	@Override
-	public boolean enabled()
+	public boolean onEnable()
 	{
-		return enabled;
-	}
-	
-	@Override
-	public void onEnable()
-	{
-		enabled = true;
+		return true;
 	}
 	
 	@Override
 	public void onDisable()
-	{
-		enabled = false;
-	}
+	{}
 	
 	// @noformat
 	@Override
