@@ -23,7 +23,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 1, compatible = 2)
+@Version(major = 2, minor = 0, revision = 2, compatible = 2)
 public class Mentio implements Module, Listener
 {
 	private File mentioLocation = new File(Main.plugin.getDataFolder(), "mentio.json");
@@ -146,7 +146,7 @@ public class Mentio implements Module, Listener
 					}
 					Utils.sendMessage(player, "",
 							event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s",
-									event.getMessage().replaceFirst("(?i)(" + Pattern.quote(mentio) + ")([^ ]?+)",
+									event.getMessage().replaceFirst("(?i)(" + Pattern.quote(mentio) + ")([^ ]*)",
 											"§a§o$1$2" + lastColorCodes)));
 					player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
 					return;
