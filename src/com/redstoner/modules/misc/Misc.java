@@ -18,7 +18,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Misc implements Module, Listener
 {
 	private final String[] sudoBlacklist = new String[] {".*:?esudo", ".*:?sudo", ".*:?script.*", ".*:?stop"};
@@ -82,8 +82,18 @@ public class Misc implements Module, Listener
 	@EventHandler
 	public void onLiquidFlow(BlockFromToEvent event)
 	{
-		if (event.getToBlock().getType() != Material.AIR)
-			event.setCancelled(true);
+		Material m = event.getToBlock().getType();
+		switch (m)
+		{
+			case AIR:
+			case WATER:
+			case STATIONARY_WATER:
+			case LAVA:
+			case STATIONARY_LAVA:
+				return;
+			default:
+				event.setCancelled(true);
+		}
 	}
 	
 	@Command(hook = "tempadddef")
