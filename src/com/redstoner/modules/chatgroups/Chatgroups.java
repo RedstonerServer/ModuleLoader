@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 3, revision = 1, compatible = 1)
+@Version(major = 1, minor = 3, revision = 2, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -222,12 +222,18 @@ public class Chatgroups implements Module, Listener
 	@Command(hook = "cgleave")
 	public boolean cgLeave(CommandSender sender)
 	{
+		String group = removeGroup(sender);
+		if (group == null)
+		{
+			Utils.sendErrorMessage(sender, null, "You were not in a chatgroup!");
+			return true;
+		}
 		String name;
 		if (sender instanceof Player)
 			name = ((Player) sender).getDisplayName();
 		else
 			name = sender.getName();
-		sendToGroup(removeGroup(sender), "&9" + name + " &7left the group!");
+		sendToGroup(group, "&9" + name + " &7left the group!");
 		Utils.sendMessage(sender, null, "Successfully removed you from your group!");
 		if (sender instanceof Player)
 			cgtoggled.remove(((Player) sender).getUniqueId());
