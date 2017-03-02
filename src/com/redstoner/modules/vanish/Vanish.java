@@ -21,7 +21,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 1, compatible = 2)
+@Version(major = 2, minor = 0, revision = 2, compatible = 2)
 public class Vanish implements Module, Listener
 {
 	private ArrayList<UUID> vanished = new ArrayList<UUID>();
@@ -127,14 +127,17 @@ public class Vanish implements Module, Listener
 		return true;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		Player player = event.getPlayer();
 		if (vanished.contains(player.getUniqueId()))
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
-				p.hidePlayer(player);
+			{
+				if (!p.hasPermission("utils.vanish"))
+					p.hidePlayer(player);
+			}
 			event.setJoinMessage(null);
 		}
 		if (player.hasPermission("utils.vanish"))
@@ -158,7 +161,7 @@ public class Vanish implements Module, Listener
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerLeave(PlayerQuitEvent event)
 	{
 		Player player = event.getPlayer();
