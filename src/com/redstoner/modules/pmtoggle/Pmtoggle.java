@@ -19,20 +19,10 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Pmtoggle implements Module, Listener
 {
 	HashMap<Player, String> toggles = new HashMap<Player, String>();
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	@Command(hook = "pmtoggle_off", async = AsyncType.ALWAYS)
 	public boolean pmtoggle_off(CommandSender sender)

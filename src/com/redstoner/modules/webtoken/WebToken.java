@@ -22,7 +22,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 2, compatible = 2)
+@Version(major = 2, minor = 0, revision = 3, compatible = 2)
 public class WebToken implements Module
 {
 	private static final int TOKEN_LENGTH = 6;
@@ -195,10 +195,6 @@ public class WebToken implements Module
 			Utils.sendErrorMessage(player, null, "Hmm... That doesn't look like a valid email!");
 		}
 	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

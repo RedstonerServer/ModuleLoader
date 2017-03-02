@@ -21,7 +21,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 2, compatible = 2)
+@Version(major = 2, minor = 0, revision = 3, compatible = 2)
 public class Vanish implements Module, Listener
 {
 	private ArrayList<UUID> vanished = new ArrayList<UUID>();
@@ -208,16 +208,6 @@ public class Vanish implements Module, Listener
 		for (Player p : Bukkit.getOnlinePlayers())
 			p.showPlayer(player);
 	}
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

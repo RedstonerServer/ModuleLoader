@@ -24,7 +24,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Adminchat implements Module, Listener
 {
 	private static final char defaultKey = ',';
@@ -44,10 +44,6 @@ public class Adminchat implements Module, Listener
 		actoggled = new ArrayList<UUID>();
 		return true;
 	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

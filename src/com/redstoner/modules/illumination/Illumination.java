@@ -10,7 +10,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Illumination implements Module
 {
 	PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false);
@@ -30,16 +30,6 @@ public class Illumination implements Module
 			Utils.sendMessage(sender, null, "Night Vision Enabled.");
 		}
 	}
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

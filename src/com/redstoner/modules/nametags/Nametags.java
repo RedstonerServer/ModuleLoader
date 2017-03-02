@@ -16,18 +16,9 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Nametags implements Module, Listener
 {
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)

@@ -37,7 +37,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class DamnSpam implements Module, Listener
 {
 	File configFile = new File(Main.plugin.getDataFolder(), "DamnSpam.json");
@@ -342,10 +342,6 @@ public class DamnSpam implements Module, Listener
 			}
 		}
 	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

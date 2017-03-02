@@ -8,7 +8,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Scriptutils implements Module
 {
 	/** Prints Bukkit restart message
@@ -171,16 +171,6 @@ public class Scriptutils implements Module
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kickall " + reason);
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop");
 	}
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

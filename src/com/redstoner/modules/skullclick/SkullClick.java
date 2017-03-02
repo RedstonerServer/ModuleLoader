@@ -12,7 +12,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 0, compatible = 1)
+@Version(major = 1, minor = 0, revision = 1, compatible = 1)
 @AutoRegisterListener
 public class SkullClick implements Module, Listener
 {
@@ -51,16 +51,6 @@ public class SkullClick implements Module, Listener
 			}
 		}
 	}
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	@Override
 	public String getCommandString()

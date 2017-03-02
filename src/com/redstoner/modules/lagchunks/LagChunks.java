@@ -16,7 +16,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class LagChunks implements Module
 {
 	private List<LaggyChunk> laggyChunks = new ArrayList<LaggyChunk>();
@@ -76,16 +76,6 @@ public class LagChunks implements Module
 			Utils.sendErrorMessage(sender, null, "§4Invalid chunk number! Use §e/lc list §4to show laggy chunks!");
 		}
 	}
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

@@ -8,7 +8,7 @@ import com.redstoner.annotations.Version;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Warn implements Module
 {
 	@Command(hook = "warn")
@@ -24,16 +24,6 @@ public class Warn implements Module
 		String name = ((Player) sender).getDisplayName();
 		Utils.broadcast(null, "§2Possible lag incoming! - §9" + name, null);
 	}
-	
-	@Override
-	public boolean onEnable()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

@@ -34,7 +34,7 @@ import com.redstoner.misc.mysql.types.text.VarChar;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class LoginSecurity implements Module, Listener
 {
 	protected static Map<UUID, Location> loggingIn;
@@ -259,10 +259,6 @@ public class LoginSecurity implements Module, Listener
 		String toInsert = "$pbkdf2-sha256$200000$" + salt + "$" + hash;
 		return table.insert(player.getUniqueId().toString(), toInsert);
 	}
-	
-	@Override
-	public void onDisable()
-	{}
 	
 	// @noformat
 	@Override

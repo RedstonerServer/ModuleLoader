@@ -31,7 +31,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Check implements Module, Listener
 {
 	MysqlTable table;
@@ -239,8 +239,4 @@ public class Check implements Module, Listener
 				"}";
 	}
 	// @format
-	
-	@Override
-	public void onDisable()
-	{}
 }
