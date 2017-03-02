@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 1, minor = 2, revision = 4, compatible = 1)
+@Version(major = 1, minor = 3, revision = 0, compatible = 1)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -222,7 +222,12 @@ public class Chatgroups implements Module, Listener
 	@Command(hook = "cgleave")
 	public boolean cgLeave(CommandSender sender)
 	{
-		removeGroup(sender);
+		String name;
+		if (sender instanceof Player)
+			name = ((Player) sender).getDisplayName();
+		else
+			name = sender.getName();
+		sendToGroup(removeGroup(sender), "&9" + name + " &7left the group!");
 		Utils.sendMessage(sender, null, "Successfully removed you from your group!");
 		cgtoggled.remove(((Player) sender).getUniqueId());
 		return true;
@@ -236,6 +241,12 @@ public class Chatgroups implements Module, Listener
 	@Command(hook = "cgjoin")
 	public boolean cgJoin(CommandSender sender, String name)
 	{
+		String pname;
+		if (sender instanceof Player)
+			pname = ((Player) sender).getDisplayName();
+		else
+			pname = sender.getName();
+		sendToGroup(name, "&9" + pname + " &7joined the group!");
 		setGroup(sender, name);
 		Utils.sendMessage(sender, null, "Successfully joined group §6" + name);
 		return true;
@@ -309,13 +320,15 @@ public class Chatgroups implements Module, Listener
 	/** Removes a CommandSender from their chatgroup. Will also save the groups after finishing
 	 * 
 	 * @param target the CommandSender to get their group removed. */
-	private void removeGroup(CommandSender target)
+	private String removeGroup(CommandSender target)
 	{
+		String group;
 		if (target instanceof Player)
-			groups.remove(((Player) target).getUniqueId().toString());
+			group = (String) groups.remove(((Player) target).getUniqueId().toString());
 		else
-			groups.remove("CONSOLE");
+			group = (String) groups.remove("CONSOLE");
 		saveGroups();
+		return group;
 	}
 	
 	/** This method will find the ChatgGroup key of any player.
@@ -355,6 +368,30 @@ public class Chatgroups implements Module, Listener
 		if (getGroup(Bukkit.getConsoleSender()) == null || !getGroup(Bukkit.getConsoleSender()).equals(group))
 		{
 			Utils.log(name + " in " + group + ": " + message + " §8(hidden)");
+		}
+	}
+	
+	/** This method sends a message to a chatgroup.
+	 * 
+	 * @param sender the sender of the message. Also defines which group the message will be sent to.
+	 * @param message the message to be sent. */
+	private void sendToGroup(String group, String message)
+	{
+		Utils.broadcast(null, "message", new BroadcastFilter()
+		{
+			@Override
+			public boolean sendTo(CommandSender recipient)
+			{
+				String rgroup = getGroup(recipient);
+				if (rgroup != null)
+					return rgroup.equals(group);
+				else
+					return false;
+			}
+		}, '&');
+		if (getGroup(Bukkit.getConsoleSender()) == null || !getGroup(Bukkit.getConsoleSender()).equals(group))
+		{
+			Utils.log("In " + group + ": " + message + " §8(hidden)");
 		}
 	}
 	
