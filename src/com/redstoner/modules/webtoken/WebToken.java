@@ -22,7 +22,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 1, revision = 0, compatible = 1)
+@Version(major = 1, minor = 1, revision = 1, compatible = 1)
 public class WebToken implements Module
 {
 	private boolean enabled = false;
@@ -55,7 +55,7 @@ public class WebToken implements Module
 		}
 		try
 		{
-			MysqlDatabase database = MysqlHandler.INSTANCE.getDatabase(config.get("database"));
+			MysqlDatabase database = MysqlHandler.INSTANCE.getDatabase(config.get("database") + "?autoReconnect=true");
 			table = database.getTable(config.get("table"));
 		}
 		catch (NullPointerException e)
