@@ -23,7 +23,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Mentio implements Module, Listener
 {
 	private File mentioLocation = new File(Main.plugin.getDataFolder(), "mentio.json");
@@ -135,22 +135,19 @@ public class Mentio implements Module, Listener
 				if (event.getMessage().toLowerCase().contains(mentio.toLowerCase()))
 				{
 					event.getRecipients().remove(player);
-					String temp = event.getMessage().replaceAll("(?i)" + Pattern.quote(mentio), "§§");
+					String temp = event.getMessage().replaceAll("(?i)" + Pattern.quote(mentio) + ".*", "");
 					String lastColorCodes = "§r";
 					char lastChar = ' ';
 					for (char c : temp.toCharArray())
 					{
-						if (lastChar == '§' && c == '§')
-							break;
 						if (lastChar == '§')
 							lastColorCodes += "§" + c;
 						lastChar = c;
 					}
-					// Using §§ as a placeholder as it can't occur in minecraft chat message naturally. If another plugin is stupid enough to leave that in, fuck that plugin.
 					Utils.sendMessage(player, "",
 							event.getFormat().replace("%1$s", event.getPlayer().getDisplayName()).replace("%2$s",
-									temp.replaceFirst("§§([^ ]*) ", "§a§o" + mentio + "$1 " + lastColorCodes)
-											.replace("§§", mentio)));
+									event.getMessage().replaceFirst("(?i)(" + Pattern.quote(mentio) + ")([^ ]?+)",
+											"§a§o$1$2" + lastColorCodes)));
 					player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
 					return;
 				}
