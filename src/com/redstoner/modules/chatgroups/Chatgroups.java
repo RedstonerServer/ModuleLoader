@@ -26,7 +26,7 @@ import com.redstoner.modules.Module;
  * 
  * @author Pepich */
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Chatgroups implements Module, Listener
 {
 	private static final char defaultKey = ':';
@@ -376,7 +376,7 @@ public class Chatgroups implements Module, Listener
 	 * @param message the message to be sent. */
 	private void sendToGroup(String group, String message)
 	{
-		Utils.broadcast(null, "message", new BroadcastFilter()
+		Utils.broadcast(null, message, new BroadcastFilter()
 		{
 			@Override
 			public boolean sendTo(CommandSender recipient)
