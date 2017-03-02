@@ -31,7 +31,7 @@ import com.redstoner.misc.mysql.elements.MysqlDatabase;
 import com.redstoner.misc.mysql.elements.MysqlTable;
 import com.redstoner.modules.Module;
 
-@Version(major = 1, minor = 0, revision = 6, compatible = 1)
+@Version(major = 1, minor = 0, revision = 7, compatible = 1)
 public class Check implements Module, Listener
 {
 	private boolean enabled = false;
@@ -49,7 +49,8 @@ public class Check implements Module, Listener
 		}
 		try
 		{
-			MysqlDatabase database = MysqlHandler.INSTANCE.getDatabase((String) config.get("database"));
+			MysqlDatabase database = MysqlHandler.INSTANCE
+					.getDatabase((String) config.get("database") + "?autoReconnect=true");
 			table = database.getTable((String) config.get("table"));
 		}
 		catch (NullPointerException e)
