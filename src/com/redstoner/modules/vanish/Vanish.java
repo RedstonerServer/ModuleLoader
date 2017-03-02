@@ -9,8 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.nemez.cmdmgr.Command;
 import com.redstoner.annotations.AutoRegisterListener;
@@ -19,7 +21,7 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Vanish implements Module, Listener
 {
 	private ArrayList<UUID> vanished = new ArrayList<UUID>();
@@ -125,7 +127,7 @@ public class Vanish implements Module, Listener
 		return true;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		Player player = event.getPlayer();
@@ -133,6 +135,7 @@ public class Vanish implements Module, Listener
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 				p.hidePlayer(player);
+			event.setJoinMessage(null);
 		}
 		if (player.hasPermission("utils.vanish"))
 			return;
@@ -155,11 +158,15 @@ public class Vanish implements Module, Listener
 		}
 	}
 	
-	@EventHandler
-	public void onPlayerLeave(PlayerJoinEvent event)
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerLeave(PlayerQuitEvent event)
 	{
 		Player player = event.getPlayer();
 		UUID uid = player.getUniqueId();
+		if (vanished.contains(player.getUniqueId()))
+		{
+			event.setQuitMessage(null);
+		}
 		if (vanishOthers.containsKey(uid))
 		{
 			ArrayList<UUID> toUnvanish = vanishOthers.remove(uid);
