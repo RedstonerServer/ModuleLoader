@@ -13,7 +13,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class Challenge implements Module
 {
 	private File challengeLocation = new File(Main.plugin.getDataFolder(), "challenges.json");
@@ -43,7 +43,7 @@ public class Challenge implements Module
 		else
 		{
 			Utils.sendMessage(sender, null, "Successfully added a new challenge!");
-			challenges.add("&a" + text);
+			challenges.add(text);
 			saveChallenges();
 		}
 		return true;
@@ -101,7 +101,7 @@ public class Challenge implements Module
 			Utils.sendErrorMessage(sender, null, "The ID must be at least 0 and at most " + (challenges.size() - 1));
 			return true;
 		}
-		Utils.sendMessage(sender, null, challenges.get(id) + "", '&');
+		Utils.sendMessage(sender, null, "&a" + challenges.get(id), '&');
 		return true;
 	}
 	
@@ -114,7 +114,6 @@ public class Challenge implements Module
 			return true;
 		}
 		int id = (new Random()).nextInt(challenges.size());
-		Utils.sendMessage(sender, null, challenges.get(id) + "", '&');
 		return true;
 	}
 	
