@@ -17,7 +17,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 0, compatible = 2)
+@Version(major = 2, minor = 0, revision = 1, compatible = 2)
 public class ClearOnJoin implements Module, Listener
 {
 	private File listLocation = new File(Main.plugin.getDataFolder(), "clearonjoins.json");
@@ -40,7 +40,7 @@ public class ClearOnJoin implements Module, Listener
 		if (list.contains(name))
 		{
 			list.remove(name);
-			Utils.sendMessage(sender, null, "Your inventory will no longer be cleared apon joining");
+			Utils.sendMessage(sender, null, "Your inventory will no longer be cleared apon joining.");
 			saveList();
 			return;
 		}
