@@ -17,7 +17,7 @@ import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
-@Version(major = 2, minor = 0, revision = 1, compatible = 2)
+@Version(major = 2, minor = 1, revision = 0, compatible = 2)
 public class ClearOnJoin implements Module, Listener
 {
 	private File listLocation = new File(Main.plugin.getDataFolder(), "clearonjoins.json");
@@ -36,7 +36,7 @@ public class ClearOnJoin implements Module, Listener
 	@Command(hook = "clearonjoinself")
 	public void clearOnJoinSelf(CommandSender sender)
 	{
-		String name = sender.getName().toLowerCase();
+		String name = ((Player)sender).getUniqueId().toString();
 		if (list.contains(name))
 		{
 			list.remove(name);
@@ -53,18 +53,18 @@ public class ClearOnJoin implements Module, Listener
 	public void uponJoin(PlayerJoinEvent e)
 	{
 		Player player = e.getPlayer();
-		String playerName = player.getName().toLowerCase();
+		String playerName = player.getUniqueId().toString();
 		if (list.contains(playerName))
 		{
 			e.getPlayer().getInventory().clear();
-			Utils.sendMessage(e.getPlayer(), null, "Inventory Cleared.");
+			Utils.sendMessage(player, null, "Inventory cleared.");
 		}
 		else if (list.contains("!" + playerName))
 		{
-			e.getPlayer().getInventory().clear();
+			player.getInventory().clear();
 			list.remove("!" + playerName);
 			saveList();
-			Utils.sendMessage(e.getPlayer(), null, "Inventory Cleared.");
+			Utils.sendMessage(player, null, "Inventory cleared.");
 		}
 	}
 	
@@ -83,19 +83,13 @@ public class ClearOnJoin implements Module, Listener
 		return true;
 	}
 	
-	@Override
-	public void onDisable()
-	{
-		saveList();
-	}
-	
 	// @noformat
 	@Override
 	public String getCommandString()
 	{
 		return "command clearonjoin {\n" + 
 				"    [string:name] {\n" + 
-				"        help Clears that players inventory the nect time they join.;\n" + 
+				"        help Clears that player's inventory the nect time they join.;\n" + 
 				"        run clearonjoin name;\n" + 
 				"        perm utils.clearonjoin.other;\n" + 
 				"    }\n" + 
