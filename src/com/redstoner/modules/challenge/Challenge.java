@@ -114,6 +114,7 @@ public class Challenge implements Module
 			return true;
 		}
 		int id = (new Random()).nextInt(challenges.size());
+		Utils.sendMessage(sender, null, "&a" + challenges.get(id), '&');
 		return true;
 	}
 	
