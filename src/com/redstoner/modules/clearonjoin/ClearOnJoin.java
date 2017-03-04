@@ -29,7 +29,7 @@ public class ClearOnJoin implements Module, Listener
 	{
 		list.add("!" + player.toLowerCase());
 		saveList();
-		Utils.sendMessage(sender, null, player + "'s inventory will be cleared next time he joins.");
+		Utils.sendMessage(sender, null, player + "'s inventory will be cleared next time they joins.");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -40,17 +40,17 @@ public class ClearOnJoin implements Module, Listener
 		if (list.contains(name))
 		{
 			list.remove(name);
-			Utils.sendMessage(sender, null, "Your inventory will no longer be cleared apon joining.");
+			Utils.sendMessage(sender, null, "Your inventory will no longer be cleared upon joining.");
 			saveList();
 			return;
 		}
 		list.add(name);
 		saveList();
-		Utils.sendMessage(sender, null, "Your inventory will now be cleared apon joining.");
+		Utils.sendMessage(sender, null, "Your inventory will now be cleared upon joining.");
 	}
 	
 	@EventHandler
-	public void aponJoin(PlayerJoinEvent e)
+	public void uponJoin(PlayerJoinEvent e)
 	{
 		Player player = e.getPlayer();
 		String playerName = player.getName().toLowerCase();
