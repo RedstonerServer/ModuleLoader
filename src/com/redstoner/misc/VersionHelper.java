@@ -8,7 +8,7 @@ import com.redstoner.exceptions.MissingVersionException;
 /** This class can be used to compare modules against the loader version or against each other to prevent dependency issues.
  * 
  * @author Pepich */
-@Version(major = 2, minor = 1, revision = 0, compatible = 0)
+@Version(major = 2, minor = 1, revision = 1, compatible = 0)
 public final class VersionHelper
 {
 	private VersionHelper()
@@ -26,8 +26,8 @@ public final class VersionHelper
 			throw new MissingVersionException("The API is not annotated with a version.");
 		if (!module.isAnnotationPresent(Version.class))
 			throw new MissingVersionException("The module is not annotated with a version.");
-		Version apiVersion = api.getClass().getAnnotation(Version.class);
-		Version moduleVersion = module.getClass().getAnnotation(Version.class);
+		Version apiVersion = api.getAnnotation(Version.class);
+		Version moduleVersion = module.getAnnotation(Version.class);
 		return isCompatible(apiVersion, moduleVersion);
 	}
 	
@@ -41,7 +41,7 @@ public final class VersionHelper
 	{
 		if (!module.isAnnotationPresent(Version.class))
 			throw new MissingVersionException("The module is not annotated with a version.");
-		Version moduleVersion = module.getClass().getAnnotation(Version.class);
+		Version moduleVersion = module.getAnnotation(Version.class);
 		return isCompatible(apiVersion, moduleVersion);
 	}
 	
@@ -55,7 +55,7 @@ public final class VersionHelper
 	{
 		if (!api.isAnnotationPresent(Version.class))
 			throw new MissingVersionException("The API is not annotated with a version.");
-		Version apiVersion = api.getClass().getAnnotation(Version.class);
+		Version apiVersion = api.getAnnotation(Version.class);
 		return isCompatible(apiVersion, moduleVersion);
 	}
 	
