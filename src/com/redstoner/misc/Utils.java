@@ -1,5 +1,8 @@
 package com.redstoner.misc;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,9 +16,12 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 10, compatible = 1)
+@Version(major = 1, minor = 2, revision = 11, compatible = 1)
 public final class Utils
 {
+	/** The SimpleDateFormat used for getting the current date. */
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]");
+	
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
 	private Utils()
 	{}
@@ -215,5 +221,14 @@ public final class Utils
 	public static void sendModuleHeader(CommandSender recipient)
 	{
 		recipient.sendMessage("§2--=[ " + getCaller() + " ]=--");
+	}
+	
+	/** Provides a uniform way of getting the date for all modules.
+	 * 
+	 * @return The current date in the format "[dd-mm-yyyy hh:mm:ss]" */
+	public static String getDate()
+	{
+		Date date = new Date(System.currentTimeMillis());
+		return dateFormat.format(date);
 	}
 }
