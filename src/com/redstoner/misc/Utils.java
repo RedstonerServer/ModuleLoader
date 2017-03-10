@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 11, compatible = 1)
+@Version(major = 1, minor = 2, revision = 12, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -164,7 +164,7 @@ public final class Utils
 		info(message);
 	}
 	
-	/** Prints an info message into console. Supports &x color codes.
+	/** Prints an info message into console. Supports "&" color codes.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
 	@Debugable
@@ -176,7 +176,7 @@ public final class Utils
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
 	}
 	
-	/** Prints a warning message into console. Supports &x color codes.
+	/** Prints a warning message into console. Supports "&" color codes.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
 	@Debugable
@@ -188,7 +188,7 @@ public final class Utils
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
 	}
 	
-	/** Used to make an error output to console. Supports &x color codes.
+	/** Used to make an error output to console. Supports "&" color codes.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to red. */
 	@Debugable
@@ -230,5 +230,17 @@ public final class Utils
 	{
 		Date date = new Date(System.currentTimeMillis());
 		return dateFormat.format(date);
+	}
+	
+	/** Provides a uniform way of getting the (display)name of a CommandSender.
+	 * 
+	 * @param sender The CommandSender to get the name of.
+	 * @return The DisplayName of the CommandSender or if not a player, the name in blue. */
+	public static String getName(CommandSender sender)
+	{
+		if (sender instanceof Player)
+			return ((Player) sender).getDisplayName();
+		else
+			return "&9" + sender.getName();
 	}
 }
