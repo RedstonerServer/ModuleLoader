@@ -12,11 +12,13 @@ import com.redstoner.modules.adminnotes.AdminNotes;
 import com.redstoner.modules.challenge.Challenge;
 import com.redstoner.modules.chatalias.Chatalias;
 import com.redstoner.modules.chatgroups.Chatgroups;
+import com.redstoner.modules.chatonly.ChatOnly;
 import com.redstoner.modules.check.Check;
 import com.redstoner.modules.clear.Clear;
 import com.redstoner.modules.clearonjoin.ClearOnJoin;
 import com.redstoner.modules.cycle.Cycle;
 import com.redstoner.modules.damnspam.DamnSpam;
+import com.redstoner.modules.essentials.Essentials;
 import com.redstoner.modules.firstseen.FirstSeen;
 import com.redstoner.modules.illumination.Illumination;
 import com.redstoner.modules.imout.Imout;
@@ -40,7 +42,7 @@ import com.redstoner.modules.webtoken.WebToken;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 5, revision = 0, compatible = -1)
+@Version(major = 1, minor = 6, revision = 0, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -58,6 +60,7 @@ public class Main extends JavaPlugin
 		// TODO: ModuleLoader.addModule(BlockplaceMods.class);
 		// TODO: ModuleLoader.addModule(Calc.class);
 		ModuleLoader.addModule(Challenge.class);
+		ModuleLoader.addModule(ChatOnly.class);
 		ModuleLoader.addModule(Clear.class);
 		ModuleLoader.addModule(ClearOnJoin.class);
 		ModuleLoader.addModule(Chatalias.class);
@@ -65,6 +68,7 @@ public class Main extends JavaPlugin
 		ModuleLoader.addModule(Chatgroups.class);
 		ModuleLoader.addModule(Check.class);
 		ModuleLoader.addModule(DamnSpam.class);
+		ModuleLoader.addModule(Essentials.class);
 		ModuleLoader.addModule(FirstSeen.class);
 		// TODO: ModuleLoader.addModule(Friends.class);
 		ModuleLoader.addModule(Illumination.class);
