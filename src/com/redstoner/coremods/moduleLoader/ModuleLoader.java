@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import com.nemez.cmdmgr.Command;
@@ -13,15 +14,17 @@ import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
+import com.redstoner.exceptions.MissingVersionException;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
+import com.redstoner.misc.VersionHelper;
 import com.redstoner.modules.CoreModule;
 import com.redstoner.modules.Module;
 
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 2, minor = 0, revision = 0, compatible = -1)
+@Version(major = 3, minor = 0, revision = 0, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -68,12 +71,8 @@ public final class ModuleLoader implements CoreModule
 			{
 				if (module.onEnable())
 				{
-					CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
-					if (module.getClass().isAnnotationPresent(AutoRegisterListener.class)
-							&& (module instanceof Listener))
-					{
-						Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
-					}
+					if (VersionHelper.isCompatible(VersionHelper.create(2, 0, 0, -1), module.getClass()))
+						CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
 					modules.put(module, true);
 					Utils.log("Loaded module " + module.getClass().getName());
 				}
@@ -84,6 +83,28 @@ public final class ModuleLoader implements CoreModule
 			{
 				Utils.error("Failed to load module " + module.getClass().getName());
 				e.printStackTrace();
+			}
+		}
+		Utils.log("Modules enabled, running post initialization.");
+		for (Module module : modules.keySet())
+		{
+			if (modules.get(module))
+			{
+				try
+				{
+					if (VersionHelper.isCompatible(VersionHelper.create(3, 0, 0, 3), module.getClass()))
+					{
+						module.postEnable();
+					}
+				}
+				catch (MissingVersionException e)
+				{
+					e.printStackTrace();
+				}
+				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
+				{
+					Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
+				}
 			}
 		}
 	}
@@ -188,6 +209,10 @@ public final class ModuleLoader implements CoreModule
 			if (modules.get(module))
 			{
 				module.onDisable();
+				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
+				{
+					HandlerList.unregisterAll((Listener) module);
+				}
 			}
 		}
 	}
