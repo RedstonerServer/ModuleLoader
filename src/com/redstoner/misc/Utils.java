@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 9, compatible = 1)
+@Version(major = 1, minor = 2, revision = 10, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -158,9 +158,9 @@ public final class Utils
 		info(message);
 	}
 	
-	/** Prints an info message into console.
+	/** Prints an info message into console. Supports &x color codes.
 	 * 
-	 * @param message The message to be put into console. Prefixes are automatically generated. */
+	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
 	@Debugable
 	public static void info(String message)
 	{
@@ -170,18 +170,21 @@ public final class Utils
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
 	}
 	
+	/** Prints a warning message into console. Supports &x color codes.
+	 * 
+	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
 	@Debugable
 	public static void warn(String message)
 	{
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
-		String prefix = "§e[WARN]: §8[§2" + classname + "§8]: ";
+		String prefix = "§e[WARN]: §8[§e" + classname + "§8]: ";
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
 	}
 	
 	/** Used to make an error output to console. Supports &x color codes.
 	 * 
-	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to red if not specified otherwise. */
+	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to red. */
 	@Debugable
 	public static void error(String message)
 	{
