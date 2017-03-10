@@ -23,13 +23,13 @@ public class ClearOnJoin implements Module, Listener
 	private File listLocation = new File(Main.plugin.getDataFolder(), "clearonjoins.json");
 	private JSONArray list;
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Command(hook = "clearonjoin")
 	public void clearOnJoin(CommandSender sender, String player)
 	{
-		list.add("!" + player.toLowerCase());
+		list.add("!" + Bukkit.getServer().getOfflinePlayer(player).getUniqueId().toString());
 		saveList();
-		Utils.sendMessage(sender, null, player + "'s inventory will be cleared next time they joins.");
+		Utils.sendMessage(sender, null, player + "'s inventory will be cleared next time they join.");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -53,8 +53,9 @@ public class ClearOnJoin implements Module, Listener
 	public void uponJoin(PlayerJoinEvent e)
 	{
 		Player player = e.getPlayer();
-		String playerName = player.getUniqueId().toString();
-		if (list.contains(playerName))
+		String playerUUID = player.getUniqueId().toString();
+		String playerName = player.getName();
+		if (list.contains(playerName) || list.contains(playerUUID))
 		{
 			e.getPlayer().getInventory().clear();
 			Utils.sendMessage(player, null, "Inventory cleared.");
@@ -89,7 +90,7 @@ public class ClearOnJoin implements Module, Listener
 	{
 		return "command clearonjoin {\n" + 
 				"    [string:name] {\n" + 
-				"        help Clears that player's inventory the nect time they join.;\n" + 
+				"        help Clears that player's inventory the next time they join.;\n" + 
 				"        run clearonjoin name;\n" + 
 				"        perm utils.clearonjoin.other;\n" + 
 				"    }\n" + 
