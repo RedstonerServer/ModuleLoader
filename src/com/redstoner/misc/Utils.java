@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 1, revision = 8, compatible = 1)
+@Version(major = 1, minor = 2, revision = 9, compatible = 1)
 public final class Utils
 {
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -28,7 +28,7 @@ public final class Utils
 	@Debugable
 	public static void sendMessage(CommandSender recipient, String prefix, String message)
 	{
-		Debugger.notifyMethod(recipient, message, prefix);
+		Debugger.notifyMethod((Object) recipient, prefix, message);
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
@@ -149,15 +149,33 @@ public final class Utils
 		}
 	}
 	
-	/** Used to make an info output to console. Supports &x color codes.
+	/** Deprecated. Use Utils.info(message) instead.
+	 * 
+	 * @param message The message to be put into console. Prefixes are automatically generated. */
+	@Deprecated
+	public static void log(String message)
+	{
+		info(message);
+	}
+	
+	/** Prints an info message into console.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. */
 	@Debugable
-	public static void log(String message)
+	public static void info(String message)
 	{
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§8[§2" + classname + "§8]: ";
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
+	}
+	
+	@Debugable
+	public static void warn(String message)
+	{
+		Debugger.notifyMethod(message);
+		String classname = getCaller();
+		String prefix = "§e[WARN]: §8[§2" + classname + "§8]: ";
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
 	}
 	
