@@ -74,7 +74,7 @@ public final class ModuleLoader implements CoreModule
 					if (VersionHelper.isCompatible(VersionHelper.create(2, 0, 0, -1), module.getClass()))
 						CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
 					modules.put(module, true);
-					Utils.log("Loaded module " + module.getClass().getName());
+					Utils.info("Loaded module " + module.getClass().getName());
 				}
 				else
 					Utils.error("Failed to load module " + module.getClass().getName());
@@ -85,7 +85,7 @@ public final class ModuleLoader implements CoreModule
 				e.printStackTrace();
 			}
 		}
-		Utils.log("Modules enabled, running post initialization.");
+		Utils.info("Modules enabled, running post initialization.");
 		for (Module module : modules.keySet())
 		{
 			if (modules.get(module))
@@ -128,7 +128,7 @@ public final class ModuleLoader implements CoreModule
 					{
 						Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
 					}
-					Utils.log("Loaded module " + module.getClass().getName());
+					Utils.info("Loaded module " + module.getClass().getName());
 					modules.put(module, true);
 					return true;
 				}
@@ -149,7 +149,7 @@ public final class ModuleLoader implements CoreModule
 				{
 					Bukkit.getPluginManager().registerEvents((Listener) m, Main.plugin);
 				}
-				Utils.log("Loaded module " + m.getClass().getName());
+				Utils.info("Loaded module " + m.getClass().getName());
 				return true;
 			}
 			else
