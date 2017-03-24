@@ -1,5 +1,6 @@
 package com.redstoner.coremods.moduleLoader;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -24,7 +25,7 @@ import com.redstoner.modules.Module;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 0, revision = 1, compatible = 2)
+@Version(major = 3, minor = 1, revision = 0, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -37,7 +38,8 @@ public final class ModuleLoader implements CoreModule
 	{
 		if (instance == null)
 			instance = new ModuleLoader();
-		CommandManager.registerCommand(instance.getCommandString(), instance, Main.plugin);
+		CommandManager.registerCommand(ModuleLoader.class.getResourceAsStream("ModuleLoader.cmd"), instance,
+				Main.plugin);
 	}
 	
 	/** This method will add a module to the module list, without enabling it
@@ -165,20 +167,6 @@ public final class ModuleLoader implements CoreModule
 		}
 	}
 	
-	// @noformat
-	@Override
-	public String getCommandString()
-	{
-		return "command modules {\n" + 
-				"	list{\n" + 
-				"		help Lists all modules. Color indicates status: §aENABLED §cDISABLED;\n" + 
-				"		perm jutils.admin;\n" + 
-				"		run list;\n" + 
-				"	}\n" + 
-				"}";
-	}
-	// @format
-	
 	/** This method lists all modules to the specified CommandSender. The modules will be color coded correspondingly to their enabled status.
 	 * 
 	 * @param sender The person to send the info to, usually the issuer of the command or the console sender.
@@ -215,5 +203,10 @@ public final class ModuleLoader implements CoreModule
 				}
 			}
 		}
+	}
+	
+	public static boolean loadModule(File f)
+	{
+		return false;
 	}
 }
