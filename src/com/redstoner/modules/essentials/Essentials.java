@@ -1,10 +1,12 @@
 package com.redstoner.modules.essentials;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,7 +58,7 @@ public class Essentials implements Module
 	@Command(hook = "kickDef")
 	public void kick(CommandSender sender, String name)
 	{
-		kick(sender, name, EssentialsDefaults.kickMessage);
+		kick(sender, name, EssentialsDefaults.kick);
 	}
 	
 	@Command(hook = "kick")
@@ -64,9 +66,60 @@ public class Essentials implements Module
 	{
 		try
 		{
-			getPlayer(name).kick(getName(sender), reason);
+			getPlayer(name).kick(Utils.getName(sender), reason);
 		}
 		catch (PlayerNotFoundException e)
+		{
+			Utils.sendErrorMessage(sender, null, e.getMessage());
+		}
+	}
+	
+	@Command(hook = "banDef")
+	public void ban(CommandSender sender, String name)
+	{
+		ban(sender, name, EssentialsDefaults.ban);
+	}
+	
+	@Command(hook = "ban")
+	public void ban(CommandSender sender, String name, String reason)
+	{
+		try
+		{
+			getOfflinePlayer(name).ban(sender.getName(), reason, null);
+		}
+		catch (PlayerNotFoundException e)
+		{
+			Utils.sendErrorMessage(sender, null, e.getMessage());
+		}
+	}
+	
+	@Command(hook = "tbanDefDR")
+	public void tempban(CommandSender sender, String name)
+	{
+		tempban(sender, name, EssentialsDefaults.tbanD, EssentialsDefaults.tbanR);
+	}
+	
+	@Command(hook = "tbanDefR")
+	public void tbanD(CommandSender sender, String name, String duration)
+	{
+		tempban(sender, name, duration, EssentialsDefaults.tbanR);
+	}
+	
+	@Command(hook = "tbanDefD")
+	public void tbanR(CommandSender sender, String name, String reason)
+	{
+		tempban(sender, name, EssentialsDefaults.tbanD, reason);
+	}
+	
+	@Command(hook = "tban")
+	public void tempban(CommandSender sender, String name, String duration, String reason)
+	{
+		try
+		{
+			getOfflinePlayer(name).ban(Utils.getName(sender), reason,
+					new Date((new Date()).getTime() + Long.parseLong(duration)));
+		}
+		catch (PlayerNotFoundException | NumberFormatException e)
 		{
 			Utils.sendErrorMessage(sender, null, e.getMessage());
 		}
@@ -109,13 +162,27 @@ public class Essentials implements Module
 		return getPlayer(player);
 	}
 	
-	public static String getName(CommandSender sender)
+	public static EssentialsOfflinePlayer getOfflinePlayer(UUID uuid) throws PlayerNotFoundException
 	{
-		String name = "&9";
-		if (sender instanceof Player)
-			name += ((Player) sender).getDisplayName();
-		else
-			name += sender.getName();
-		return name;
+		OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+		if (player == null)
+			throw new PlayerNotFoundException();
+		return getOfflinePlayer(player);
+	}
+	
+	public static EssentialsOfflinePlayer getOfflinePlayer(OfflinePlayer player)
+	{
+		if (players.containsKey(player.getUniqueId()))
+			return players.get(player.getUniqueId());
+		return new EssentialsOfflinePlayer(player);
+	}
+	
+	@Deprecated
+	public static EssentialsOfflinePlayer getOfflinePlayer(String name) throws PlayerNotFoundException
+	{
+		OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+		if (player == null)
+			throw new PlayerNotFoundException();
+		return getOfflinePlayer(player);
 	}
 }
