@@ -18,11 +18,12 @@ import com.redstoner.misc.Utils;
 import com.redstoner.modules.Module;
 
 @AutoRegisterListener
-@Version(major = 2, minor = 0, revision = 2, compatible = 2)
+@Version(major = 2, minor = 0, revision = 3, compatible = 2)
 public class Misc implements Module, Listener
 {
-	private final String[] sudoBlacklist = new String[] {".*:?esudo", ".*:?sudo", ".*:?script.*", ".*:?stop"};
-	
+	private final String[] sudoBlacklist = new String[] {".?+:?esudo", ".?+:?sudo", ".?+:?script.*", ".?+:?stop",
+			".?+:?modules"};
+			
 	@EventHandler
 	public void onFirstJoin(PlayerJoinEvent event)
 	{
