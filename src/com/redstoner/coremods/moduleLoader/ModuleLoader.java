@@ -32,13 +32,14 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 1, revision = 0, compatible = 2)
+@Version(major = 3, minor = 1, revision = 1, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
 	private static final HashMap<Module, Boolean> modules = new HashMap<Module, Boolean>();
 	private static URL[] urls;
 	private static URLClassLoader mainLoader;
+	private static HashMap<Module, URLClassLoader> loaders = new HashMap<Module, URLClassLoader>();
 	
 	private ModuleLoader()
 	{
@@ -306,24 +307,41 @@ public final class ModuleLoader implements CoreModule
 				Utils.info("Attempting to load new class definition before disabling and removing the old module:");
 				boolean differs = false;
 				Utils.info("Old class definition: Class@" + m.getClass().hashCode());
-				ClassLoader delegateParent = Module.class.getClassLoader();
+				ClassLoader delegateParent = mainLoader.getParent();
 				Class<?> newClass = null;
-				try (URLClassLoader cl = new URLClassLoader(urls, delegateParent))
+				URLClassLoader cl = new URLClassLoader(urls, delegateParent);
+				try
 				{
 					newClass = cl.loadClass(m.getClass().getName());
 					Utils.info("Found new class definition: Class@" + newClass.hashCode());
 					differs = m.getClass() != newClass;
 				}
-				catch (IOException | ClassNotFoundException e)
+				catch (ClassNotFoundException e)
 				{
 					Utils.error("Could not find a class definition, aborting now!");
 					e.printStackTrace();
+					try
+					{
+						cl.close();
+					}
+					catch (IOException e1)
+					{
+						e1.printStackTrace();
+					}
 					return;
 				}
 				if (!differs)
 				{
 					Utils.warn("New class definition equals old definition, are you sure you did everything right?");
 					Utils.info("Aborting now...");
+					try
+					{
+						cl.close();
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
 					return;
 				}
 				Utils.info("Found new class definition, attempting to instantiate:");
@@ -336,6 +354,14 @@ public final class ModuleLoader implements CoreModule
 				{
 					Utils.error("Could not instantiate the module, aborting!");
 					e.printStackTrace();
+					try
+					{
+						cl.close();
+					}
+					catch (IOException e1)
+					{
+						e1.printStackTrace();
+					}
 					return;
 				}
 				Utils.info("Instantiated new class definition, checking versions:");
@@ -346,13 +372,30 @@ public final class ModuleLoader implements CoreModule
 				if (oldVersion.equals(newVersion))
 				{
 					Utils.error("Detected equal module versions, aborting now...");
+					try
+					{
+						cl.close();
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
 					return;
 				}
 				Utils.info("Versions differ, disabling old module:");
 				disableModule(m);
 				Utils.info("Disabled module, overriding the implementation:");
 				modules.remove(m);
+				try
+				{
+					loaders.remove(m).close();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 				modules.put(module, false);
+				loaders.put(module, cl);
 				Utils.info("Successfully updated class definition. Enabling new implementation:");
 				enableLoadedModule(module);
 				Object[] newStatus = getServerStatus();
