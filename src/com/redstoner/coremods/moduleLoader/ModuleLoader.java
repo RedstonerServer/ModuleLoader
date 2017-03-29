@@ -446,7 +446,8 @@ public final class ModuleLoader implements CoreModule
 				modules.remove(m);
 				try
 				{
-					loaders.remove(m).close();
+					if (loaders.containsKey(m))
+						loaders.remove(m).close();
 				}
 				catch (IOException e)
 				{
