@@ -1,15 +1,19 @@
 package com.redstoner.coremods.moduleLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
@@ -32,7 +36,7 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 1, revision = 2, compatible = 2)
+@Version(major = 3, minor = 1, revision = 3, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -40,11 +44,15 @@ public final class ModuleLoader implements CoreModule
 	private static URL[] urls;
 	private static URLClassLoader mainLoader;
 	private static HashMap<Module, URLClassLoader> loaders = new HashMap<Module, URLClassLoader>();
+	private static File configFile;
+	private static FileConfiguration config;
 	
 	private ModuleLoader()
 	{
 		try
 		{
+			config = Main.plugin.getConfig();
+			configFile = new File(Main.plugin.getDataFolder(), "config.yml");
 			urls = new URL[] {(new File(Main.plugin.getDataFolder(), "classes")).toURI().toURL()};
 			mainLoader = new URLClassLoader(urls, this.getClass().getClassLoader());
 		}
@@ -60,6 +68,55 @@ public final class ModuleLoader implements CoreModule
 			instance = new ModuleLoader();
 		CommandManager.registerCommand(ModuleLoader.class.getResourceAsStream("ModuleLoader.cmd"), instance,
 				Main.plugin);
+	}
+	
+	public static final void loadFromConfig()
+	{
+		try
+		{
+			if (!configFile.exists())
+			{
+				configFile.getParentFile().mkdirs();
+				configFile.createNewFile();
+			}
+			config.load(configFile);
+		}
+		catch (FileNotFoundException e)
+		{}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvalidConfigurationException e)
+		{
+			configFile.delete();
+			try
+			{
+				configFile.createNewFile();
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+			Utils.error("Invalid config file! Creating new, blank file!");
+		}
+		List<String> autoload = config.getStringList("autoLoad");
+		if (autoload == null || autoload.isEmpty())
+		{
+			config.set("autoLoad", new String[] {"# Add the modules here!"});
+			Main.plugin.saveConfig();
+			try
+			{
+				config.save(configFile);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		for (String s : autoload)
+			if (!s.startsWith("#"))
+				ModuleLoader.addDynamicModule(s);
 	}
 	
 	/** This method will add a module to the module list, without enabling it.</br>

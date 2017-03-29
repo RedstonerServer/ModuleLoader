@@ -1,11 +1,5 @@
 package com.redstoner.misc;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.redstoner.annotations.Version;
@@ -16,65 +10,19 @@ import com.redstoner.misc.mysql.MysqlHandler;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 0, revision = 1, compatible = -1)
+@Version(major = 3, minor = 1, revision = 0, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
-	public static File configFile;
 	
 	@Override
 	public void onEnable()
 	{
 		plugin = this;
-		configFile = new File(this.getDataFolder(), "config.yml");
 		Debugger.init();
-		ModuleLoader.init();
 		MysqlHandler.init();
-		try
-		{
-			if (!configFile.exists())
-			{
-				configFile.getParentFile().mkdirs();
-				configFile.createNewFile();
-			}
-			getConfig().load(configFile);
-		}
-		catch (FileNotFoundException e)
-		{}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (InvalidConfigurationException e)
-		{
-			configFile.delete();
-			try
-			{
-				configFile.createNewFile();
-			}
-			catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
-			Utils.error("Invalid config file! Creating new, blank file!");
-		}
-		List<String> autoload = this.getConfig().getStringList("autoLoad");
-		if (autoload == null || autoload.isEmpty())
-		{
-			getConfig().set("autoLoad", new String[] {"# Add the modules here!"});
-			saveConfig();
-			try
-			{
-				getConfig().save(configFile);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		for (String s : autoload)
-			if (!s.startsWith("#"))
-				ModuleLoader.addDynamicModule(s);
+		ModuleLoader.init();
+		ModuleLoader.loadFromConfig();
 		// ModuleLoader.addDynamicModule("com.redstoner.modules.abot.Abot");
 		// ModuleLoader.addDynamicModule("com.redstoner.modules.adminchat.Adminchat");
 		// ModuleLoader.addDynamicModule("com.redstoner.modules.adminnotes.AdminNotes");
