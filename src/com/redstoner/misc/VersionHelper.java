@@ -8,7 +8,7 @@ import com.redstoner.exceptions.MissingVersionException;
 /** This class can be used to compare modules against the loader version or against each other to prevent dependency issues.
  * 
  * @author Pepich */
-@Version(major = 2, minor = 1, revision = 1, compatible = 0)
+@Version(major = 2, minor = 1, revision = 2, compatible = 0)
 public final class VersionHelper
 {
 	private VersionHelper()
@@ -86,6 +86,15 @@ public final class VersionHelper
 		if (!clazz.isAnnotationPresent(Version.class))
 			throw new MissingVersionException("The given class is not associated with a version.");
 		Version ver = clazz.getAnnotation(Version.class);
+		return getString(ver);
+	}
+	
+	/** Returns the String representation of a version.
+	 * 
+	 * @param ver The version to be represented.
+	 * @return The String representation. */
+	public static String getString(Version ver)
+	{
 		return ver.major() + "." + ver.minor() + "." + ver.revision() + "." + ver.compatible();
 	}
 	
