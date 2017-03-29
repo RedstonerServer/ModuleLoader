@@ -32,7 +32,7 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 1, revision = 1, compatible = 2)
+@Version(major = 3, minor = 1, revision = 2, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -97,6 +97,7 @@ public final class ModuleLoader implements CoreModule
 	}
 	
 	/** Call this to enable all not-yet enabled modules that are known to the loader. */
+	@SuppressWarnings("deprecation")
 	@Debugable
 	public static final void enableModules()
 	{
