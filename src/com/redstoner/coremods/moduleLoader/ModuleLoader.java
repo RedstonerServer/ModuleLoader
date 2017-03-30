@@ -36,7 +36,7 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 1, revision = 3, compatible = 2)
+@Version(major = 3, minor = 1, revision = 4, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -286,6 +286,10 @@ public final class ModuleLoader implements CoreModule
 					module.postEnable();
 				}
 				Utils.info("Loaded module " + module.getClass().getName());
+				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
+				{
+					Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
+				}
 			}
 			else
 				Utils.error("Failed to load module " + module.getClass().getName());
