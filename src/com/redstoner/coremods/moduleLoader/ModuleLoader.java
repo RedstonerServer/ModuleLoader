@@ -24,7 +24,6 @@ import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
-import com.redstoner.exceptions.MissingVersionException;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.misc.VersionHelper;
@@ -36,7 +35,7 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 1, revision = 4, compatible = 2)
+@Version(major = 3, minor = 1, revision = 5, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -154,7 +153,6 @@ public final class ModuleLoader implements CoreModule
 	}
 	
 	/** Call this to enable all not-yet enabled modules that are known to the loader. */
-	@SuppressWarnings("deprecation")
 	@Debugable
 	public static final void enableModules()
 	{
@@ -164,45 +162,6 @@ public final class ModuleLoader implements CoreModule
 			if (modules.get(module))
 				continue;
 			enableLoadedModule(module);
-			try
-			{
-				if (module.onEnable())
-				{
-					if (VersionHelper.isCompatible(VersionHelper.create(2, 0, 0, -1), module.getClass()))
-						CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
-					modules.put(module, true);
-					Utils.info("Loaded module " + module.getClass().getName());
-				}
-				else
-					Utils.error("Failed to load module " + module.getClass().getName());
-			}
-			catch (Exception e)
-			{
-				Utils.error("Failed to load module " + module.getClass().getName());
-				e.printStackTrace();
-			}
-		}
-		Utils.info("Modules enabled, running post initialization.");
-		for (Module module : modules.keySet())
-		{
-			if (modules.get(module))
-			{
-				try
-				{
-					if (VersionHelper.isCompatible(VersionHelper.create(3, 0, 0, 3), module.getClass()))
-					{
-						module.postEnable();
-					}
-				}
-				catch (MissingVersionException e)
-				{
-					e.printStackTrace();
-				}
-				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
-				{
-					Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
-				}
-			}
 		}
 	}
 	
