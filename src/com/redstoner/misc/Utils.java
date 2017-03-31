@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 12, compatible = 1)
+@Version(major = 1, minor = 2, revision = 13, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -48,7 +48,7 @@ public final class Utils
 	@Debugable
 	public static void sendErrorMessage(CommandSender recipient, String prefix, String message)
 	{
-		Debugger.notifyMethod(recipient, prefix, message);
+		Debugger.notifyMethod((Object) recipient, prefix, message);
 		if (prefix == null)
 			prefix = "§8[§c" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
