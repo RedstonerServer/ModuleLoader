@@ -35,7 +35,7 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 1, revision = 5, compatible = 2)
+@Version(major = 3, minor = 1, revision = 6, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -466,5 +466,17 @@ public final class ModuleLoader implements CoreModule
 		status[3] = i;
 		status[4] = Bukkit.getOnlinePlayers().size();
 		return status;
+	}
+	
+	/** Finds a module by name for other modules to reference it.
+	 * 
+	 * @param name the name of the module. Use the full path if you are not sure about the module's SimpleClassName being unique.
+	 * @return the instance of the module or @null it none could be found */
+	public static Module getModule(String name)
+	{
+		for (Module m : modules.keySet())
+			if (m.getClass().getSimpleName().equals(name) || m.getClass().getName().equals(name))
+				return m;
+		return null;
 	}
 }
