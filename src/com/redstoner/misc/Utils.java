@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
+import com.redstoner.modules.CoreModule;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -17,14 +18,10 @@ import net.md_5.bungee.api.ChatColor;
  * 
  * @author Pepich */
 @Version(major = 1, minor = 2, revision = 13, compatible = 1)
-public final class Utils
+public final class Utils implements CoreModule
 {
 	/** The SimpleDateFormat used for getting the current date. */
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]");
-	
-	/** Hidden constructor. Do not instantiate UTILS classes! :) */
-	private Utils()
-	{}
 	
 	/** This will send a message to the specified recipient. It will generate the module prefix if you want it to.
 	 * 
