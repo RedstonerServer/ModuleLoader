@@ -324,11 +324,16 @@ public final class ModuleLoader implements CoreModule
 			CommandManager.unregisterAll(commands);
 			try
 			{
-				loaders.get(module).close();
+				URLClassLoader loader = loaders.get(module);
+				if (loader != null)
+					loader.close();
 			}
 			catch (IOException e)
 			{}
-			loaders.remove(module);
+			finally
+			{
+				loaders.remove(module);
+			}
 		}
 	}
 	
