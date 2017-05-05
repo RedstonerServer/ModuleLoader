@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 2, compatible = 1)
+@Version(major = 1, minor = 3, revision = 3, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -239,7 +239,17 @@ public final class Utils
 	 * @param recipient Whom to display the header to. */
 	public static void sendModuleHeader(CommandSender recipient)
 	{
-		recipient.sendMessage("§2--=[ " + getCaller() + " ]=--");
+		sendModuleHeader(recipient, getCaller());
+	}
+	
+	/** Displays the module header to the recipient.</br>
+	 * Format: &2--=[ %HEADER% ]=--
+	 * 
+	 * @param recipient Whom to display the header to.
+	 * @param header The module name. */
+	public static void sendModuleHeader(CommandSender recipient, String header)
+	{
+		recipient.sendMessage("§2--=[ " + header + " ]=--");
 	}
 	
 	/** Provides a uniform way of getting the date for all modules.
