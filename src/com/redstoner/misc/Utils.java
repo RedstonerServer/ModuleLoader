@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 2, revision = 13, compatible = 1)
+@Version(major = 1, minor = 3, revision = 0, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -202,12 +202,27 @@ public final class Utils
 	
 	/** This method will find the next parent caller and return their class name, omitting package names.
 	 * 
-	 * @return */
+	 * @return the Name of the calling class. */
 	private static final String getCaller()
 	{
 		StackTraceElement[] stackTrace = (new Exception()).getStackTrace();
 		String classname = "Utils";
 		for (int i = 0; classname.equals("Utils"); i++)
+		{
+			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
+		}
+		return classname;
+	}
+	
+	/** This method will find the next parent caller and return their class name, omitting package names.
+	 * 
+	 * @param directCaller used to prevent this method from returning the caller itself. Null if supposed to be ignored.
+	 * @return the name of the calling class. */
+	public static final String getCaller(Class<? extends Object> directCaller)
+	{
+		StackTraceElement[] stackTrace = (new Exception()).getStackTrace();
+		String classname = (directCaller == null ? "Utils" : directCaller.getName());
+		for (int i = 0; classname.equals(directCaller.getName()); i++)
 		{
 			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
 		}
