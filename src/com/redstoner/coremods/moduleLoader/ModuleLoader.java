@@ -37,7 +37,7 @@ import net.minecraft.server.v1_11_R1.MinecraftServer;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 2, revision = 0, compatible = 2)
+@Version(major = 3, minor = 2, revision = 2, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -132,6 +132,7 @@ public final class ModuleLoader implements CoreModule
 		for (String s : coremods)
 			if (!s.startsWith("#"))
 				ModuleLoader.addDynamicModule(s);
+		enableModules();
 		for (String s : autoload)
 			if (!s.startsWith("#"))
 				ModuleLoader.addDynamicModule(s);
@@ -509,6 +510,7 @@ public final class ModuleLoader implements CoreModule
 				Utils.info("Player count: " + status[4]);
 				Utils.info("Attempting to disable module properly:");
 				disableModule(m);
+				modules.remove(m);
 				Utils.info("Disabled module, overriding the implementation:");
 				Object[] newStatus = getServerStatus();
 				Utils.info("Task complete! Took " + ((long) newStatus[0] - (long) status[0]) + "ms to finish!");
