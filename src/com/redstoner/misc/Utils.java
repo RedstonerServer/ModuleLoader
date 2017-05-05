@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 1, compatible = 1)
+@Version(major = 1, minor = 3, revision = 2, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -64,8 +64,8 @@ public final class Utils
 	{
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
-		sendMessage(recipient, ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
-				ChatColor.translateAlternateColorCodes(alternateColorCode, message));
+		sendMessage(recipient, ChatColor.translateAlternateColorCodes(alternateColorCode, prefix).replace("&§", "&"),
+				ChatColor.translateAlternateColorCodes(alternateColorCode, message).replace("&§", "&"));
 	}
 	
 	/** Invokes sendErrorMessage. This method will additionally translate alternate color codes for you.
@@ -78,8 +78,9 @@ public final class Utils
 	{
 		if (prefix == null)
 			prefix = "§8[§c" + getCaller() + "§8]: ";
-		sendErrorMessage(recipient, ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
-				ChatColor.translateAlternateColorCodes(alternateColorCode, message));
+		sendErrorMessage(recipient,
+				ChatColor.translateAlternateColorCodes(alternateColorCode, prefix).replace("&§", "&"),
+				ChatColor.translateAlternateColorCodes(alternateColorCode, message).replace("&§", "&"));
 	}
 	
 	/** This method broadcasts a message to all players (and console) that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
@@ -106,8 +107,8 @@ public final class Utils
 	{
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
-		return broadcast(ChatColor.translateAlternateColorCodes(alternateColorCode, prefix),
-				ChatColor.translateAlternateColorCodes(alternateColorCode, message), filter, null);
+		return broadcast(ChatColor.translateAlternateColorCodes(alternateColorCode, prefix).replace("&§", "&"),
+				ChatColor.translateAlternateColorCodes(alternateColorCode, message).replace("&§", "&"), filter, null);
 	}
 	
 	/** This method broadcasts a message to all players and console that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
@@ -173,7 +174,8 @@ public final class Utils
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§8[§2" + classname + "§8]: ";
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
+		Bukkit.getConsoleSender()
+				.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message).replace("&§", "&"));
 	}
 	
 	/** Prints a warning message into console. Supports "&" color codes.
@@ -185,7 +187,8 @@ public final class Utils
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§e[WARN]: §8[§e" + classname + "§8]: ";
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
+		Bukkit.getConsoleSender()
+				.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message).replace("&§", "&"));
 	}
 	
 	/** Used to make an error output to console. Supports "&" color codes.
@@ -197,7 +200,8 @@ public final class Utils
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§c[ERROR]: §8[§c" + classname + "§8]: ";
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message));
+		Bukkit.getConsoleSender()
+				.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message).replace("&§", "&"));
 	}
 	
 	/** This method will find the next parent caller and return their class name, omitting package names.
