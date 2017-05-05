@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 0, compatible = 1)
+@Version(major = 1, minor = 3, revision = 1, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -257,5 +257,21 @@ public final class Utils
 			return ((Player) sender).getDisplayName();
 		else
 			return "&9" + sender.getName();
+	}
+	
+	/** This method "colorifies" a message using proper permissions.
+	 * 
+	 * @param message the message to be colored.
+	 * @param sender the command sender whose permissions shall be applied.
+	 * @return the colorified message. */
+	public static String colorify(String message, CommandSender sender)
+	{
+		if (sender.hasPermission("essentials.chat.color"))
+			message = message.replaceAll("&([0-9a-fA-FrR])", "§$1");
+		if (sender.hasPermission("essentials.chat.format"))
+			message = message.replaceAll("&(l-oL-OrR)", "§$1");
+		if (sender.hasPermission("essentials.chat.magic"))
+			message = message.replaceAll("&([kKrR])", "§$1");
+		return message.replace("&§", "&");
 	}
 }
