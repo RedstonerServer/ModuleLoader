@@ -222,11 +222,11 @@ public final class Utils
 	 * 
 	 * @param directCaller used to prevent this method from returning the caller itself. Null if supposed to be ignored.
 	 * @return the name of the calling class. */
-	public static final String getCaller(Class<? extends Object> directCaller)
+	public static final String getCaller(String directCaller)
 	{
 		StackTraceElement[] stackTrace = (new Exception()).getStackTrace();
-		String classname = (directCaller == null ? "Utils" : directCaller.getName());
-		for (int i = 0; classname.equals(directCaller.getName()) || classname.equals("Utils"); i++)
+		String classname = (directCaller == null ? "Utils" : directCaller);
+		for (int i = 0; classname.equals(directCaller) || classname.equals("Utils"); i++)
 		{
 			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
 		}
