@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 4, compatible = 1)
+@Version(major = 1, minor = 3, revision = 5, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
