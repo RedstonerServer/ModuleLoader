@@ -16,7 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 3, compatible = 1)
+@Version(major = 1, minor = 3, revision = 4, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -226,7 +226,7 @@ public final class Utils
 	{
 		StackTraceElement[] stackTrace = (new Exception()).getStackTrace();
 		String classname = (directCaller == null ? "Utils" : directCaller.getName());
-		for (int i = 0; classname.equals(directCaller.getName()); i++)
+		for (int i = 0; classname.equals(directCaller.getName()) || classname.equals("Utils"); i++)
 		{
 			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
 		}
