@@ -8,7 +8,7 @@ import com.redstoner.exceptions.MissingVersionException;
 /** This class can be used to compare modules against the loader version or against each other to prevent dependency issues.
  * 
  * @author Pepich */
-@Version(major = 2, minor = 1, revision = 2, compatible = 0)
+@Version(major = 2, minor = 1, revision = 3, compatible = 0)
 public final class VersionHelper
 {
 	private VersionHelper()
@@ -63,8 +63,7 @@ public final class VersionHelper
 	 * 
 	 * @param base The API version to compare to.
 	 * @param module The module version to compare.
-	 * @return true, when the module is up to date with the API, or the API supports outdated modules.
-	 * @throws MissingVersionException When one of the parameters is not annotated with a @Version annotation. */
+	 * @return true, when the module is up to date with the API, or the API supports outdated modules. */
 	public static boolean isCompatible(Version apiVersion, Version moduleVersion)
 	{
 		if (apiVersion.major() >= moduleVersion.compatible())
