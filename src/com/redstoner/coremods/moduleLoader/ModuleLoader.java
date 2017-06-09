@@ -32,12 +32,12 @@ import com.redstoner.misc.VersionHelper;
 import com.redstoner.modules.CoreModule;
 import com.redstoner.modules.Module;
 
-import net.minecraft.server.v1_11_R1.MinecraftServer;
+import net.minecraft.server.v1_12_R1.MinecraftServer;
 
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 2, revision = 4, compatible = 2)
+@Version(major = 3, minor = 2, revision = 5, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
