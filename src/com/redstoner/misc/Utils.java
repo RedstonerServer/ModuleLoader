@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,12 +12,10 @@ import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
 
-import net.md_5.bungee.api.ChatColor;
-
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 7, compatible = 1)
+@Version(major = 1, minor = 3, revision = 8, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
