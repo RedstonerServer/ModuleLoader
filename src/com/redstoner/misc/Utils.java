@@ -16,10 +16,10 @@ import com.redstoner.coremods.debugger.Debugger;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 1, compatible = 1)
+@Version(major = 4, minor = 0, revision = 2, compatible = 1)
 public final class Utils
 {
-	/** The SimpleDateFormat used for getting the current date. */
+	/** The @SimpleDateFormat used for getting the current date. */
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]");
 	
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
@@ -241,16 +241,30 @@ public final class Utils
 		return dateFormat.format(date);
 	}
 	
-	/** Provides a uniform way of getting the (display)name of a CommandSender.
+	/** Provides a uniform way of getting the (display)name of a @CommandSender.
 	 * 
-	 * @param sender The CommandSender to get the name of.
-	 * @return The DisplayName of the CommandSender or if not a player, the name in blue. */
+	 * @param sender The @CommandSender to get the name of.
+	 * @return The DisplayName of the @CommandSender or if not a @Player, the name in blue. */
 	public static String getName(CommandSender sender)
 	{
 		if (sender instanceof Player)
 			return ((Player) sender).getDisplayName();
 		else
 			return "§9" + sender.getName();
+	}
+	
+	/** Provides a uniform way of getting the UUID of a @CommandSender.
+	 * 
+	 * @param sender The @CommandSender to get the UUID of.
+	 * @return The UUID of the @CommandSender or if not a player, "CONSOLE" in blue. */
+	public static String getID(CommandSender sender)
+	{
+		String id;
+		if (sender instanceof Player)
+			id = ((Player) sender).getUniqueId().toString();
+		else
+			id = "CONSOLE";
+		return id;
 	}
 	
 	/** This method "colorifies" a message.
@@ -265,7 +279,7 @@ public final class Utils
 	/** This method "colorifies" a message using proper permissions.
 	 * 
 	 * @param message the message to be colored.
-	 * @param sender the command sender whose permissions shall be applied.
+	 * @param sender the @CommandSender whose permissions shall be applied.
 	 * @return the colorified message. */
 	public static String colorify(String message, CommandSender sender, char alternateColorcode)
 	{
