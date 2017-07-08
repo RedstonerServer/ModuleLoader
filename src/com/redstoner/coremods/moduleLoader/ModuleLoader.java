@@ -3,6 +3,7 @@ package com.redstoner.coremods.moduleLoader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,6 +23,7 @@ import com.nemez.cmdmgr.Command;
 import com.nemez.cmdmgr.Command.AsyncType;
 import com.nemez.cmdmgr.CommandManager;
 import com.redstoner.annotations.AutoRegisterListener;
+import com.redstoner.annotations.Commands;
 import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
 import com.redstoner.coremods.debugger.Debugger;
@@ -32,12 +33,10 @@ import com.redstoner.misc.VersionHelper;
 import com.redstoner.modules.CoreModule;
 import com.redstoner.modules.Module;
 
-import net.minecraft.server.v1_12_R1.MinecraftServer;
-
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 2, revision = 5, compatible = 2)
+@Version(major = 4, minor = 0, revision = 0, compatible = 2)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -47,6 +46,7 @@ public final class ModuleLoader implements CoreModule
 	private static HashMap<Module, URLClassLoader> loaders = new HashMap<Module, URLClassLoader>();
 	private static File configFile;
 	private static FileConfiguration config;
+	private static boolean debugMode = false;
 	
 	private ModuleLoader()
 	{
@@ -60,6 +60,7 @@ public final class ModuleLoader implements CoreModule
 		catch (MalformedURLException e)
 		{
 			System.out.println("Sumtin is wong with ya filesüstem m8. Fix eeeet or I won't werk!");
+			Bukkit.getPluginManager().disablePlugin(Main.plugin);
 		}
 	}
 	
@@ -129,6 +130,19 @@ public final class ModuleLoader implements CoreModule
 				e.printStackTrace();
 			}
 		}
+		if (!config.contains("debugMode"))
+		{
+			config.set("debugMode", false);
+			try
+			{
+				config.save(configFile);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		debugMode = config.getBoolean("debugMode");
 		for (String s : coremods)
 			if (!s.startsWith("#"))
 				ModuleLoader.addDynamicModule(s);
@@ -136,6 +150,7 @@ public final class ModuleLoader implements CoreModule
 		for (String s : autoload)
 			if (!s.startsWith("#"))
 				ModuleLoader.addDynamicModule(s);
+		enableModules();
 	}
 	
 	/** This method will add a module to the module list, without enabling it.</br>
@@ -257,12 +272,35 @@ public final class ModuleLoader implements CoreModule
 		{
 			if (module.onEnable())
 			{
+				modules.put(module, true);
 				if (VersionHelper.isCompatible(VersionHelper.create(2, 0, 0, -1), module.getClass()))
 					CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
-				modules.put(module, true);
-				if (VersionHelper.isCompatible(VersionHelper.create(3, 0, 0, 3), module.getClass()))
+				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 3), module.getClass()))
 				{
 					module.postEnable();
+				}
+				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 4), module.getClass()))
+				{
+					Commands ann = module.getClass().getAnnotation(Commands.class);
+					if (ann != null)
+					{
+						switch (ann.value())
+						{
+							case File:
+								File f = new File(module.getClass().getName() + ".cmd");
+								CommandManager.registerCommand(f, module, Main.plugin);
+								break;
+							case Stream:
+								InputStream stream = module.getClass()
+										.getResourceAsStream(module.getClass().getSimpleName() + ".cmd");
+								CommandManager.registerCommand(stream, module, Main.plugin);
+							case String:
+								CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
+								break;
+							case None:
+								break;
+						}
+					}
 				}
 				Utils.info("Loaded module " + module.getClass().getName());
 				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
@@ -366,19 +404,12 @@ public final class ModuleLoader implements CoreModule
 	
 	public static final void addDynamicModule(String name)
 	{
-		Object[] status = getServerStatus();
 		for (Module m : modules.keySet())
 		{
 			if (m.getClass().getName().equals(name))
 			{
 				Utils.info(
 						"Found existing module, attempting override. WARNING! This operation will halt the main thread until it is completed.");
-				Utils.info("Current server status:");
-				Utils.info("Current system time: " + status[0]);
-				Utils.info("Current tick: " + status[1]);
-				Utils.info("Last TPS: " + status[2]);
-				Utils.info("Entity count: " + status[3]);
-				Utils.info("Player count: " + status[4]);
 				Utils.info("Attempting to load new class definition before disabling and removing the old module:");
 				boolean differs = false;
 				Utils.info("Old class definition: Class@" + m.getClass().hashCode());
@@ -446,18 +477,24 @@ public final class ModuleLoader implements CoreModule
 				Utils.info("Version of remote class: " + VersionHelper.getString(newVersion));
 				if (oldVersion.equals(newVersion))
 				{
-					Utils.error("Detected equal module versions, aborting now...");
-					try
+					Utils.error("Detected equal module versions, " + (debugMode
+							? " aborting now... Set debugMode to true in your config if you want to continue!"
+							: " continueing anyways."));
+					if (!debugMode)
 					{
-						cl.close();
+						try
+						{
+							cl.close();
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+						return;
 					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-					return;
 				}
-				Utils.info("Versions differ, disabling old module:");
+				else
+					Utils.info("Versions differ, disabling old module:");
 				disableModule(m);
 				Utils.info("Disabled module, overriding the implementation:");
 				modules.remove(m);
@@ -474,14 +511,6 @@ public final class ModuleLoader implements CoreModule
 				loaders.put(module, cl);
 				Utils.info("Successfully updated class definition. Enabling new implementation:");
 				enableLoadedModule(module);
-				Object[] newStatus = getServerStatus();
-				Utils.info("Task complete! Took " + ((long) newStatus[0] - (long) status[0]) + "ms to finish!");
-				Utils.info("Current server status:");
-				Utils.info("Current system time: " + newStatus[0]);
-				Utils.info("Current tick: " + newStatus[1]);
-				Utils.info("Last TPS: " + newStatus[2]);
-				Utils.info("Entity count: " + newStatus[3]);
-				Utils.info("Player count: " + newStatus[4]);
 				return;
 			}
 		}
@@ -507,31 +536,16 @@ public final class ModuleLoader implements CoreModule
 	
 	public static final void removeDynamicModule(String name)
 	{
-		Object[] status = getServerStatus();
 		for (Module m : modules.keySet())
 		{
 			if (m.getClass().getName().equals(name))
 			{
 				Utils.info(
 						"Found existing module, attempting unload. WARNING! This operation will halt the main thread until it is completed.");
-				Utils.info("Current server status:");
-				Utils.info("Current system time: " + status[0]);
-				Utils.info("Current tick: " + status[1]);
-				Utils.info("Last TPS: " + status[2]);
-				Utils.info("Entity count: " + status[3]);
-				Utils.info("Player count: " + status[4]);
 				Utils.info("Attempting to disable module properly:");
 				disableModule(m);
 				modules.remove(m);
-				Utils.info("Disabled module, overriding the implementation:");
-				Object[] newStatus = getServerStatus();
-				Utils.info("Task complete! Took " + ((long) newStatus[0] - (long) status[0]) + "ms to finish!");
-				Utils.info("Current server status:");
-				Utils.info("Current system time: " + newStatus[0]);
-				Utils.info("Current tick: " + newStatus[1]);
-				Utils.info("Last TPS: " + newStatus[2]);
-				Utils.info("Entity count: " + newStatus[3]);
-				Utils.info("Player count: " + newStatus[4]);
+				Utils.info("Disabled module.");
 				return;
 			}
 		}
@@ -542,23 +556,6 @@ public final class ModuleLoader implements CoreModule
 		}
 		else
 			Utils.error("Couldn't find module! Couldn't ");
-	}
-	
-	@SuppressWarnings("deprecation")
-	private static final Object[] getServerStatus()
-	{
-		final Object[] status = new Object[5];
-		status[0] = System.currentTimeMillis();
-		status[1] = MinecraftServer.currentTick;
-		status[2] = MinecraftServer.getServer().recentTps[0];
-		int i = 0;
-		for (World w : Bukkit.getWorlds())
-		{
-			i += w.getEntities().size();
-		}
-		status[3] = i;
-		status[4] = Bukkit.getOnlinePlayers().size();
-		return status;
 	}
 	
 	/** Finds a module by name for other modules to reference it.

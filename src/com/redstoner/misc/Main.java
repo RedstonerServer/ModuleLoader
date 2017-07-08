@@ -10,7 +10,7 @@ import com.redstoner.misc.mysql.MysqlHandler;
 /** Main class. Duh.
  * 
  * @author Pepich */
-@Version(major = 3, minor = 2, revision = 0, compatible = -1)
+@Version(major = 4, minor = 0, revision = 0, compatible = -1)
 public class Main extends JavaPlugin
 {
 	public static JavaPlugin plugin;
@@ -19,9 +19,11 @@ public class Main extends JavaPlugin
 	public void onEnable()
 	{
 		plugin = this;
+		// Configger.init();
 		Debugger.init();
 		MysqlHandler.init();
 		ModuleLoader.init();
+		// Load modules from config
 		ModuleLoader.loadFromConfig();
 		// And enable them
 		ModuleLoader.enableModules();

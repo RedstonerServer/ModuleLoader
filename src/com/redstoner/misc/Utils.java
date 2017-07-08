@@ -1,10 +1,10 @@
 package com.redstoner.misc;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import com.redstoner.coremods.debugger.Debugger;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 3, revision = 8, compatible = 1)
+@Version(major = 4, minor = 0, revision = 0, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -63,8 +63,7 @@ public final class Utils
 	{
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
-		sendMessage(recipient, ChatColor.translateAlternateColorCodes(alternateColorCode, prefix).replace("&§", "&"),
-				ChatColor.translateAlternateColorCodes(alternateColorCode, message).replace("&§", "&"));
+		sendMessage(recipient, colorify(prefix, alternateColorCode), colorify(message, alternateColorCode));
 	}
 	
 	/** Invokes sendErrorMessage. This method will additionally translate alternate color codes for you.
@@ -77,21 +76,7 @@ public final class Utils
 	{
 		if (prefix == null)
 			prefix = "§8[§c" + getCaller() + "§8]: ";
-		sendErrorMessage(recipient,
-				ChatColor.translateAlternateColorCodes(alternateColorCode, prefix).replace("&§", "&"),
-				ChatColor.translateAlternateColorCodes(alternateColorCode, message).replace("&§", "&"));
-	}
-	
-	/** This method broadcasts a message to all players (and console) that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
-	 * This will not be logged to console except when you return true in the filter.
-	 * 
-	 * @param message the message to be sent around
-	 * @param filter the BroadcastFilter to be applied.</br>
-	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
-	 * @return the amount of people that received the message. */
-	public static int broadcast(String prefix, String message, BroadcastFilter filter)
-	{
-		return broadcast(prefix, message, filter, null);
+		sendErrorMessage(recipient, colorify(prefix, '&'), colorify(message, '&'));
 	}
 	
 	/** This method broadcasts a message to all players (and console) that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
@@ -106,8 +91,8 @@ public final class Utils
 	{
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
-		return broadcast(ChatColor.translateAlternateColorCodes(alternateColorCode, prefix).replace("&§", "&"),
-				ChatColor.translateAlternateColorCodes(alternateColorCode, message).replace("&§", "&"), filter, null);
+		message = colorify(message, alternateColorCode);
+		return broadcast(prefix, message, filter);
 	}
 	
 	/** This method broadcasts a message to all players and console that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
@@ -121,20 +106,16 @@ public final class Utils
 	 * @param logmessage the log message to appear in console. Set to null to not log this (you can still log the original message by returning true in the filter).
 	 * @return the amount of people that received the message. */
 	@Debugable
-	public static int broadcast(String prefix, String message, BroadcastFilter filter, String logmessage)
+	public static int broadcast(String prefix, String message, BroadcastFilter filter)
 	{
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
-		Debugger.notifyMethod(message, filter, logmessage);
-		if (logmessage != null)
-			sendMessage(Bukkit.getConsoleSender(), prefix, logmessage);
 		if (filter == null)
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 				p.sendMessage(prefix + message);
-			if (logmessage == null)
-				Bukkit.getConsoleSender().sendMessage(prefix + message);
-			return Bukkit.getOnlinePlayers().size();
+			Bukkit.getConsoleSender().sendMessage(prefix + message);
+			return Bukkit.getOnlinePlayers().size() + 1;
 		}
 		else
 		{
@@ -145,12 +126,11 @@ public final class Utils
 					p.sendMessage(prefix + message);
 					count++;
 				}
-			if (logmessage == null)
-				if (filter.sendTo(Bukkit.getConsoleSender()))
-				{
-					Bukkit.getConsoleSender().sendMessage(prefix + message);
-					count++;
-				}
+			if (filter.sendTo(Bukkit.getConsoleSender()))
+			{
+				Bukkit.getConsoleSender().sendMessage(prefix + message);
+				count++;
+			}
 			return count;
 		}
 	}
@@ -173,8 +153,7 @@ public final class Utils
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§8[§2" + classname + "§8]: ";
-		Bukkit.getConsoleSender()
-				.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message).replace("&§", "&"));
+		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
 	}
 	
 	/** Prints a warning message into console. Supports "&" color codes.
@@ -186,8 +165,7 @@ public final class Utils
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§e[WARN]: §8[§e" + classname + "§8]: ";
-		Bukkit.getConsoleSender()
-				.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message).replace("&§", "&"));
+		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
 	}
 	
 	/** Used to make an error output to console. Supports "&" color codes.
@@ -199,8 +177,7 @@ public final class Utils
 		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§c[ERROR]: §8[§c" + classname + "§8]: ";
-		Bukkit.getConsoleSender()
-				.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + "§7" + message).replace("&§", "&"));
+		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
 	}
 	
 	/** This method will find the next parent caller and return their class name, omitting package names.
@@ -221,11 +198,13 @@ public final class Utils
 	 * 
 	 * @param directCaller used to prevent this method from returning the caller itself. Null if supposed to be ignored.
 	 * @return the name of the calling class. */
-	public static final String getCaller(String directCaller)
+	public static final String getCaller(ArrayList<String> directCaller)
 	{
+		if (directCaller == null || directCaller.size() == 0)
+			return getCaller();
 		StackTraceElement[] stackTrace = (new Exception()).getStackTrace();
-		String classname = (directCaller == null ? "Utils" : directCaller);
-		for (int i = 0; classname.equals(directCaller) || classname.equals("Utils"); i++)
+		String classname = "Utils";
+		for (int i = 0; directCaller.contains(classname) || classname.equals("Utils"); i++)
 		{
 			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
 		}
@@ -269,7 +248,16 @@ public final class Utils
 		if (sender instanceof Player)
 			return ((Player) sender).getDisplayName();
 		else
-			return "&9" + sender.getName();
+			return "§9" + sender.getName();
+	}
+	
+	/** This method "colorifies" a message.
+	 * 
+	 * @param message the message to be colored.
+	 * @return the colorified message. */
+	public static String colorify(String message, char alternateColorcode)
+	{
+		return colorify(message, Bukkit.getConsoleSender(), alternateColorcode);
 	}
 	
 	/** This method "colorifies" a message using proper permissions.
@@ -277,14 +265,14 @@ public final class Utils
 	 * @param message the message to be colored.
 	 * @param sender the command sender whose permissions shall be applied.
 	 * @return the colorified message. */
-	public static String colorify(String message, CommandSender sender)
+	public static String colorify(String message, CommandSender sender, char alternateColorcode)
 	{
 		if (sender.hasPermission("essentials.chat.color"))
-			message = message.replaceAll("&([0-9a-fA-FrR])", "§$1");
+			message = message.replaceAll(alternateColorcode + "([0-9a-fA-FrR])", "§$1");
 		if (sender.hasPermission("essentials.chat.format"))
-			message = message.replaceAll("&(l-oL-OrR)", "§$1");
+			message = message.replaceAll(alternateColorcode + "(l-oL-OrR)", "§$1");
 		if (sender.hasPermission("essentials.chat.magic"))
-			message = message.replaceAll("&([kKrR])", "§$1");
-		return message.replace("&§", "&");
+			message = message.replaceAll(alternateColorcode + "([kKrR])", "§$1");
+		return message.replace(alternateColorcode + "§", alternateColorcode + "");
 	}
 }
