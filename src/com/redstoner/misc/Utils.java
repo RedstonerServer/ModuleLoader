@@ -1,8 +1,9 @@
 package com.redstoner.misc;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,7 @@ import com.redstoner.coremods.debugger.Debugger;
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 0, compatible = 1)
+@Version(major = 4, minor = 0, revision = 1, compatible = 1)
 public final class Utils
 {
 	/** The SimpleDateFormat used for getting the current date. */
@@ -198,13 +199,14 @@ public final class Utils
 	 * 
 	 * @param directCaller used to prevent this method from returning the caller itself. Null if supposed to be ignored.
 	 * @return the name of the calling class. */
-	public static final String getCaller(ArrayList<String> directCaller)
+	public static final String getCaller(String... directCaller)
 	{
-		if (directCaller == null || directCaller.size() == 0)
+		if (directCaller == null || directCaller.length == 0)
 			return getCaller();
 		StackTraceElement[] stackTrace = (new Exception()).getStackTrace();
 		String classname = "Utils";
-		for (int i = 0; directCaller.contains(classname) || classname.equals("Utils"); i++)
+		List<String> callers = Arrays.asList(directCaller);
+		for (int i = 0; callers.contains(classname) || classname.equals("Utils"); i++)
 		{
 			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
 		}
