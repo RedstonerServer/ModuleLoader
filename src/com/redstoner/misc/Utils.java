@@ -26,6 +26,26 @@ public final class Utils
 	private Utils()
 	{}
 	
+	/** This will send a message to the specified recipient. It will generate the module prefix.
+	 * 
+	 * @param recipient Whom to sent the message to.
+	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
+	@Debugable
+	public static void sendMessage(CommandSender recipient, String message)
+	{
+		sendMessage(recipient, null, message);
+	}
+	
+	/** This will send a message to the specified recipient. It will generate the module prefix. Also, this will be logged to console as a warning.
+	 * 
+	 * @param recipient Whom to sent the message to.
+	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
+	@Debugable
+	public static void sendErrorMessage(CommandSender recipient, String message)
+	{
+		sendErrorMessage(recipient, null, message);
+	}
+	
 	/** This will send a message to the specified recipient. It will generate the module prefix if you want it to.
 	 * 
 	 * @param recipient Whom to sent the message to.
