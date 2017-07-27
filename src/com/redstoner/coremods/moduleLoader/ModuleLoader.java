@@ -24,9 +24,7 @@ import com.nemez.cmdmgr.Command.AsyncType;
 import com.nemez.cmdmgr.CommandManager;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Commands;
-import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
-import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.Utils;
 import com.redstoner.misc.VersionHelper;
@@ -153,45 +151,9 @@ public final class ModuleLoader implements CoreModule
 		enableModules();
 	}
 	
-	/** This method will add a module to the module list, without enabling it.</br>
-	 * This method is deprecated, use addDynamicModule(String name) instead. When using this method, dynamic reloading of the module will not be supported.
-	 * 
-	 * @param clazz The class of the module to be added. */
-	@Debugable
-	@Deprecated
-	public static final void addModule(Class<? extends Module> clazz)
-	{
-		Debugger.notifyMethod(clazz);
-		try
-		{
-			Module module = clazz.newInstance();
-			modules.put(module, false);
-		}
-		catch (InstantiationException | IllegalAccessException e)
-		{
-			Utils.error("Could not add " + clazz.getName() + " to the list, constructor not accessible.");
-		}
-	}
-	
-	@Debugable
-	private static final void addLoadedModule(Module m)
-	{
-		Debugger.notifyMethod(m);
-		if (modules.containsKey(m))
-			if (modules.get(m))
-			{
-				Utils.error(
-						"Module m was already loaded and enabled. Disable the module before attempting to reload it.");
-				return;
-			}
-		modules.put(m, false);
-	}
-	
 	/** Call this to enable all not-yet enabled modules that are known to the loader. */
-	@Debugable
 	public static final void enableModules()
 	{
-		Debugger.notifyMethod();
 		for (Module module : modules.keySet())
 		{
 			if (modules.get(module))
@@ -205,11 +167,9 @@ public final class ModuleLoader implements CoreModule
 	 * 
 	 * @param clazz The class of the module to be enabled.
 	 * @return true, when the module was successfully enabled. */
-	@Debugable
 	@Deprecated
 	public static final boolean enableModule(Class<? extends Module> clazz)
 	{
-		Debugger.notifyMethod(clazz);
 		for (Module module : modules.keySet())
 		{
 			if (module.getClass().equals(clazz))
@@ -410,7 +370,7 @@ public final class ModuleLoader implements CoreModule
 			{
 				Utils.info(
 						"Found existing module, attempting override. WARNING! This operation will halt the main thread until it is completed.");
-				Utils.info("Attempting to load new class definition before disabling and removing the old module:");
+				Utils.info("Attempting to load new class definition before disabling and removing the old module");
 				boolean differs = false;
 				Utils.info("Old class definition: Class@" + m.getClass().hashCode());
 				ClassLoader delegateParent = mainLoader.getParent();
@@ -438,19 +398,27 @@ public final class ModuleLoader implements CoreModule
 				}
 				if (!differs)
 				{
-					Utils.warn("New class definition equals old definition, are you sure you did everything right?");
-					Utils.info("Aborting now...");
-					try
+					if (!debugMode)
 					{
-						cl.close();
+						Utils.warn(
+								"New class definition equals old definition, are you sure you did everything right?");
+						Utils.info("Aborting now...");
+						try
+						{
+							cl.close();
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+						return;
 					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-					return;
+					else
+						Utils.warn(
+								"New class definition equals old definition, but debugMode is enabled. Loading anyways.");
 				}
-				Utils.info("Found new class definition, attempting to instantiate:");
+				else
+					Utils.info("Found new class definition, attempting to instantiate:");
 				Module module = null;
 				try
 				{
@@ -470,33 +438,38 @@ public final class ModuleLoader implements CoreModule
 					}
 					return;
 				}
-				Utils.info("Instantiated new class definition, checking versions:");
+				Utils.info("Instantiated new class definition, checking versions");
 				Version oldVersion = m.getClass().getAnnotation(Version.class);
 				Utils.info("Current version: " + VersionHelper.getString(oldVersion));
 				Version newVersion = module.getClass().getAnnotation(Version.class);
 				Utils.info("Version of remote class: " + VersionHelper.getString(newVersion));
 				if (oldVersion.equals(newVersion))
 				{
-					Utils.error("Detected equal module versions, " + (debugMode
-							? " aborting now... Set debugMode to true in your config if you want to continue!"
-							: " continueing anyways."));
 					if (!debugMode)
 					{
-						try
+						Utils.error("Detected equal module versions, " + (debugMode
+								? " aborting now... Set debugMode to true in your config if you want to continue!"
+								: " continueing anyways."));
+						if (!debugMode)
 						{
-							cl.close();
+							try
+							{
+								cl.close();
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+							return;
 						}
-						catch (IOException e)
-						{
-							e.printStackTrace();
-						}
-						return;
 					}
+					else
+						Utils.warn("New version equals old version, but debugMode is enabled. Loading anyways.");
 				}
 				else
-					Utils.info("Versions differ, disabling old module:");
+					Utils.info("Versions differ, disabling old module");
 				disableModule(m);
-				Utils.info("Disabled module, overriding the implementation:");
+				Utils.info("Disabled module, overriding the implementation");
 				modules.remove(m);
 				try
 				{
@@ -518,15 +491,27 @@ public final class ModuleLoader implements CoreModule
 		{
 			Class<?> clazz = mainLoader.loadClass(name);
 			Module module = (Module) clazz.newInstance();
-			addLoadedModule(module);
+			modules.put(module, false);
 			enableLoadedModule(module);
 		}
 		catch (ClassNotFoundException | InstantiationException | IllegalAccessException e)
 		{
+			if (name.endsWith(".class"))
+			{
+				Utils.warn(
+						"Couldn't find class definition, but path ends with .class -> Attempting again with removed file suffix.");
+				addDynamicModule(name.replaceAll(".class$", ""));
+			}
+			if (!name.contains("."))
+			{
+				Utils.warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of path by adding a packet name and trying again.");
+				addDynamicModule(name.toLowerCase() + "." + name);
+			}
 			if (!name.startsWith("com.redstoner.modules."))
 			{
 				Utils.warn(
-						"Couldn't find class definition, suspecting missing path. Autocompleting path, trying again.");
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of packet name and trying again.");
 				addDynamicModule("com.redstoner.modules." + name);
 			}
 			else
@@ -551,11 +536,27 @@ public final class ModuleLoader implements CoreModule
 		}
 		if (!name.startsWith("com.redstoner.modules."))
 		{
-			Utils.warn("Couldn't find class definition, suspecting missing path. Autocompleting path, trying again.");
-			removeDynamicModule("com.redstoner.modules." + name);
+			if (name.endsWith(".class"))
+			{
+				Utils.warn(
+						"Couldn't find class definition, but path ends with .class -> Attempting again with removed file suffix.");
+				addDynamicModule(name.replaceAll(".class$", ""));
+			}
+			if (!name.contains("."))
+			{
+				Utils.warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of path by adding a packet name and trying again.");
+				addDynamicModule(name.toLowerCase() + "." + name);
+			}
+			if (!name.startsWith("com.redstoner.modules."))
+			{
+				Utils.warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of packet name and trying again.");
+				addDynamicModule("com.redstoner.modules." + name);
+			}
 		}
 		else
-			Utils.error("Couldn't find module! Couldn't ");
+			Utils.error("Couldn't find module! Couldn't disable nonexisting module!");
 	}
 	
 	/** Finds a module by name for other modules to reference it.
@@ -568,5 +569,17 @@ public final class ModuleLoader implements CoreModule
 			if (m.getClass().getSimpleName().equals(name) || m.getClass().getName().equals(name))
 				return m;
 		return null;
+	}
+	
+	/** Finds a module by name for other modules to reference it.
+	 * 
+	 * @param name the name of the module. Use the full path if you are not sure about the module's SimpleClassName being unique.
+	 * @return the instance of the module or @null it none could be found */
+	public static boolean exists(String name)
+	{
+		for (Module m : modules.keySet())
+			if (m.getClass().getSimpleName().equals(name) || m.getClass().getName().equals(name))
+				return true;
+		return false;
 	}
 }

@@ -3,7 +3,6 @@ package com.redstoner.misc;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.redstoner.annotations.Version;
-import com.redstoner.coremods.debugger.Debugger;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.misc.mysql.MysqlHandler;
 
@@ -20,7 +19,6 @@ public class Main extends JavaPlugin
 	{
 		plugin = this;
 		// Configger.init();
-		Debugger.init();
 		MysqlHandler.init();
 		ModuleLoader.init();
 		// Load modules from config

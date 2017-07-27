@@ -9,14 +9,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.redstoner.annotations.Debugable;
 import com.redstoner.annotations.Version;
-import com.redstoner.coremods.debugger.Debugger;
 
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 2, compatible = 1)
+@Version(major = 4, minor = 0, revision = 0, compatible = 1)
 public final class Utils
 {
 	/** The @SimpleDateFormat used for getting the current date. */
@@ -30,7 +28,6 @@ public final class Utils
 	 * 
 	 * @param recipient Whom to sent the message to.
 	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	@Debugable
 	public static void sendMessage(CommandSender recipient, String message)
 	{
 		sendMessage(recipient, null, message);
@@ -40,7 +37,6 @@ public final class Utils
 	 * 
 	 * @param recipient Whom to sent the message to.
 	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	@Debugable
 	public static void sendErrorMessage(CommandSender recipient, String message)
 	{
 		sendErrorMessage(recipient, null, message);
@@ -51,10 +47,8 @@ public final class Utils
 	 * @param recipient Whom to sent the message to.
 	 * @param prefix The prefix for the message. If null, the default prefix will be used: &8[&2MODULE&8]
 	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	@Debugable
 	public static void sendMessage(CommandSender recipient, String prefix, String message)
 	{
-		Debugger.notifyMethod((Object) recipient, prefix, message);
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
@@ -65,10 +59,8 @@ public final class Utils
 	 * @param recipient Whom to sent the message to.
 	 * @param prefix The prefix for the message. If null, the default prefix will be used: &8[&cMODULE&8]
 	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	@Debugable
 	public static void sendErrorMessage(CommandSender recipient, String prefix, String message)
 	{
-		Debugger.notifyMethod((Object) recipient, prefix, message);
 		if (prefix == null)
 			prefix = "§8[§c" + getCaller() + "§8]: ";
 		recipient.sendMessage(prefix + "§7" + message);
@@ -126,7 +118,6 @@ public final class Utils
 	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
 	 * @param logmessage the log message to appear in console. Set to null to not log this (you can still log the original message by returning true in the filter).
 	 * @return the amount of people that received the message. */
-	@Debugable
 	public static int broadcast(String prefix, String message, BroadcastFilter filter)
 	{
 		if (prefix == null)
@@ -168,10 +159,8 @@ public final class Utils
 	/** Prints an info message into console. Supports "&" color codes.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
-	@Debugable
 	public static void info(String message)
 	{
-		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§8[§2" + classname + "§8]: ";
 		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
@@ -180,10 +169,8 @@ public final class Utils
 	/** Prints a warning message into console. Supports "&" color codes.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
-	@Debugable
 	public static void warn(String message)
 	{
-		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§e[WARN]: §8[§e" + classname + "§8]: ";
 		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
@@ -192,10 +179,8 @@ public final class Utils
 	/** Used to make an error output to console. Supports "&" color codes.
 	 * 
 	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to red. */
-	@Debugable
 	public static void error(String message)
 	{
-		Debugger.notifyMethod(message);
 		String classname = getCaller();
 		String prefix = "§c[ERROR]: §8[§c" + classname + "§8]: ";
 		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
