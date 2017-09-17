@@ -6,6 +6,8 @@ import com.redstoner.annotations.Version;
 import com.redstoner.coremods.moduleLoader.ModuleLoader;
 import com.redstoner.misc.mysql.MysqlHandler;
 
+import net.nemez.chatapi.ChatAPI;
+
 /** Main class. Duh.
  * 
  * @author Pepich */
@@ -18,13 +20,12 @@ public class Main extends JavaPlugin
 	public void onEnable()
 	{
 		plugin = this;
+		ChatAPI.initialize(this);
 		// Configger.init();
 		MysqlHandler.init();
 		ModuleLoader.init();
 		// Load modules from config
 		ModuleLoader.loadFromConfig();
-		// And enable them
-		ModuleLoader.enableModules();
 	}
 	
 	@Override

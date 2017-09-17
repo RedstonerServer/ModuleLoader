@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 
 import com.redstoner.annotations.Version;
 
+import net.nemez.chatapi.ChatAPI;
+
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
@@ -24,90 +26,6 @@ public final class Utils
 	private Utils()
 	{}
 	
-	/** This will send a message to the specified recipient. It will generate the module prefix.
-	 * 
-	 * @param recipient Whom to sent the message to.
-	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	public static void sendMessage(CommandSender recipient, String message)
-	{
-		sendMessage(recipient, null, message);
-	}
-	
-	/** This will send a message to the specified recipient. It will generate the module prefix. Also, this will be logged to console as a warning.
-	 * 
-	 * @param recipient Whom to sent the message to.
-	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	public static void sendErrorMessage(CommandSender recipient, String message)
-	{
-		sendErrorMessage(recipient, null, message);
-	}
-	
-	/** This will send a message to the specified recipient. It will generate the module prefix if you want it to.
-	 * 
-	 * @param recipient Whom to sent the message to.
-	 * @param prefix The prefix for the message. If null, the default prefix will be used: &8[&2MODULE&8]
-	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	public static void sendMessage(CommandSender recipient, String prefix, String message)
-	{
-		if (prefix == null)
-			prefix = "§8[§2" + getCaller() + "§8]: ";
-		recipient.sendMessage(prefix + "§7" + message);
-	}
-	
-	/** This will send a message to the specified recipient. It will generate the module prefix if you want it to. Also, this will be logged to console as a warning.
-	 * 
-	 * @param recipient Whom to sent the message to.
-	 * @param prefix The prefix for the message. If null, the default prefix will be used: &8[&cMODULE&8]
-	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise. */
-	public static void sendErrorMessage(CommandSender recipient, String prefix, String message)
-	{
-		if (prefix == null)
-			prefix = "§8[§c" + getCaller() + "§8]: ";
-		recipient.sendMessage(prefix + "§7" + message);
-	}
-	
-	/** Invokes sendMessage. This method will additionally translate alternate color codes for you.
-	 * 
-	 * @param recipient Whom to sent the message to.
-	 * @param prefix The prefix for the message. If null, the default prefix will be used: &8[&cMODULE&8]
-	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise.
-	 * @param alternateColorCode The alternate color code indicator to use. If set to '&' then "&7" would be translated to "§7". Works with any char. */
-	public static void sendMessage(CommandSender recipient, String prefix, String message, char alternateColorCode)
-	{
-		if (prefix == null)
-			prefix = "§8[§2" + getCaller() + "§8]: ";
-		sendMessage(recipient, colorify(prefix, alternateColorCode), colorify(message, alternateColorCode));
-	}
-	
-	/** Invokes sendErrorMessage. This method will additionally translate alternate color codes for you.
-	 * 
-	 * @param recipient Whom to sent the message to.
-	 * @param prefix The prefix for the message. If null, the default prefix will be used: &8[&cMODULE&8]
-	 * @param message The message to sent. Will default to &7 (light_grey) if not specified otherwise.
-	 * @param alternateColorCode The alternate color code indicator to use. If set to '&' then "&7" would be translated to "§7". Works with any char. */
-	public static void sendErrorMessage(CommandSender recipient, String prefix, String message, char alternateColorCode)
-	{
-		if (prefix == null)
-			prefix = "§8[§c" + getCaller() + "§8]: ";
-		sendErrorMessage(recipient, colorify(prefix, '&'), colorify(message, '&'));
-	}
-	
-	/** This method broadcasts a message to all players (and console) that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
-	 * This will not be logged to console except when you return true in the filter.
-	 * 
-	 * @param message the message to be sent around
-	 * @param filter the BroadcastFilter to be applied.</br>
-	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
-	 * @param alternateColorCode The alternate color code indicator to use. If set to '&' then "&7" would be translated to "§7". Works with any char.
-	 * @return the amount of people that received the message. */
-	public static int broadcast(String prefix, String message, BroadcastFilter filter, char alternateColorCode)
-	{
-		if (prefix == null)
-			prefix = "§8[§2" + getCaller() + "§8]: ";
-		message = colorify(message, alternateColorCode);
-		return broadcast(prefix, message, filter);
-	}
-	
 	/** This method broadcasts a message to all players and console that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
 	 * If you want to, you can set a message that will be logged to console. Set to null to not log anything.</br>
 	 * You can still allow console in the filter to log the original message.
@@ -120,6 +38,7 @@ public final class Utils
 	 * @return the amount of people that received the message. */
 	public static int broadcast(String prefix, String message, BroadcastFilter filter)
 	{
+		message = ChatAPI.colorify(null, message);
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
 		if (filter == null)
@@ -145,45 +64,6 @@ public final class Utils
 			}
 			return count;
 		}
-	}
-	
-	/** Deprecated. Use Utils.info(message) instead.
-	 * 
-	 * @param message The message to be put into console. Prefixes are automatically generated. */
-	@Deprecated
-	public static void log(String message)
-	{
-		info(message);
-	}
-	
-	/** Prints an info message into console. Supports "&" color codes.
-	 * 
-	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
-	public static void info(String message)
-	{
-		String classname = getCaller();
-		String prefix = "§8[§2" + classname + "§8]: ";
-		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
-	}
-	
-	/** Prints a warning message into console. Supports "&" color codes.
-	 * 
-	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to grey. */
-	public static void warn(String message)
-	{
-		String classname = getCaller();
-		String prefix = "§e[WARN]: §8[§e" + classname + "§8]: ";
-		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
-	}
-	
-	/** Used to make an error output to console. Supports "&" color codes.
-	 * 
-	 * @param message The message to be put into console. Prefixes are automatically generated. Color defaults to red. */
-	public static void error(String message)
-	{
-		String classname = getCaller();
-		String prefix = "§c[ERROR]: §8[§c" + classname + "§8]: ";
-		Bukkit.getConsoleSender().sendMessage(colorify(prefix + "§7" + message, Bukkit.getConsoleSender(), '&'));
 	}
 	
 	/** This method will find the next parent caller and return their class name, omitting package names.
@@ -216,25 +96,6 @@ public final class Utils
 			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
 		}
 		return classname;
-	}
-	
-	/** Displays the module header to the recipient.</br>
-	 * Format: &2--=[ %MODULE% ]=--
-	 * 
-	 * @param recipient Whom to display the header to. */
-	public static void sendModuleHeader(CommandSender recipient)
-	{
-		sendModuleHeader(recipient, getCaller());
-	}
-	
-	/** Displays the module header to the recipient.</br>
-	 * Format: &2--=[ %HEADER% ]=--
-	 * 
-	 * @param recipient Whom to display the header to.
-	 * @param header The module name. */
-	public static void sendModuleHeader(CommandSender recipient, String header)
-	{
-		recipient.sendMessage("§2--=[ " + header + " ]=--");
 	}
 	
 	/** Provides a uniform way of getting the date for all modules.
@@ -270,30 +131,5 @@ public final class Utils
 		else
 			id = "CONSOLE";
 		return id;
-	}
-	
-	/** This method "colorifies" a message.
-	 * 
-	 * @param message the message to be colored.
-	 * @return the colorified message. */
-	public static String colorify(String message, char alternateColorcode)
-	{
-		return colorify(message, Bukkit.getConsoleSender(), alternateColorcode);
-	}
-	
-	/** This method "colorifies" a message using proper permissions.
-	 * 
-	 * @param message the message to be colored.
-	 * @param sender the @CommandSender whose permissions shall be applied.
-	 * @return the colorified message. */
-	public static String colorify(String message, CommandSender sender, char alternateColorcode)
-	{
-		if (sender.hasPermission("essentials.chat.color"))
-			message = message.replaceAll(alternateColorcode + "([0-9a-fA-FrR])", "§$1");
-		if (sender.hasPermission("essentials.chat.format"))
-			message = message.replaceAll(alternateColorcode + "(l-oL-OrR)", "§$1");
-		if (sender.hasPermission("essentials.chat.magic"))
-			message = message.replaceAll(alternateColorcode + "([kKrR])", "§$1");
-		return message.replace(alternateColorcode + "§", alternateColorcode + "");
 	}
 }

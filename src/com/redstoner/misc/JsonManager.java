@@ -55,23 +55,33 @@ public class JsonManager
 			@Override
 			public void run()
 			{
-				if (destination.exists())
-					destination.delete();
-				else if (!destination.getParentFile().exists())
-					destination.getParentFile().mkdirs();
-				try
-				{
-					destination.createNewFile();
-					FileWriter writer = new FileWriter(destination);
-					object.writeJSONString(writer);
-					writer.flush();
-					writer.close();
-				}
-				catch (IOException e)
-				{}
+				saveSync(object, destination);
 			}
 		});
 		t.start();
+	}
+	
+	/** Saves a JSONObject to a file. Will create the necessary FileStructure like folders and the file itself.</br>
+	 * Note that this operation will be run on the same thread that you are calling it from!
+	 * 
+	 * @param object the JSONObject to save.
+	 * @param destination the file to write to. */
+	public static void saveSync(JSONObject object, File destination)
+	{
+		if (destination.exists())
+			destination.delete();
+		else if (!destination.getParentFile().exists())
+			destination.getParentFile().mkdirs();
+		try
+		{
+			destination.createNewFile();
+			FileWriter writer = new FileWriter(destination);
+			object.writeJSONString(writer);
+			writer.flush();
+			writer.close();
+		}
+		catch (IOException e)
+		{}
 	}
 	
 	/** Loads a JSONArray from a file.
@@ -106,22 +116,32 @@ public class JsonManager
 			@Override
 			public void run()
 			{
-				if (destination.exists())
-					destination.delete();
-				else if (!destination.getParentFile().exists())
-					destination.getParentFile().mkdirs();
-				try
-				{
-					destination.createNewFile();
-					FileWriter writer = new FileWriter(destination);
-					array.writeJSONString(writer);
-					writer.flush();
-					writer.close();
-				}
-				catch (IOException e)
-				{}
+				saveSync(array, destination);
 			}
 		});
 		t.start();
+	}
+	
+	/** Saves a JSONArray to a file. Will create the necessary FileStructure like folders and the file itself.</br>
+	 * Note that this operation will be run on the same thread that you are calling it from!
+	 * 
+	 * @param object the JSONArray to save.
+	 * @param destination the file to write to. */
+	public static void saveSync(JSONArray array, File destination)
+	{
+		if (destination.exists())
+			destination.delete();
+		else if (!destination.getParentFile().exists())
+			destination.getParentFile().mkdirs();
+		try
+		{
+			destination.createNewFile();
+			FileWriter writer = new FileWriter(destination);
+			array.writeJSONString(writer);
+			writer.flush();
+			writer.close();
+		}
+		catch (IOException e)
+		{}
 	}
 }

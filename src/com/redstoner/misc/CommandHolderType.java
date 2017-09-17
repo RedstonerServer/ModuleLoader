@@ -8,6 +8,6 @@ public enum CommandHolderType
 {
 	Stream,
 	File,
-	@Deprecated String,
+	String,
 	None
 }

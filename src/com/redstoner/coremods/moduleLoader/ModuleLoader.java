@@ -25,16 +25,19 @@ import com.nemez.cmdmgr.CommandManager;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Commands;
 import com.redstoner.annotations.Version;
+import com.redstoner.exceptions.MissingVersionException;
 import com.redstoner.misc.Main;
-import com.redstoner.misc.Utils;
 import com.redstoner.misc.VersionHelper;
 import com.redstoner.modules.CoreModule;
 import com.redstoner.modules.Module;
+import com.redstoner.modules.ModuleLogger;
+
+import net.nemez.chatapi.click.Message;
 
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 0, compatible = 2)
+@Version(major = 4, minor = 0, revision = 0, compatible = 4)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -45,6 +48,7 @@ public final class ModuleLoader implements CoreModule
 	private static File configFile;
 	private static FileConfiguration config;
 	private static boolean debugMode = false;
+	private static HashMap<Module, ModuleLogger> loggers = new HashMap<Module, ModuleLogger>();
 	
 	private ModuleLoader()
 	{
@@ -66,6 +70,7 @@ public final class ModuleLoader implements CoreModule
 	{
 		if (instance == null)
 			instance = new ModuleLoader();
+		loggers.put(instance, new ModuleLogger("ModuleLoader"));
 		CommandManager.registerCommand(ModuleLoader.class.getResourceAsStream("ModuleLoader.cmd"), instance,
 				Main.plugin);
 	}
@@ -98,7 +103,7 @@ public final class ModuleLoader implements CoreModule
 			{
 				e1.printStackTrace();
 			}
-			Utils.error("Invalid config file! Creating new, blank file!");
+			instance.getLogger().error("Invalid config file! Creating new, blank file!");
 		}
 		List<String> coremods = config.getStringList("coremods");
 		if (coremods == null || coremods.isEmpty())
@@ -143,23 +148,21 @@ public final class ModuleLoader implements CoreModule
 		debugMode = config.getBoolean("debugMode");
 		for (String s : coremods)
 			if (!s.startsWith("#"))
-				ModuleLoader.addDynamicModule(s);
-		enableModules();
+				if (!ModuleLoader.addDynamicModule(s))
+				{
+					instance.getLogger().error("Couldn't autocomplete path for module name: " + s
+							+ "! If you're on a case sensitive filesystem, please take note that case correction does not work. Make sure that the classname has proper capitalisation.");
+							
+				}
 		for (String s : autoload)
 			if (!s.startsWith("#"))
-				ModuleLoader.addDynamicModule(s);
-		enableModules();
-	}
-	
-	/** Call this to enable all not-yet enabled modules that are known to the loader. */
-	public static final void enableModules()
-	{
-		for (Module module : modules.keySet())
-		{
-			if (modules.get(module))
-				continue;
-			enableLoadedModule(module);
-		}
+				if (!ModuleLoader.addDynamicModule(s))
+				{
+					instance.getLogger().error("Couldn't autocomplete path for module name: " + s
+							+ "! If you're on a case sensitive filesystem, please take note that case correction does not work. Make sure that the classname has proper capitalisation.");
+							
+				}
+		updateConfig();
 	}
 	
 	/** This method enables a specific module. If no module with that name is known to the loader yet it will be added to the list.</br>
@@ -176,7 +179,7 @@ public final class ModuleLoader implements CoreModule
 			{
 				if (modules.get(module))
 				{
-					Utils.info("Module was already enabled! Ignoring module.!");
+					instance.getLogger().info("Module was already enabled! Ignoring module.!");
 					return true;
 				}
 				if (module.onEnable())
@@ -186,14 +189,14 @@ public final class ModuleLoader implements CoreModule
 					{
 						Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
 					}
-					Utils.info("Enabled module " + module.getClass().getName());
-					Utils.info("Loaded module " + module.getClass().getName());
+					instance.getLogger().info("Enabled module " + module.getClass().getName());
+					instance.getLogger().info("Loaded module " + module.getClass().getName());
 					modules.put(module, true);
 					return true;
 				}
 				else
 				{
-					Utils.error("Failed to enable module " + module.getClass().getName());
+					instance.getLogger().error("Failed to enable module " + module.getClass().getName());
 					return false;
 				}
 			}
@@ -208,33 +211,36 @@ public final class ModuleLoader implements CoreModule
 				{
 					Bukkit.getPluginManager().registerEvents((Listener) m, Main.plugin);
 				}
-				Utils.info("Loaded and enabled module " + m.getClass().getName());
-				Utils.info("Loaded module " + m.getClass().getName());
+				instance.getLogger().info("Loaded and enabled module " + m.getClass().getName());
+				instance.getLogger().info("Loaded module " + m.getClass().getName());
 				return true;
 			}
 			else
 			{
-				Utils.error("Failed to enable module " + m.getClass().getName());
+				instance.getLogger().error("Failed to enable module " + m.getClass().getName());
 				return false;
 			}
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
-			Utils.error("Could not add " + clazz.getName() + " to the list, constructor not accessible.");
+			instance.getLogger()
+					.error("Could not add " + clazz.getName() + " to the list, constructor not accessible.");
 			return false;
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
-	private static final void enableLoadedModule(Module module)
+	private static final void enableLoadedModule(Module module, Version oldVersion)
 	{
 		try
 		{
+			loggers.put(module, new ModuleLogger(module.getClass().getSimpleName()));
 			if (module.onEnable())
 			{
 				modules.put(module, true);
-				if (VersionHelper.isCompatible(VersionHelper.create(2, 0, 0, -1), module.getClass()))
-					CommandManager.registerCommand(module.getCommandString(), module, Main.plugin);
+				if (oldVersion.toString().equals("0.0.0.0"))
+					module.firstLoad();
+				else if (!VersionHelper.getVersion(module.getClass()).equals(oldVersion))
+					module.migrate(oldVersion);
 				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 3), module.getClass()))
 				{
 					module.postEnable();
@@ -247,7 +253,8 @@ public final class ModuleLoader implements CoreModule
 						switch (ann.value())
 						{
 							case File:
-								File f = new File(module.getClass().getName() + ".cmd");
+								File f = new File("plugins/ModuleLoader/classes/"
+										+ module.getClass().getName().replace(".", "/") + ".cmd");
 								CommandManager.registerCommand(f, module, Main.plugin);
 								break;
 							case Stream:
@@ -262,18 +269,16 @@ public final class ModuleLoader implements CoreModule
 						}
 					}
 				}
-				Utils.info("Loaded module " + module.getClass().getName());
+				instance.getLogger().info("Loaded module " + module.getClass().getName());
 				if (module.getClass().isAnnotationPresent(AutoRegisterListener.class) && (module instanceof Listener))
-				{
 					Bukkit.getPluginManager().registerEvents((Listener) module, Main.plugin);
-				}
 			}
 			else
-				Utils.error("Failed to load module " + module.getClass().getName());
+				instance.getLogger().error("Failed to load module " + module.getClass().getName());
 		}
 		catch (Exception e)
 		{
-			Utils.error("Failed to load module " + module.getClass().getName());
+			instance.getLogger().error("Failed to load module " + module.getClass().getName());
 			e.printStackTrace();
 		}
 	}
@@ -285,19 +290,52 @@ public final class ModuleLoader implements CoreModule
 	@Command(hook = "list", async = AsyncType.ALWAYS)
 	public boolean listModulesCommand(CommandSender sender)
 	{
-		Utils.sendModuleHeader(sender);
-		StringBuilder sb = new StringBuilder("Modules:\n");
-		for (Module module : modules.keySet())
+		Message m = new Message(sender, null);
+		m.appendText(getLogger().getHeader());
+		m.appendText("§2Modules:\n&e");
+		Module[] modules = ModuleLoader.modules.keySet().toArray(new Module[] {});
+		for (int i = 0; i < modules.length; i++)
 		{
+			Module module = modules[i];
 			String[] classPath = module.getClass().getName().split("\\.");
 			String classname = classPath[classPath.length - 1];
-			sb.append(modules.get(module) ? "&a" : "&c");
-			sb.append(classname);
-			sb.append(", ");
+			m.appendText((ModuleLoader.modules.get(module) ? "§a" : "§c") + classname);
+			if (i + 1 < modules.length)
+				m.appendText("§7, ");
 		}
-		sb.delete(sb.length() - 2, sb.length());
-		Utils.sendMessage(sender, " §e", sb.toString(), '&');
-		Utils.sendMessage(sender, " §7", "For more detailed information, consult the debugger.");
+		m.send();
+		return true;
+	}
+	
+	/** This method lists all modules to the specified CommandSender. The modules will be color coded correspondingly to their enabled status.
+	 * 
+	 * @param sender The person to send the info to, usually the issuer of the command or the console sender.
+	 * @return true. */
+	@Command(hook = "listv", async = AsyncType.ALWAYS)
+	public boolean listModulesCommandVersion(CommandSender sender)
+	{
+		Message m = new Message(sender, null);
+		m.appendText(getLogger().getHeader());
+		m.appendText("§2Modules:\n&e");
+		Module[] modules = ModuleLoader.modules.keySet().toArray(new Module[] {});
+		for (int i = 0; i < modules.length; i++)
+		{
+			Module module = modules[i];
+			String[] classPath = module.getClass().getName().split("\\.");
+			String classname = classPath[classPath.length - 1];
+			try
+			{
+				m.appendText((ModuleLoader.modules.get(module) ? "§a" : "§c") + classname + "§e("
+						+ VersionHelper.getVersion(module.getClass()) + ")");
+			}
+			catch (MissingVersionException e)
+			{
+				m.appendText((ModuleLoader.modules.get(module) ? "§a" : "§c") + classname + "§c" + "(Unknown Version)");
+			}
+			if (i + 1 < modules.length)
+				m.appendText("§7, ");
+		}
+		m.send();
 		return true;
 	}
 	
@@ -351,40 +389,55 @@ public final class ModuleLoader implements CoreModule
 	@Command(hook = "load")
 	public boolean loadModule(CommandSender sender, String name)
 	{
-		addDynamicModule(name);
+		if (!addDynamicModule(name))
+		{
+			instance.getLogger().message(sender, true, "Couldn't autocomplete path for module name: " + name
+					+ "! If you're on a case sensitive filesystem, please take note that case correction does not work. Make sure that the classname has proper capitalisation.");
+					
+		}
+		updateConfig();
 		return true;
 	}
 	
 	@Command(hook = "unload")
 	public boolean unloadModule(CommandSender sender, String name)
 	{
-		removeDynamicModule(name);
+		if (!removeDynamicModule(name))
+			instance.getLogger().error("Couldn't find module! Couldn't disable nonexisting module!");
 		return true;
 	}
 	
-	public static final void addDynamicModule(String name)
+	public static final boolean addDynamicModule(String raw_name)
 	{
+		String[] raw = raw_name.split(" ");
+		String name = raw[0];
+		Version oldVersion;
+		if (raw.length > 1)
+			oldVersion = VersionHelper.getVersion(raw[1]);
+		else
+			oldVersion = VersionHelper.create(0, 0, 0, 0);
 		for (Module m : modules.keySet())
 		{
 			if (m.getClass().getName().equals(name))
 			{
-				Utils.info(
+				instance.getLogger().info(
 						"Found existing module, attempting override. WARNING! This operation will halt the main thread until it is completed.");
-				Utils.info("Attempting to load new class definition before disabling and removing the old module");
+				instance.getLogger()
+						.info("Attempting to load new class definition before disabling and removing the old module");
 				boolean differs = false;
-				Utils.info("Old class definition: Class@" + m.getClass().hashCode());
+				instance.getLogger().info("Old class definition: Class@" + m.getClass().hashCode());
 				ClassLoader delegateParent = mainLoader.getParent();
 				Class<?> newClass = null;
 				URLClassLoader cl = new URLClassLoader(urls, delegateParent);
 				try
 				{
 					newClass = cl.loadClass(m.getClass().getName());
-					Utils.info("Found new class definition: Class@" + newClass.hashCode());
+					instance.getLogger().info("Found new class definition: Class@" + newClass.hashCode());
 					differs = m.getClass() != newClass;
 				}
 				catch (ClassNotFoundException e)
 				{
-					Utils.error("Could not find a class definition, aborting now!");
+					instance.getLogger().error("Could not find a class definition, aborting now!");
 					e.printStackTrace();
 					try
 					{
@@ -394,15 +447,15 @@ public final class ModuleLoader implements CoreModule
 					{
 						e1.printStackTrace();
 					}
-					return;
+					return false;
 				}
 				if (!differs)
 				{
 					if (!debugMode)
 					{
-						Utils.warn(
+						instance.getLogger().warn(
 								"New class definition equals old definition, are you sure you did everything right?");
-						Utils.info("Aborting now...");
+						instance.getLogger().info("Aborting now...");
 						try
 						{
 							cl.close();
@@ -411,14 +464,14 @@ public final class ModuleLoader implements CoreModule
 						{
 							e.printStackTrace();
 						}
-						return;
+						return false;
 					}
 					else
-						Utils.warn(
+						instance.getLogger().warn(
 								"New class definition equals old definition, but debugMode is enabled. Loading anyways.");
 				}
 				else
-					Utils.info("Found new class definition, attempting to instantiate:");
+					instance.getLogger().info("Found new class definition, attempting to instantiate:");
 				Module module = null;
 				try
 				{
@@ -426,7 +479,7 @@ public final class ModuleLoader implements CoreModule
 				}
 				catch (InstantiationException | IllegalAccessException e)
 				{
-					Utils.error("Could not instantiate the module, aborting!");
+					instance.getLogger().error("Could not instantiate the module, aborting!");
 					e.printStackTrace();
 					try
 					{
@@ -436,20 +489,21 @@ public final class ModuleLoader implements CoreModule
 					{
 						e1.printStackTrace();
 					}
-					return;
+					return false;
 				}
-				Utils.info("Instantiated new class definition, checking versions");
-				Version oldVersion = m.getClass().getAnnotation(Version.class);
-				Utils.info("Current version: " + VersionHelper.getString(oldVersion));
+				instance.getLogger().info("Instantiated new class definition, checking versions");
+				oldVersion = m.getClass().getAnnotation(Version.class);
+				instance.getLogger().info("Current version: " + VersionHelper.getString(oldVersion));
 				Version newVersion = module.getClass().getAnnotation(Version.class);
-				Utils.info("Version of remote class: " + VersionHelper.getString(newVersion));
+				instance.getLogger().info("Version of remote class: " + VersionHelper.getString(newVersion));
 				if (oldVersion.equals(newVersion))
 				{
 					if (!debugMode)
 					{
-						Utils.error("Detected equal module versions, " + (debugMode
-								? " aborting now... Set debugMode to true in your config if you want to continue!"
-								: " continueing anyways."));
+						instance.getLogger()
+								.error("Detected equal module versions, " + (debugMode
+										? " aborting now... Set debugMode to true in your config if you want to continue!"
+										: " continueing anyways."));
 						if (!debugMode)
 						{
 							try
@@ -460,16 +514,17 @@ public final class ModuleLoader implements CoreModule
 							{
 								e.printStackTrace();
 							}
-							return;
+							return false;
 						}
 					}
 					else
-						Utils.warn("New version equals old version, but debugMode is enabled. Loading anyways.");
+						instance.getLogger()
+								.warn("New version equals old version, but debugMode is enabled. Loading anyways.");
 				}
 				else
-					Utils.info("Versions differ, disabling old module");
+					instance.getLogger().info("Versions differ, disabling old module");
 				disableModule(m);
-				Utils.info("Disabled module, overriding the implementation");
+				instance.getLogger().info("Disabled module, overriding the implementation");
 				modules.remove(m);
 				try
 				{
@@ -482,81 +537,115 @@ public final class ModuleLoader implements CoreModule
 				}
 				modules.put(module, false);
 				loaders.put(module, cl);
-				Utils.info("Successfully updated class definition. Enabling new implementation:");
-				enableLoadedModule(module);
-				return;
+				instance.getLogger().info("Successfully updated class definition. Enabling new implementation:");
+				enableLoadedModule(module, oldVersion);
+				return true;
 			}
 		}
+		ClassLoader delegateParent = mainLoader.getParent();
+		URLClassLoader cl = new URLClassLoader(urls, delegateParent);
 		try
 		{
-			Class<?> clazz = mainLoader.loadClass(name);
+			Class<?> clazz = cl.loadClass(name);
 			Module module = (Module) clazz.newInstance();
 			modules.put(module, false);
-			enableLoadedModule(module);
+			loaders.put(module, cl);
+			enableLoadedModule(module, oldVersion);
+			return true;
 		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException e)
+		catch (NoClassDefFoundError | ClassNotFoundException | InstantiationException | IllegalAccessException e)
 		{
+			try
+			{
+				cl.close();
+			}
+			catch (IOException e1)
+			{}
+			if (e instanceof NoClassDefFoundError)
+			{
+				NoClassDefFoundError exception = (NoClassDefFoundError) e;
+				String[] exMessage = exception.getMessage().split(" ");
+				String moduleName = exMessage[exMessage.length - 1]
+						.substring(0, exMessage[exMessage.length - 1].length()
+								- (exMessage[exMessage.length - 1].endsWith(")") ? 1 : 0))
+						.replace("/", ".");
+				if (!moduleName.equalsIgnoreCase(name))
+				{
+					instance.getLogger()
+							.error("Class &e" + moduleName + "&r couldn't be found! Suspecting a missing dependency!");
+					return false;
+				}
+				else
+					instance.getLogger().warn(
+							"Couldn't find class definition, attempting to get proper classname from thrown Exception.");
+				if (addDynamicModule(moduleName))
+					return true;
+			}
 			if (name.endsWith(".class"))
 			{
-				Utils.warn(
+				instance.getLogger().warn(
 						"Couldn't find class definition, but path ends with .class -> Attempting again with removed file suffix.");
-				addDynamicModule(name.replaceAll(".class$", ""));
+				if (addDynamicModule(name.replaceAll(".class$", "")))
+					return true;
 			}
 			if (!name.contains("."))
 			{
-				Utils.warn(
-						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of path by adding a packet name and trying again.");
-				addDynamicModule(name.toLowerCase() + "." + name);
+				instance.getLogger().warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of path by adding a package name and trying again.");
+				if (addDynamicModule(name.toLowerCase() + "." + name))
+					return true;
 			}
-			if (!name.startsWith("com.redstoner.modules."))
+			if (!name.startsWith("com.redstoner.modules.") && name.contains("."))
 			{
-				Utils.warn(
-						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of packet name and trying again.");
-				addDynamicModule("com.redstoner.modules." + name);
+				instance.getLogger().warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of package name and trying again.");
+				if (addDynamicModule("com.redstoner.modules." + name))
+					return true;
 			}
-			else
-				e.printStackTrace();
 		}
+		return false;
 	}
 	
-	public static final void removeDynamicModule(String name)
+	public static final boolean removeDynamicModule(String name)
 	{
 		for (Module m : modules.keySet())
 		{
 			if (m.getClass().getName().equals(name))
 			{
-				Utils.info(
+				instance.getLogger().info(
 						"Found existing module, attempting unload. WARNING! This operation will halt the main thread until it is completed.");
-				Utils.info("Attempting to disable module properly:");
+				instance.getLogger().info("Attempting to disable module properly:");
 				disableModule(m);
 				modules.remove(m);
-				Utils.info("Disabled module.");
-				return;
+				instance.getLogger().info("Disabled module.");
+				return true;
 			}
 		}
 		if (!name.startsWith("com.redstoner.modules."))
 		{
 			if (name.endsWith(".class"))
 			{
-				Utils.warn(
+				instance.getLogger().warn(
 						"Couldn't find class definition, but path ends with .class -> Attempting again with removed file suffix.");
-				addDynamicModule(name.replaceAll(".class$", ""));
+				if (removeDynamicModule(name.replaceAll(".class$", "")))
+					return true;
 			}
 			if (!name.contains("."))
 			{
-				Utils.warn(
-						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of path by adding a packet name and trying again.");
-				addDynamicModule(name.toLowerCase() + "." + name);
+				instance.getLogger().warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of path by adding a package name and trying again.");
+				if (removeDynamicModule(name.toLowerCase() + "." + name))
+					return true;
 			}
 			if (!name.startsWith("com.redstoner.modules."))
 			{
-				Utils.warn(
-						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of packet name and trying again.");
-				addDynamicModule("com.redstoner.modules." + name);
+				instance.getLogger().warn(
+						"Couldn't find class definition, suspecting incomplete path. Attempting autocompletion of package name and trying again.");
+				if (removeDynamicModule("com.redstoner.modules." + name))
+					return true;
 			}
 		}
-		else
-			Utils.error("Couldn't find module! Couldn't disable nonexisting module!");
+		return false;
 	}
 	
 	/** Finds a module by name for other modules to reference it.
@@ -566,7 +655,7 @@ public final class ModuleLoader implements CoreModule
 	public static Module getModule(String name)
 	{
 		for (Module m : modules.keySet())
-			if (m.getClass().getSimpleName().equals(name) || m.getClass().getName().equals(name))
+			if (m.getClass().getSimpleName().equalsIgnoreCase(name) || m.getClass().getName().equalsIgnoreCase(name))
 				return m;
 		return null;
 	}
@@ -581,5 +670,70 @@ public final class ModuleLoader implements CoreModule
 			if (m.getClass().getSimpleName().equals(name) || m.getClass().getName().equals(name))
 				return true;
 		return false;
+	}
+	
+	public static ModuleLogger getModuleLogger(Module module)
+	{
+		return loggers.get(module);
+	}
+	
+	public static void updateConfig()
+	{
+		List<String> coremods = config.getStringList("coremods");
+		ArrayList<String> new_coremods = new ArrayList<String>();
+		List<String> autoload = config.getStringList("autoload");
+		ArrayList<String> new_autoload = new ArrayList<String>();
+		
+		for (String s : coremods)
+		{
+			if (s.startsWith("#"))
+			{
+				new_coremods.add(s);
+			}
+			else
+			{
+				s = s.split(" ")[0];
+				try
+				{
+					new_coremods.add(getModule(s).getClass().getName() + " "
+							+ VersionHelper.getVersion(getModule(s).getClass()));
+				}
+				catch (Exception e)
+				{
+					new_coremods.add(s + " " + VersionHelper.getString(VersionHelper.create(0, 0, 0, 0)));
+				}
+			}
+		}
+		for (String s : autoload)
+		{
+			if (s.startsWith("#"))
+			{
+				new_autoload.add(s);
+			}
+			else
+			{
+				s = s.split(" ")[0];
+				try
+				{
+					new_autoload.add(getModule(s).getClass().getName() + " "
+							+ VersionHelper.getVersion(getModule(s).getClass()));
+				}
+				catch (Exception e)
+				{
+					new_autoload.add(s + " " + VersionHelper.getString(VersionHelper.create(0, 0, 0, 0)));
+				}
+			}
+		}
+		
+		config.set("coremods", new_coremods);
+		config.set("autoload", new_autoload);
+		try
+		{
+			config.save(configFile);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
