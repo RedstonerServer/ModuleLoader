@@ -11,12 +11,10 @@ import org.bukkit.entity.Player;
 
 import com.redstoner.annotations.Version;
 
-import net.nemez.chatapi.ChatAPI;
-
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 0, compatible = 1)
+@Version(major = 4, minor = 0, revision = 1, compatible = 1)
 public final class Utils
 {
 	/** The @SimpleDateFormat used for getting the current date. */
@@ -38,7 +36,6 @@ public final class Utils
 	 * @return the amount of people that received the message. */
 	public static int broadcast(String prefix, String message, BroadcastFilter filter)
 	{
-		message = ChatAPI.colorify(null, message);
 		if (prefix == null)
 			prefix = "§8[§2" + getCaller() + "§8]: ";
 		if (filter == null)
