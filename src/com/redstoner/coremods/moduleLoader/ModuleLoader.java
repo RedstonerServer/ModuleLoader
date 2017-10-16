@@ -37,18 +37,18 @@ import net.nemez.chatapi.click.Message;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 0, compatible = 4)
+@Version(major = 4, minor = 0, revision = 1, compatible = 4)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
-	private static final HashMap<Module, Boolean> modules = new HashMap<Module, Boolean>();
+	private static final HashMap<Module, Boolean> modules = new HashMap<>();
 	private static URL[] urls;
 	private static URLClassLoader mainLoader;
-	private static HashMap<Module, URLClassLoader> loaders = new HashMap<Module, URLClassLoader>();
+	private static HashMap<Module, URLClassLoader> loaders = new HashMap<>();
 	private static File configFile;
 	private static FileConfiguration config;
 	private static boolean debugMode = false;
-	private static HashMap<Module, ModuleLogger> loggers = new HashMap<Module, ModuleLogger>();
+	private static HashMap<Module, ModuleLogger> loggers = new HashMap<>();
 	
 	private ModuleLoader()
 	{
@@ -152,7 +152,7 @@ public final class ModuleLoader implements CoreModule
 				{
 					instance.getLogger().error("Couldn't autocomplete path for module name: " + s
 							+ "! If you're on a case sensitive filesystem, please take note that case correction does not work. Make sure that the classname has proper capitalisation.");
-							
+					
 				}
 		for (String s : autoload)
 			if (!s.startsWith("#"))
@@ -160,7 +160,7 @@ public final class ModuleLoader implements CoreModule
 				{
 					instance.getLogger().error("Couldn't autocomplete path for module name: " + s
 							+ "! If you're on a case sensitive filesystem, please take note that case correction does not work. Make sure that the classname has proper capitalisation.");
-							
+					
 				}
 		updateConfig();
 	}
@@ -237,14 +237,12 @@ public final class ModuleLoader implements CoreModule
 			if (module.onEnable())
 			{
 				modules.put(module, true);
-				if (oldVersion.toString().equals("0.0.0.0"))
+				if (VersionHelper.getString(oldVersion).equals("0.0.0.0"))
 					module.firstLoad();
-				else if (!VersionHelper.getVersion(module.getClass()).equals(oldVersion))
+				else if (!VersionHelper.getVersion(module.getClass()).equals(VersionHelper.getString(oldVersion)))
 					module.migrate(oldVersion);
 				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 3), module.getClass()))
-				{
 					module.postEnable();
-				}
 				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 4), module.getClass()))
 				{
 					Commands ann = module.getClass().getAnnotation(Commands.class);
@@ -375,7 +373,7 @@ public final class ModuleLoader implements CoreModule
 	
 	private static ArrayList<String> getAllHooks(Module module)
 	{
-		ArrayList<String> commands = new ArrayList<String>();
+		ArrayList<String> commands = new ArrayList<>();
 		for (Method m : module.getClass().getMethods())
 		{
 			Command cmd = m.getDeclaredAnnotation(Command.class);
@@ -393,7 +391,7 @@ public final class ModuleLoader implements CoreModule
 		{
 			instance.getLogger().message(sender, true, "Couldn't autocomplete path for module name: " + name
 					+ "! If you're on a case sensitive filesystem, please take note that case correction does not work. Make sure that the classname has proper capitalisation.");
-					
+			
 		}
 		updateConfig();
 		return true;
@@ -500,10 +498,9 @@ public final class ModuleLoader implements CoreModule
 				{
 					if (!debugMode)
 					{
-						instance.getLogger()
-								.error("Detected equal module versions, " + (debugMode
-										? " aborting now... Set debugMode to true in your config if you want to continue!"
-										: " continueing anyways."));
+						instance.getLogger().error("Detected equal module versions, " + (debugMode
+								? " aborting now... Set debugMode to true in your config if you want to continue!"
+								: " continueing anyways."));
 						if (!debugMode)
 						{
 							try
@@ -680,9 +677,9 @@ public final class ModuleLoader implements CoreModule
 	public static void updateConfig()
 	{
 		List<String> coremods = config.getStringList("coremods");
-		ArrayList<String> new_coremods = new ArrayList<String>();
+		ArrayList<String> new_coremods = new ArrayList<>();
 		List<String> autoload = config.getStringList("autoload");
-		ArrayList<String> new_autoload = new ArrayList<String>();
+		ArrayList<String> new_autoload = new ArrayList<>();
 		
 		for (String s : coremods)
 		{
