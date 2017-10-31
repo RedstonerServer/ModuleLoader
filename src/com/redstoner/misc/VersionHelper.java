@@ -97,6 +97,15 @@ public final class VersionHelper
 		return ver.major() + "." + ver.minor() + "." + ver.revision() + "." + ver.compatible();
 	}
 	
+	public static Version getVersion(String ver)
+	{
+		String[] raw = ver.split("\\.");
+		if (raw.length != 4)
+			return null;
+		return VersionHelper.create(Integer.parseInt(raw[0]), Integer.parseInt(raw[1]), Integer.parseInt(raw[2]),
+				Integer.parseInt(raw[3]));
+	}
+	
 	/** This method creates a new Version to use for compatibility checks.
 	 * 
 	 * @param major The major version

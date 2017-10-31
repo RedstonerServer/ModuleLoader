@@ -5,10 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/** Debugable annotation, to be added to methods that invoke the Debugger.notifyMethod method for debugging purposes.
- * 
- * @author Pepich */
-@Target(ElementType.METHOD)
+import com.redstoner.misc.CommandHolderType;
+
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Debugable
-{}
+public @interface Commands
+{
+	CommandHolderType value();
+}
