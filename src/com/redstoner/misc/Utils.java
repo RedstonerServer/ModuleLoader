@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -19,6 +20,9 @@ public final class Utils
 {
 	/** The @SimpleDateFormat used for getting the current date. */
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]");
+	
+	/** The Pattern for a UUID*/
+	private static final Pattern UUID_pattern = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 	
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
 	private Utils()
@@ -128,5 +132,15 @@ public final class Utils
 		else
 			id = "CONSOLE";
 		return id;
+	}
+	
+	/** Checks if the string is an UUID.
+	 * 
+	 * @param toCheck String to check.
+	 * @return if the string is an UUID.
+	 */
+	public static boolean isUUID(String toCheck)
+	{
+	    return UUID_pattern.matcher(toCheck).matches();
 	}
 }
