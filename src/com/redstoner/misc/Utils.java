@@ -134,10 +134,10 @@ public final class Utils
 		return id;
 	}
 	
-	/** Checks if the string is an UUID.
+	/** Checks if the string is a UUID.
 	 * 
 	 * @param toCheck String to check.
-	 * @return if the string is an UUID.
+	 * @return if the string is a UUID.
 	 */
 	public static boolean isUUID(String toCheck)
 	{
