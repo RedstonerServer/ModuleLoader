@@ -23,6 +23,8 @@ public final class Utils
 	
 	/** The Pattern for a UUID*/
 	private static final Pattern UUID_pattern = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
+	private static final Pattern Class_pattern = Pattern.compile(".*\\.");
+	private static final Pattern NoDolarSign_pattern = Pattern.compile("\\$\\d*");
 	
 	/** Hidden constructor. Do not instantiate UTILS classes! :) */
 	private Utils()
@@ -76,7 +78,7 @@ public final class Utils
 		String classname = "Utils";
 		for (int i = 0; classname.equals("Utils"); i++)
 		{
-			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
+			classname = Class_pattern.matcher(stackTrace[i].getClassName()).replaceAll("");
 		}
 		return classname;
 	}
@@ -94,8 +96,9 @@ public final class Utils
 		List<String> callers = Arrays.asList(directCaller);
 		for (int i = 0; callers.contains(classname) || classname.equals("Utils"); i++)
 		{
-			classname = stackTrace[i].getClassName().replaceAll(".*\\.", "");
+			classname = Class_pattern.matcher(stackTrace[i].getClassName()).replaceAll("");
 		}
+		classname = NoDolarSign_pattern.matcher(classname).replaceAll("");
 		return classname;
 	}
 	
