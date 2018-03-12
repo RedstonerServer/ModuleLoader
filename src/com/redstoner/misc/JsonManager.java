@@ -15,7 +15,7 @@ import com.redstoner.annotations.Version;
 /** This class provides simple JSON handling, like storing and loading from and to files.
  * 
  * @author Pepich */
-@Version(major = 1, minor = 0, revision = 1, compatible = -1)
+@Version(major = 1, minor = 0, revision = 2, compatible = -1)
 public class JsonManager
 {
 	private JsonManager()
@@ -76,7 +76,8 @@ public class JsonManager
 		{
 			destination.createNewFile();
 			FileWriter writer = new FileWriter(destination);
-			object.writeJSONString(writer);
+			String json_string = object.toJSONString();
+			writer.write(json_string);
 			writer.flush();
 			writer.close();
 		}
@@ -137,7 +138,8 @@ public class JsonManager
 		{
 			destination.createNewFile();
 			FileWriter writer = new FileWriter(destination);
-			array.writeJSONString(writer);
+			String json_string = array.toJSONString();
+			writer.write(json_string);
 			writer.flush();
 			writer.close();
 		}
