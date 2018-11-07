@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.2"
+    }
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "java"
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+    implementation "com.github.RedstonerServer:CommandManager:master-SNAPSHOT"
+    implementation "com.github.RedstonerServer:ChatAPI:master-SNAPSHOT"
+    implementation "com.github.RedstonerServer:ChestAPI:master-SNAPSHOT"
+
+    compileOnly 'org.spigotmc:spigot-api:1.13.1-R0.1-SNAPSHOT'
+}
+
+jar {
+    manifest {
+        attributes "Class-Path": "../lib/CommandManager.jar ../lib/ChatAPI.jar ../lib/ChestAPI.jar"
+    }
+}
