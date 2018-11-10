@@ -31,3 +31,8 @@ jar {
         attributes "Class-Path": "../lib/CommandManager.jar ../lib/ChatAPI.jar ../lib/ChestAPI.jar"
     }
 }
+
+task sourceJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
