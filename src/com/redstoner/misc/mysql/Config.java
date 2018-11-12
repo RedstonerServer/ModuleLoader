@@ -66,7 +66,9 @@ public class Config
 	private JSONObject loadConfig(File file) throws IOException, ParseException
 	{
 		FileReader reader = new FileReader(file);
-		return (JSONObject) parser.parse(reader);
+		JSONObject object = (JSONObject) parser.parse(reader);
+		reader.close();
+		return object;
 	}
 	
 	@Override
