@@ -12,6 +12,9 @@ import org.bukkit.entity.Player;
 
 import com.redstoner.annotations.Version;
 
+import net.nemez.chatapi.ChatAPI;
+import net.nemez.chatapi.click.Message;
+
 /** The utils class containing utility functions. Those include but are not limited to sending formatted messages, broadcasts and more.
  * 
  * @author Pepich */
@@ -58,6 +61,45 @@ public final class Utils
 				if (filter.sendTo(p))
 				{
 					p.sendMessage(prefix + message);
+					count++;
+				}
+			if (filter.sendTo(Bukkit.getConsoleSender()))
+			{
+				Bukkit.getConsoleSender().sendMessage(prefix + message);
+				count++;
+			}
+			return count;
+		}
+	}
+	
+	/** This method broadcasts a message to all players and console that are allowed by the filter. Set the filter to NULL to broadcast to everyone.</br>
+	 * If you want to, you can set a message that will be logged to console. Set to null to not log anything.</br>
+	 * You can still allow console in the filter to log the original message.
+	 * 
+	 * @param prefix The prefix for the message. Set to NULL to let it auto generate.
+	 * @param message the message to be sent around
+	 * @param filter the BroadcastFilter to be applied.</br>
+	 *        Write a class implementing the interface and pass it to this method, the "sendTo()" method will be called for each recipient.
+	 * @param logmessage the log message to appear in console. Set to null to not log this (you can still log the original message by returning true in the filter).
+	 */
+	public static int broadcast(String prefix, Message message, BroadcastFilter filter)
+	{
+		if (prefix == null)
+			prefix = "§8[§2" + getCaller() + "§8]: ";
+		if (filter == null)
+		{
+			for (Player p : Bukkit.getOnlinePlayers())
+				ChatAPI.createMessage(p).appendText(prefix).appendMessage(message).send();
+			Bukkit.getConsoleSender().sendMessage(prefix + message);
+			return Bukkit.getOnlinePlayers().size() + 1;
+		}
+		else
+		{
+			int count = 0;
+			for (Player p : Bukkit.getOnlinePlayers())
+				if (filter.sendTo(p))
+				{
+					ChatAPI.createMessage(p).appendText(prefix).appendMessage(message).send();
 					count++;
 				}
 			if (filter.sendTo(Bukkit.getConsoleSender()))
