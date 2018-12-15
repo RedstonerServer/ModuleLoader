@@ -33,6 +33,7 @@ import com.redstoner.modules.Module;
 import com.redstoner.modules.ModuleLogger;
 
 import net.nemez.chatapi.click.Message;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
@@ -732,5 +733,9 @@ public final class ModuleLoader implements CoreModule
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public static JavaPlugin getPlugin() {
+		return Main.plugin;
 	}
 }
