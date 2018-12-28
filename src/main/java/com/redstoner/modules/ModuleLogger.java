@@ -13,6 +13,7 @@ public class ModuleLogger
 {
 	public static final String PREFIX_WARN = "§8[§eWARN§8]:§7 ";
 	public static final String PREFIX_ERROR = "§8[§cERROR§8]:§7 ";
+	public static final String PREFIX_INFO = "§8[§fINFO§8]:§7 ";
 	
 	private String name;
 	
@@ -23,7 +24,7 @@ public class ModuleLogger
 	
 	public void info(final String message)
 	{
-		Bukkit.getConsoleSender().sendMessage(getPrefix() + ChatAPI.colorify(null, message));
+		Bukkit.getConsoleSender().sendMessage(PREFIX_INFO + getPrefix() + ChatAPI.colorify(null, message));
 	}
 	
 	public void warn(final String message)
