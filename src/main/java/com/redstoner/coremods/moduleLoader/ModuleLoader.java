@@ -240,18 +240,20 @@ public final class ModuleLoader implements CoreModule
 	{
 		try
 		{
-			String basePath = "plugins/ModuleLoader/classes/" + module.getClass().getName().replace(".", "/"); 
+			InputStream infoFile = null;
 			
-			InputStream file;
-			try {
-				file = new FileInputStream(
-					new File(basePath.substring(0, basePath.lastIndexOf('/')+1) + "module.info"));
-			}
-			catch(Exception e) {
-				file = null;
-			}
+			if (VersionHelper.isCompatible(VersionHelper.create(5, 0, 0, 5), module.getClass())) {
+				String basePath = "plugins/ModuleLoader/classes/" + module.getClass().getName().replace(".", "/"); 
 			
-			ModuleInfo info = new ModuleInfo(file, module);
+				try {
+					infoFile = new FileInputStream(
+							new File(basePath.substring(0, basePath.lastIndexOf('/')+1) + "module.info"));
+				}
+				catch(Exception e) {
+					infoFile = null;
+				}
+			}
+			ModuleInfo info = new ModuleInfo(infoFile, module);
 			
 			moduleInfos.put(module, info);
 			
