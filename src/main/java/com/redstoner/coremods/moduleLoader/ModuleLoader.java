@@ -40,7 +40,7 @@ import net.nemez.chatapi.click.Message;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 1, compatible = 4)
+@Version(major = 5, minor = 0, revision = 0, compatible = 5)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
