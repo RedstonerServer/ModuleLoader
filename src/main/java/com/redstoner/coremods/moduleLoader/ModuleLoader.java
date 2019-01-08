@@ -1,6 +1,7 @@
 package com.redstoner.coremods.moduleLoader;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nemez.cmdmgr.Command;
 import com.nemez.cmdmgr.Command.AsyncType;
@@ -25,24 +28,25 @@ import com.nemez.cmdmgr.CommandManager;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Commands;
 import com.redstoner.annotations.Version;
-import com.redstoner.exceptions.MissingVersionException;
 import com.redstoner.misc.Main;
+import com.redstoner.misc.ModuleInfo;
 import com.redstoner.misc.VersionHelper;
 import com.redstoner.modules.CoreModule;
 import com.redstoner.modules.Module;
 import com.redstoner.modules.ModuleLogger;
 
 import net.nemez.chatapi.click.Message;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 4, minor = 0, revision = 1, compatible = 4)
+@Version(major = 5, minor = 0, revision = 0, compatible = 5)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
 	private static final HashMap<Module, Boolean> modules = new HashMap<>();
+	private static HashMap<Module, ModuleInfo> moduleInfos = new HashMap<>();
+	private static HashMap<String, List<Module>> categorizes = new HashMap<>();
 	private static URL[] urls;
 	private static URLClassLoader mainLoader;
 	private static HashMap<Module, URLClassLoader> loaders = new HashMap<>();
@@ -71,7 +75,9 @@ public final class ModuleLoader implements CoreModule
 	{
 		if (instance == null)
 			instance = new ModuleLoader();
-		loggers.put(instance, new ModuleLogger("ModuleLoader"));
+		ModuleInfo info = new ModuleInfo(ModuleLoader.class.getResourceAsStream("module.info"), instance);
+		moduleInfos.put(instance, info);
+		loggers.put(instance, new ModuleLogger(info.getDisplayName()));
 		CommandManager.registerCommand(ModuleLoader.class.getResourceAsStream("ModuleLoader.cmd"), instance,
 				Main.plugin);
 	}
@@ -234,7 +240,35 @@ public final class ModuleLoader implements CoreModule
 	{
 		try
 		{
-			loggers.put(module, new ModuleLogger(module.getClass().getSimpleName()));
+			InputStream infoFile = null;
+			
+			if (VersionHelper.isCompatible(VersionHelper.create(5, 0, 0, 5), module.getClass())) {
+				String basePath = "plugins/ModuleLoader/classes/" + module.getClass().getName().replace(".", "/"); 
+			
+				try {
+					infoFile = new FileInputStream(
+							new File(basePath.substring(0, basePath.lastIndexOf('/')+1) + "module.info"));
+				}
+				catch(Exception e) {
+					infoFile = null;
+				}
+			}
+			ModuleInfo info = new ModuleInfo(infoFile, module);
+			
+			moduleInfos.put(module, info);
+			
+			String category = info.getCategory();
+			if (!categorizes.containsKey(category)) 
+				categorizes.put(category, new ArrayList<>(Arrays.asList(module)));
+			else {
+				List<Module> modsInCat = categorizes.get(category);
+				modsInCat.add(module);
+				categorizes.put(category, modsInCat);
+			}
+				
+				loggers.put(module, new ModuleLogger(info.getDisplayName()));
+				
+			
 			if (module.onEnable())
 			{
 				modules.put(module, true);
@@ -242,9 +276,9 @@ public final class ModuleLoader implements CoreModule
 					module.firstLoad();
 				else if (!VersionHelper.getVersion(module.getClass()).equals(VersionHelper.getString(oldVersion)))
 					module.migrate(oldVersion);
-				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 3), module.getClass()))
+				if (VersionHelper.isCompatible(VersionHelper.create(5, 0, 0, 3), module.getClass()))
 					module.postEnable();
-				if (VersionHelper.isCompatible(VersionHelper.create(4, 0, 0, 4), module.getClass()))
+				if (VersionHelper.isCompatible(VersionHelper.create(5, 0, 0, 4), module.getClass()))
 				{
 					Commands ann = module.getClass().getAnnotation(Commands.class);
 					if (ann != null)
@@ -289,50 +323,31 @@ public final class ModuleLoader implements CoreModule
 	@Command(hook = "list", async = AsyncType.ALWAYS)
 	public boolean listModulesCommand(CommandSender sender)
 	{
-		Message m = new Message(sender, null);
-		m.appendText(getLogger().getHeader());
-		m.appendText("§2Modules:\n&e");
-		Module[] modules = ModuleLoader.modules.keySet().toArray(new Module[] {});
-		for (int i = 0; i < modules.length; i++)
-		{
-			Module module = modules[i];
-			String[] classPath = module.getClass().getName().split("\\.");
-			String classname = classPath[classPath.length - 1];
-			m.appendText((ModuleLoader.modules.get(module) ? "§a" : "§c") + classname);
-			if (i + 1 < modules.length)
-				m.appendText("§7, ");
-		}
-		m.send();
-		return true;
-	}
-	
-	/** This method lists all modules to the specified CommandSender. The modules will be color coded correspondingly to their enabled status.
-	 * 
-	 * @param sender The person to send the info to, usually the issuer of the command or the console sender.
-	 * @return true. */
-	@Command(hook = "listv", async = AsyncType.ALWAYS)
-	public boolean listModulesCommandVersion(CommandSender sender)
-	{
-		Message m = new Message(sender, null);
-		m.appendText(getLogger().getHeader());
-		m.appendText("§2Modules:\n&e");
-		Module[] modules = ModuleLoader.modules.keySet().toArray(new Module[] {});
-		for (int i = 0; i < modules.length; i++)
-		{
-			Module module = modules[i];
-			String[] classPath = module.getClass().getName().split("\\.");
-			String classname = classPath[classPath.length - 1];
-			try
-			{
-				m.appendText((ModuleLoader.modules.get(module) ? "§a" : "§c") + classname + "§e("
-						+ VersionHelper.getVersion(module.getClass()) + ")");
+		boolean hasCategorys = hasCategories();
+		Message m = new Message(sender, null);	
+		ModuleInfo ml_info = moduleInfos.get(instance);
+		
+		m.appendText("§2--=[ ")
+		 .appendTextHover("§2" + ml_info.getDisplayName(), ml_info.getModuleInfoHover())
+		 .appendText("§2 ]=--\nModules:\n");
+		
+		for (String cat: categorizes.keySet()) {
+			if (hasCategorys)
+				m.appendText("\n&7" + cat + ":\n");
+			
+			int curModule = 1;
+			List<Module> mods = categorizes.get(cat);
+			for (Module mod : mods) {
+				
+				ModuleInfo info = moduleInfos.get(mod);				
+				m.appendTextHover((modules.get(mod) ? "§a" : "§c") + info.getDisplayName(), info.getModuleInfoHover());
+				
+				if (curModule != mods.size())
+					m.appendText("&7, ");
+				curModule++;
 			}
-			catch (MissingVersionException e)
-			{
-				m.appendText((ModuleLoader.modules.get(module) ? "§a" : "§c") + classname + "§c" + "(Unknown Version)");
-			}
-			if (i + 1 < modules.length)
-				m.appendText("§7, ");
+			m.appendText("\n");
+			
 		}
 		m.send();
 		return true;
@@ -524,6 +539,9 @@ public final class ModuleLoader implements CoreModule
 				disableModule(m);
 				instance.getLogger().info("Disabled module, overriding the implementation");
 				modules.remove(m);
+				categorizes.get(moduleInfos.get(m).getCategory()).remove(m);
+				moduleInfos.remove(m);
+				
 				try
 				{
 					if (loaders.containsKey(m))
@@ -615,6 +633,8 @@ public final class ModuleLoader implements CoreModule
 				instance.getLogger().info("Attempting to disable module properly:");
 				disableModule(m);
 				modules.remove(m);
+				categorizes.get(moduleInfos.get(m).getCategory()).remove(m);
+				moduleInfos.remove(m);
 				instance.getLogger().info("Disabled module.");
 				return true;
 			}
@@ -734,8 +754,12 @@ public final class ModuleLoader implements CoreModule
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static JavaPlugin getPlugin() {
 		return Main.plugin;
+	}
+	
+	public static boolean hasCategories() {
+		return !(categorizes.size() == 1 && categorizes.containsKey("Other"));
 	}
 }
