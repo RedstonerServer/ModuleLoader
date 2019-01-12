@@ -90,7 +90,7 @@ public final class Utils
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 				ChatAPI.createMessage(p).appendText(prefix).appendMessage(message).send();
-			Bukkit.getConsoleSender().sendMessage(prefix + message);
+			Bukkit.getConsoleSender().sendMessage(prefix + message.getRawMessage());
 			return Bukkit.getOnlinePlayers().size() + 1;
 		}
 		else
@@ -104,7 +104,7 @@ public final class Utils
 				}
 			if (filter.sendTo(Bukkit.getConsoleSender()))
 			{
-				Bukkit.getConsoleSender().sendMessage(prefix + message);
+				Bukkit.getConsoleSender().sendMessage(prefix + message.getRawMessage());
 				count++;
 			}
 			return count;
