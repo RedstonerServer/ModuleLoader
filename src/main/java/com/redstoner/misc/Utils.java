@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.redstoner.annotations.Version;
+import com.redstoner.coremods.moduleLoader.ModuleLoader;
 
 import net.nemez.chatapi.ChatAPI;
 import net.nemez.chatapi.click.Message;
@@ -188,4 +189,15 @@ public final class Utils
 	{
 	    return UUID_pattern.matcher(toCheck).matches();
 	}
+	
+	public static void run(Runnable r) {
+		run(r, 0);
+	}
+	
+	public static void run(Runnable r, int delay) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(ModuleLoader.getPlugin(), r, delay);
+	}
+	
+	
+	
 }

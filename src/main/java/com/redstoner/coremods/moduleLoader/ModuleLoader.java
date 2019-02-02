@@ -27,6 +27,7 @@ import com.nemez.cmdmgr.CommandManager;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Commands;
 import com.redstoner.annotations.Version;
+import com.redstoner.logging.PrivateLogManager;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.ModuleInfo;
 import com.redstoner.misc.VersionHelper;
@@ -39,7 +40,7 @@ import net.nemez.chatapi.click.Message;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 5, minor = 1, revision = 0, compatible = 5)
+@Version(major = 5, minor = 2, revision = 0, compatible = 5)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -370,6 +371,7 @@ public final class ModuleLoader implements CoreModule
 				HandlerList.unregisterAll((Listener) module);
 			}
 			CommandManager.unregisterAllWithFallback(module.getClass().getSimpleName());
+			PrivateLogManager.unregister(module);
 			try
 			{
 				URLClassLoader loader = loaders.get(module);
