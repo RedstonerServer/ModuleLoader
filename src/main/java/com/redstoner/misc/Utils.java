@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.redstoner.annotations.Version;
+import com.redstoner.coremods.moduleLoader.ModuleLoader;
 
 import net.nemez.chatapi.ChatAPI;
 import net.nemez.chatapi.click.Message;
@@ -90,7 +91,7 @@ public final class Utils
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 				ChatAPI.createMessage(p).appendText(prefix).appendMessage(message).send();
-			Bukkit.getConsoleSender().sendMessage(prefix + message);
+			Bukkit.getConsoleSender().sendMessage(prefix + message.getRawMessage());
 			return Bukkit.getOnlinePlayers().size() + 1;
 		}
 		else
@@ -104,7 +105,7 @@ public final class Utils
 				}
 			if (filter.sendTo(Bukkit.getConsoleSender()))
 			{
-				Bukkit.getConsoleSender().sendMessage(prefix + message);
+				Bukkit.getConsoleSender().sendMessage(prefix + message.getRawMessage());
 				count++;
 			}
 			return count;
@@ -188,4 +189,15 @@ public final class Utils
 	{
 	    return UUID_pattern.matcher(toCheck).matches();
 	}
+	
+	public static void run(Runnable r) {
+		run(r, 0);
+	}
+	
+	public static void run(Runnable r, int delay) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(ModuleLoader.getPlugin(), r, delay);
+	}
+	
+	
+	
 }

@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -28,6 +27,7 @@ import com.nemez.cmdmgr.CommandManager;
 import com.redstoner.annotations.AutoRegisterListener;
 import com.redstoner.annotations.Commands;
 import com.redstoner.annotations.Version;
+import com.redstoner.logging.PrivateLogManager;
 import com.redstoner.misc.Main;
 import com.redstoner.misc.ModuleInfo;
 import com.redstoner.misc.VersionHelper;
@@ -40,7 +40,7 @@ import net.nemez.chatapi.click.Message;
 /** The module loader, mother of all modules. Responsible for loading and taking care of all modules.
  * 
  * @author Pepich */
-@Version(major = 5, minor = 0, revision = 0, compatible = 5)
+@Version(major = 5, minor = 2, revision = 0, compatible = 5)
 public final class ModuleLoader implements CoreModule
 {
 	private static ModuleLoader instance;
@@ -370,8 +370,8 @@ public final class ModuleLoader implements CoreModule
 			{
 				HandlerList.unregisterAll((Listener) module);
 			}
-			String[] commands = getAllHooks(module).toArray(new String[] {});
-			CommandManager.unregisterAll(commands);
+			CommandManager.unregisterAllWithFallback(module.getClass().getSimpleName());
+			PrivateLogManager.unregister(module);
 			try
 			{
 				URLClassLoader loader = loaders.get(module);
@@ -385,19 +385,6 @@ public final class ModuleLoader implements CoreModule
 				loaders.remove(module);
 			}
 		}
-	}
-	
-	private static ArrayList<String> getAllHooks(Module module)
-	{
-		ArrayList<String> commands = new ArrayList<>();
-		for (Method m : module.getClass().getMethods())
-		{
-			Command cmd = m.getDeclaredAnnotation(Command.class);
-			if (cmd == null)
-				continue;
-			commands.add(cmd.hook());
-		}
-		return commands;
 	}
 	
 	@Command(hook = "load")
