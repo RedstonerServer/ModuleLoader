@@ -1,45 +1,21 @@
 package com.redstoner.misc.mysql.types;
 
-import com.redstoner.misc.mysql.types.date.Date;
-import com.redstoner.misc.mysql.types.date.DateTime;
-import com.redstoner.misc.mysql.types.date.Time;
-import com.redstoner.misc.mysql.types.date.TimeStamp;
-import com.redstoner.misc.mysql.types.date.Year;
-import com.redstoner.misc.mysql.types.number.BigInt;
-import com.redstoner.misc.mysql.types.number.Decimal;
+import com.redstoner.misc.mysql.types.date.*;
 import com.redstoner.misc.mysql.types.number.Double;
 import com.redstoner.misc.mysql.types.number.Float;
-import com.redstoner.misc.mysql.types.number.Int;
-import com.redstoner.misc.mysql.types.number.MediumInt;
-import com.redstoner.misc.mysql.types.number.SmallInt;
-import com.redstoner.misc.mysql.types.number.TinyInt;
-import com.redstoner.misc.mysql.types.text.Blob;
-import com.redstoner.misc.mysql.types.text.Char;
+import com.redstoner.misc.mysql.types.number.*;
 import com.redstoner.misc.mysql.types.text.Enum;
-import com.redstoner.misc.mysql.types.text.LongBlob;
-import com.redstoner.misc.mysql.types.text.LongText;
-import com.redstoner.misc.mysql.types.text.MediumBlob;
-import com.redstoner.misc.mysql.types.text.MediumText;
-import com.redstoner.misc.mysql.types.text.Set;
-import com.redstoner.misc.mysql.types.text.Text;
-import com.redstoner.misc.mysql.types.text.TinyText;
-import com.redstoner.misc.mysql.types.text.VarChar;
+import com.redstoner.misc.mysql.types.text.*;
 
-public abstract class MysqlType
-{
-	public abstract String getName();
-	
-	public static MysqlType getTypeFromString(String type)
-	{
+public abstract class MysqlType {
+	public static MysqlType getTypeFromString(String type) {
 		String[] splitType = type.split("\\(");
-		String toSwitch = splitType[0].toUpperCase();
-		String value = "";
-		if (type.contains("(") && type.endsWith(")"))
-		{
+		String   toSwitch  = splitType[0].toUpperCase();
+		String   value     = "";
+		if (type.contains("(") && type.endsWith(")")) {
 			value = splitType[1].substring(0, splitType[1].length() - 1);
 		}
-		switch (toSwitch)
-		{
+		switch (toSwitch) {
 			case "CHAR":
 				return new Char(Integer.valueOf(value));
 			case "ENUM":
@@ -93,4 +69,6 @@ public abstract class MysqlType
 		}
 		return null;
 	}
+
+	public abstract String getName();
 }

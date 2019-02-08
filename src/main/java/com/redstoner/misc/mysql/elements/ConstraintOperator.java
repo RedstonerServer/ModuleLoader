@@ -2,7 +2,7 @@ package com.redstoner.misc.mysql.elements;
 
 public enum ConstraintOperator {
 	LESS_THAN, GREATER_THAN, EQUAL, NOT_EQUAL, LESS_THAN_OR_EQUAL, GREATER_THAN_OR_EQUAL;
-	
+
 	public String toString() {
 		switch (this) {
 			case LESS_THAN:
