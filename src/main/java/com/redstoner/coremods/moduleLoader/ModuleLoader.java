@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author Pepich
  */
-@Version (major = 5, minor = 2, revision = 0, compatible = 5)
+@Version (major = 5, minor = 2, revision = 1, compatible = 5)
 public final class ModuleLoader implements CoreModule {
 	private static final HashMap<Module, Boolean>        modules     = new HashMap<>();
 	private static       ModuleLoader                    instance;

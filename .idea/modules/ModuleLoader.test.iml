@@ -8,9 +8,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ModuleLoader.main" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-1.2-api:2.11.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.RedstonerServer:CommandManager:master-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.RedstonerServer:ChatAPI:master-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.RedstonerServer:ChestAPI:master-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.RedstonerServer:CommandManager:v1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.RedstonerServer:ChatAPI:v1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.11.1" level="project" />
   </component>

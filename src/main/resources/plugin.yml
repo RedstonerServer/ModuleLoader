@@ -1,5 +1,5 @@
 name: ModuleLoader
-version: 4.0.0
+version: 5.2.1
 authors: [pepich1851]
 main: com.redstoner.misc.Main
 softdepend: [Vault]

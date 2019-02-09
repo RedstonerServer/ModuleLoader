@@ -19,10 +19,9 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.RedstonerServer:CommandManager:master-SNAPSHOT"
-    implementation "com.github.RedstonerServer:ChatAPI:master-SNAPSHOT"
-    implementation "com.github.RedstonerServer:ChestAPI:master-SNAPSHOT"
-    
+    implementation "com.github.RedstonerServer:CommandManager:v1"
+    implementation "com.github.RedstonerServer:ChatAPI:v1"
+
     compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.11.1'
 
     compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
@@ -30,7 +29,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes "Class-Path": "../lib/CommandManager.jar ../lib/ChatAPI.jar ../lib/ChestAPI.jar"
+        attributes "Class-Path": "../lib/CommandManager.jar ../lib/ChatAPI.jar"
     }
 }
 
