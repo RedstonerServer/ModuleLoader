@@ -561,15 +561,25 @@ public final class ModuleLoader implements CoreModule {
 		return Main.plugin;
 	}
 
+	@Command (hook = "list", async = AsyncType.ALWAYS)
+	public boolean listModulesCommand(CommandSender sender) {
+		return listModules(sender, false);
+	}
+
+	@Command (hook = "listversions", async = AsyncType.ALWAYS)
+	public boolean listModulesVerionsCommand(CommandSender sender) {
+		return listModules(sender, true);
+	}
+
 	/**
 	 * This method lists all modules to the specified CommandSender. The modules will be color coded correspondingly to their enabled status.
 	 *
 	 * @param sender The person to send the info to, usually the issuer of the command or the console sender.
+	 * @param showVersions Should we show the versions directly in chat.
 	 *
 	 * @return true.
 	 */
-	@Command (hook = "list", async = AsyncType.ALWAYS)
-	public boolean listModulesCommand(CommandSender sender) {
+	public boolean listModules(CommandSender sender, boolean showVersions) {
 		boolean    hasCategorys = hasCategories();
 		Message    m            = new Message(sender, null);
 		ModuleInfo ml_info      = moduleInfos.get(instance);
@@ -587,7 +597,7 @@ public final class ModuleLoader implements CoreModule {
 			for (Module mod : mods) {
 
 				ModuleInfo info = moduleInfos.get(mod);
-				m.appendTextHover((modules.get(mod) ? "§a" : "§c") + info.getDisplayName(), info.getModuleInfoHover());
+				m.appendTextHover((modules.get(mod) ? "§a" : "§c") + info.getDisplayName() + (showVersions ? " &e" + info.getVersion() : ""), info.getModuleInfoHover());
 
 				if (curModule != mods.size())
 					m.appendText("&7, ");
