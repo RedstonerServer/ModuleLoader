@@ -37,3 +37,15 @@ task sourceJar(type: Jar, dependsOn: classes) {
     classifier 'sources'
     from sourceSets.main.allSource
 }
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            include '**/*.cmd'
+
+            srcDir 'src/main/resources'
+            include '**/*.yml'
+        }
+    }
+}
