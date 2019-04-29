@@ -55,10 +55,10 @@ public class MysqlHandler {
 	}
 
 	public MysqlDatabase getDatabase(String databaseName) {
-		return new MysqlDatabase(getConnection(databaseName));
+		return new MysqlDatabase(this, databaseName);
 	}
 
-	private Connection getConnection(String databaseName) throws IllegalStateException {
+	public Connection getConnection(String databaseName) throws IllegalStateException {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(url + databaseName, username, password);
@@ -76,7 +76,7 @@ public class MysqlHandler {
 			ResultSet           queryResults = metadata.getCatalogs();
 			while (queryResults.next()) {
 				String databaseName = queryResults.getString("TABLE_CAT");
-				databases.add(new MysqlDatabase(getConnection(databaseName)));
+				databases.add(new MysqlDatabase(this, databaseName));
 			}
 			connection.close();
 			return databases;
